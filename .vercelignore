@@ -1,0 +1,9 @@
+# Version control / tooling — ไม่ต้องอัปขึ้นเว็บ
+.git
+.gitignore
+.claude
+.DS_Store
+
+# ไฟล์ภายใน ไม่ควรเปิดให้คนนอกเข้าถึงได้
+DESIGN.md
+index.backup.html
