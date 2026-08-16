@@ -13,7 +13,7 @@
     width:100%;
     min-height:calc(100vh - var(--hdr-h));
     overflow:hidden;
-    background:#1a1316;
+    background:#110e0d;
   }
   .hero-track{
     position:absolute;
@@ -39,7 +39,7 @@
   .hero-slide::after{
     content:"";
     position:absolute;inset:0;
-    background:linear-gradient(180deg,rgba(16,10,14,.46) 0%,rgba(16,10,14,.30) 40%,rgba(16,10,14,.74) 100%);
+    background:linear-gradient(180deg,rgba(11,7,7,.46) 0%,rgba(11,7,7,.30) 40%,rgba(11,7,7,.74) 100%);
   }
   .hero-inner{
     position:relative;
@@ -117,7 +117,8 @@
   /* .btn-link now uses the shared pill system (.btn-base.is-outline) */
 
   /* ============ MISSIONS ============ */
-  /* พื้นหลังรูปตึกทับด้วยม่านสีน้ำเงิน ไอคอนวงกลมขาวเรียงสี่ช่อง */
+  /* พื้นหลังรูปตึกทับด้วยม่านสีส้มแบรนด์ ไอคอนวงกลมขาวเรียงสี่ช่อง
+     ไล่สี 135deg ชุดเดียวกับ .mission-band ใน site.css แต่ใส่ alpha ให้เห็นรูปจาง ๆ */
   .missions {
   text-align: center;
 
@@ -125,9 +126,10 @@
 
   background:
     linear-gradient(
-      180deg,
-      rgba(47, 111, 181, 0.9) 0%,
-      rgba(27, 58, 107, 0.93) 100%
+      135deg,
+      rgba(235, 91, 54, 0.90) 0%,
+      rgba(232, 64, 26, 0.92) 46%,
+      rgba(205, 68, 33, 0.94) 100%
     ),
     url('img/pic2.jpeg') center/cover no-repeat;
 
@@ -161,7 +163,7 @@
     background:#fff;
     display:grid;
     place-items:center;
-    box-shadow:0 10px 26px rgba(20,36,86,.22);
+    box-shadow:0 10px 26px rgba(120,32,10,.26);
     transition:transform .3s ease,box-shadow .3s ease;
   }
   .mission-card .m-icon svg{width:56%;height:56%;}
@@ -175,7 +177,7 @@
   }
   .mission-card:hover .m-icon{
     transform:translateY(-6px) scale(1.03);
-    box-shadow:0 18px 36px rgba(20,36,86,.32);
+    box-shadow:0 18px 36px rgba(120,32,10,.34);
   }
   .mission-card h4{
     margin-top:clamp(16px,1.8vw,24px);
@@ -257,7 +259,7 @@
     transform:translateY(-6px);
     box-shadow:0 18px 38px rgba(43,43,43,.20);
   }
-  .course-card:focus-visible{outline:2px solid var(--pink-dark);outline-offset:3px;}
+  .course-card:focus-visible{outline:2px solid var(--brand-dark);outline-offset:3px;}
 
   /* รูปเต็มใบ — ใส่รูปจริงที่ style="--img:url('img/ชื่อไฟล์.jpg')" */
   .course-card .c-photo{
@@ -349,7 +351,7 @@
   .program-text h3{
     font-family:var(--font-display);
     font-size:30px;
-     color:var(--pink);
+     color:var(--brand);
     margin-bottom:16px;
   }
   .program-text p{
@@ -370,7 +372,7 @@
     letter-spacing:2px;
     box-shadow:0 16px 36px rgba(36,58,97,.22);
   }
-  .program-img.alt{background:linear-gradient(135deg,#e78ab0,#c9538a);}
+  .program-img.alt{background:linear-gradient(135deg,#e1846c,#b15038);}
 .program-img {
   position: relative;
   width: 100%;
@@ -391,7 +393,7 @@
     overflow:hidden;
     isolation:isolate;
     padding:clamp(64px,8vw,112px) 0;
-    background:linear-gradient(105deg,#ffffff 0%,#fffdfe 45%,#fdf7fa 78%,#faf0f5 100%);
+    background:linear-gradient(105deg,#ffffff 0%,#fffdfc 45%,#fcf6f5 78%,#f9efec 100%);
   }
   /* ชั้นพื้นหลังคลื่น (เคลื่อนไหว) */
   .intro-bg{
@@ -407,15 +409,15 @@
     transform-origin:50% 50%;
   }
   .intro-bg .w svg{width:100%;height:100%;display:block;}
-  .intro-bg .w-1{filter:blur(22px);opacity:.5;animation:introWaveA 22s ease-in-out infinite alternate;}
-  .intro-bg .w-2{filter:blur(30px);opacity:.34;animation:introWaveB 30s ease-in-out infinite alternate;}
-  .intro-bg .w-3{filter:blur(38px);opacity:.28;animation:introWaveC 26s ease-in-out infinite alternate;}
+  .intro-bg .w-1{filter:blur(22px);opacity:.4;animation:introWaveA 22s ease-in-out infinite alternate;}
+  .intro-bg .w-2{filter:blur(30px);opacity:.28;animation:introWaveB 30s ease-in-out infinite alternate;}
+  .intro-bg .w-3{filter:blur(38px);opacity:.22;animation:introWaveC 26s ease-in-out infinite alternate;}
   /* ล้างฝั่งซ้ายให้ขาวสะอาด ตัวหนังสืออ่านง่าย */
   .intro-bg::after{
     content:"";
     position:absolute;
     inset:0;
-    background:linear-gradient(95deg,rgba(255,255,255,.92) 0%,rgba(255,255,255,.6) 42%,rgba(255,255,255,.12) 72%,rgba(255,255,255,0) 100%);
+    background:linear-gradient(95deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.78) 38%,rgba(255,255,255,.4) 68%,rgba(255,255,255,.12) 100%);
   }
   /* ดวงแสงนุ่ม ๆ ลอยช้า */
   .intro-bg .glow{
@@ -427,13 +429,13 @@
   .intro-bg .glow-1{
     width:46vw;height:46vw;
     top:-18%;right:-6%;
-    background:radial-gradient(circle,rgba(232,168,196,.34),rgba(232,168,196,0) 68%);
+    background:radial-gradient(circle,rgba(255,146,96,.22),rgba(255,146,96,0) 68%);
     animation:introGlowA 24s ease-in-out infinite alternate;
   }
   .intro-bg .glow-2{
     width:38vw;height:38vw;
     bottom:-22%;left:-8%;
-    background:radial-gradient(circle,rgba(206,180,204,.26),rgba(206,180,204,0) 70%);
+    background:radial-gradient(circle,rgba(255,178,122,.18),rgba(255,178,122,0) 70%);
     animation:introGlowB 28s ease-in-out infinite alternate;
   }
   @keyframes introWaveA{
@@ -479,7 +481,7 @@
     font-size:clamp(38px,4.4vw,56px);
     font-weight:700;
     line-height:1;
-    color:var(--pink);
+    color:var(--brand);
   }
   .i-stat .label{
     font-size:13px;
@@ -490,7 +492,7 @@
   }
   .intro-eyebrow{
     font-size:15px;
-    color:var(--pink);
+    color:var(--brand);
     margin-bottom:clamp(18px,2.4vw,30px);
   }
   .intro-title{
@@ -529,7 +531,7 @@
   /* ============ STATS ============ */
   .stats{
     position:relative;
-    background:#1a1316 url('img/pic3.jpeg') center/cover no-repeat;
+    background:#110e0d url('img/pic3.jpeg') center/cover no-repeat;
     padding:56px 24px;
     overflow:hidden;
   }
@@ -537,7 +539,7 @@
   .stats::after{
     content:"";
     position:absolute;inset:0;
-    background:linear-gradient(180deg,rgba(20,14,17,.72),rgba(20,14,17,.62));
+    background:linear-gradient(180deg,rgba(13,10,9,.72),rgba(13,10,9,.62));
   }
   .stats-inner{
     position:relative;
@@ -618,7 +620,7 @@
   .faq-item summary::after{
     content:"+";
     font-size:20px;
-    color:var(--pink);
+    color:var(--brand);
     margin-left:14px;
     flex-shrink:0;
   }
@@ -992,9 +994,9 @@
           <svg viewBox="0 0 1440 560" preserveAspectRatio="none">
             <defs>
               <linearGradient id="introGradA" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#f7e3ea"/>
-                <stop offset="55%" stop-color="#eec6d6"/>
-                <stop offset="100%" stop-color="#e2aec6"/>
+                <stop offset="0%" stop-color="#ffeadf"/>
+                <stop offset="55%" stop-color="#ffcdb4"/>
+                <stop offset="100%" stop-color="#ffb08a"/>
               </linearGradient>
             </defs>
             <path fill="url(#introGradA)"
@@ -1006,9 +1008,9 @@
           <svg viewBox="0 0 1440 560" preserveAspectRatio="none">
             <defs>
               <linearGradient id="introGradB" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#efdfe6" stop-opacity="0"/>
-                <stop offset="40%" stop-color="#e7cad9" stop-opacity=".9"/>
-                <stop offset="100%" stop-color="#d9bfd2" stop-opacity=".5"/>
+                <stop offset="0%" stop-color="#ffdccb" stop-opacity="0"/>
+                <stop offset="40%" stop-color="#ffbe9c" stop-opacity=".9"/>
+                <stop offset="100%" stop-color="#f79f72" stop-opacity=".5"/>
               </linearGradient>
             </defs>
             <path fill="none" stroke="url(#introGradB)" stroke-width="90" stroke-linecap="round"
@@ -1020,8 +1022,8 @@
           <svg viewBox="0 0 1440 560" preserveAspectRatio="none">
             <defs>
               <linearGradient id="introGradC" x1="0" y1="1" x2="1" y2="0">
-                <stop offset="0%" stop-color="#f3e6ec"/>
-                <stop offset="100%" stop-color="#e8d3e0" stop-opacity=".6"/>
+                <stop offset="0%" stop-color="#fff0e7"/>
+                <stop offset="100%" stop-color="#ffd6c0" stop-opacity=".6"/>
               </linearGradient>
             </defs>
             <path fill="url(#introGradC)"
