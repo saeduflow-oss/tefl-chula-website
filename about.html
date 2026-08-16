@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About | (TEFL) Teaching English as a Foreign Language</title>
+<link rel="stylesheet" href="fonts/chula.css">
+<link rel="stylesheet" href="site.css">
+<style>
+  /* ============ PAGE LAYOUT ============ */
+  /* clip (ไม่ใช่ hidden) กันสกอลล์แนวนอนจากแถบ 100vw โดยไม่ทำให้ header sticky เสีย */
+  body{overflow-x:clip;}
+  .page-wrap{
+    max-width:980px;
+    margin:0 auto;
+    padding:56px 24px 84px;
+  }
+  /* .page-banner ใช้สไตล์กลางจาก site.css ทั้งหมด (รวม responsive) */
+
+  /* ============ CONTENT ============ */
+  .content section{margin-bottom:64px;scroll-margin-top:110px;}
+  .content section:last-child{margin-bottom:0;}
+  .content .eyebrow{
+    font-size:12px;
+    letter-spacing:3px;
+    color:var(--pink);
+    font-weight:700;
+    margin-bottom:6px;
+    text-transform:uppercase;
+  }
+  .content h2{
+    font-family:var(--font-display);
+    font-size:30px;
+    color:var(--blue-dark);
+    margin-bottom:18px;
+  }
+  .content p{
+    font-size:14.5px;
+    line-height:2;
+    color:var(--text-muted);
+    margin-bottom:16px;
+  }
+  /* ============ CENTERED SECTION HEAD (eyebrow + rule + title) ============ */
+  .about-intro,
+  .is-centered{
+    text-align:center;
+    padding-bottom:8px;
+  }
+  .content .about-intro .eyebrow,
+  .content .is-centered .eyebrow{
+    font-family:var(--font-display);
+    font-size:11.5px;
+    letter-spacing:2.5px;
+    margin-bottom:10px;
+  }
+  .about-intro .rule,
+  .is-centered .rule{
+    display:block;
+    width:70px;
+    height:3px;
+    margin:0 auto 14px;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--pink) 0%,#9b6bb5 50%,var(--orange) 100%);
+  }
+  .content .about-intro h2,
+  .content .is-centered h2{
+    font-size:30px;            /* เท่ากับหัวข้อ Goals and Objectives */
+    font-weight:700;
+    line-height:1.3;
+    letter-spacing:-.2px;
+    color:var(--text-dark);
+    margin-bottom:22px;
+  }
+  .content .about-intro p,
+  .content .is-centered > p{
+    max-width:760px;
+    margin-left:auto;
+    margin-right:auto;
+    font-size:15px;
+  }
+  .about-intro .btn-base{margin-top:22px;}
+  @media (max-width:560px){
+    .content .about-intro .eyebrow{font-size:11px;letter-spacing:2px;}
+    .about-intro .rule,
+  .is-centered .rule{width:58px;}
+    .content .about-intro h2,
+  .content .is-centered h2{font-size:25px;}
+  }
+
+  /* ============ FEATURE IMAGE ============ */
+  .feature-img{
+    margin:34px 0 0;
+    border-radius:14px;
+    overflow:hidden;
+    background:var(--pink-soft);
+    box-shadow:0 14px 30px rgba(36,58,97,.16);
+  }
+  .feature-img img{
+    display:block;
+    width:100%;
+    height:auto;               /* ยกเลิก height จาก attribute เพื่อให้ aspect-ratio ทำงาน */
+    aspect-ratio:16/9;
+    object-fit:cover;
+    object-position:center;
+  }
+  @media (max-width:560px){
+    .feature-img img{aspect-ratio:4/3;}
+  }
+
+
+  /* ============ GOALS — แถบยาวเต็มความกว้างหน้าจอ ไม่มีกรอบ ============ */
+  .goal-band{
+    /* ดันออกนอก .page-wrap ให้กินเต็มความกว้าง viewport */
+    width:100vw;
+    margin-left:calc(50% - 50vw);
+    margin-right:calc(50% - 50vw);
+    margin-top:40px;
+    padding:clamp(48px,6vw,72px) 24px;
+    /* สีฐานเป็นครีมทั้งแถบ (เดิมบนสุดเกือบขาวเลยเห็นเป็นหย่อมขาวกลางบน)
+       วงไล่เฉดสามวงคลุมซ้ายบน–ขวาบน–ขวาล่าง ให้ครีมกระจายทั่วไม่มีช่องโหว่ */
+    background:
+      radial-gradient(70% 130% at 18% 0%,#fbe7f0 0%,rgba(251,231,240,0) 62%),
+      radial-gradient(65% 120% at 82% 0%,#fbe4ee 0%,rgba(251,228,238,0) 60%),
+      radial-gradient(70% 130% at 88% 100%,#f8dceb 0%,rgba(248,220,235,0) 58%),
+      linear-gradient(180deg,#fdf3f8 0%,#fdf5f9 50%,#fcf3f7 100%);
+  }
+  .goal-grid{
+    max-width:980px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:clamp(36px,6vw,80px);
+  }
+  .goal-item{
+    display:block;
+    text-align:center;
+    text-decoration:none;
+    color:inherit;
+    transition:transform .25s ease;
+  }
+  .goal-item .ic{
+    display:block;
+    color:#d894b3;
+    margin-bottom:18px;
+    transition:color .25s ease;
+  }
+  .goal-item .ic svg{width:46px;height:46px;display:block;margin:0 auto;}
+  .goal-item h5{
+    font-family:var(--font-display);
+    font-size:20px;
+    font-weight:700;
+    line-height:1.35;
+    color:var(--text-dark);
+    margin-bottom:12px;
+    transition:color .25s ease;
+  }
+  .content .goal-item p{
+    font-size:13.5px;
+    line-height:1.9;
+    max-width:360px;
+    margin:0 auto;
+    transition:color .25s ease;
+  }
+  /* hover / touch: เปลี่ยนเป็นสีชมพู */
+  .goal-item:hover,
+  .goal-item:active,
+  .goal-item:focus-visible{transform:translateY(-3px);}
+  .goal-item:hover .ic,
+  .goal-item:hover h5,
+  .goal-item:active .ic,
+  .goal-item:active h5,
+  .goal-item:focus-visible .ic,
+  .goal-item:focus-visible h5,
+  .content .goal-item:hover p,
+  .content .goal-item:active p,
+  .content .goal-item:focus-visible p{color:var(--pink);}
+  .goal-item:focus-visible{
+    outline:2px solid var(--pink);
+    outline-offset:8px;
+    border-radius:12px;
+  }
+  @media (max-width:560px){
+    .goal-item h5{font-size:18px;}
+  }
+
+  /* ============ ACADEMIC STAFF — portrait cards ============ */
+  .staff-lead{
+    margin-top:34px;
+    text-align:center;
+  }
+  .staff-lead .lead-role{
+    font-family:var(--font-display);
+    font-size:20px;
+    font-weight:700;
+    color:var(--pink);
+    margin-bottom:16px;
+  }
+  .staff-photo{
+    aspect-ratio:4/5;
+    border-radius:6px;
+    overflow:hidden;
+    background:linear-gradient(180deg,#eaf2fc 0%,#d8e6f6 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .staff-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .staff-lead .staff-photo{
+    width:min(200px,100%);
+    margin:0 auto 14px;
+  }
+  .staff-lead .lead-name{
+    font-family:var(--font-display);
+    font-size:16px;
+    font-weight:700;
+    color:var(--text-dark);
+  }
+  .staff-lead .lead-ext{
+    font-size:12.5px;
+    color:var(--text-muted);
+    margin-top:6px;
+  }
+  .staff-grid{
+    margin-top:38px;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:30px 20px;
+  }
+  .staff-card{text-align:center;}
+  .staff-card .staff-photo{margin-bottom:14px;}
+  .staff-card .s-name{
+    font-family:var(--font-display);
+    font-size:14px;
+    font-weight:700;
+    line-height:1.45;
+    color:var(--text-dark);
+    min-height:3em;          /* keep role + ext aligned across cards */
+  }
+  .staff-card .s-role{
+    font-size:12.5px;
+    color:var(--pink);
+    font-weight:700;
+    margin-top:5px;
+  }
+  .staff-card .s-ext{
+    font-size:12.5px;
+    color:var(--text-muted);
+    margin-top:3px;
+    font-variant-numeric:tabular-nums;
+  }
+  @media (max-width:820px){
+    .staff-grid{grid-template-columns:repeat(3,1fr);}
+  }
+  @media (max-width:560px){
+    .staff-grid{grid-template-columns:repeat(2,1fr);gap:24px 18px;}
+    .staff-lead .lead-role{font-size:18px;}
+  }
+
+  /* ============ DATA TABLES (staff / guest lecturers) ============ */
+  .table-wrap{
+    margin-top:26px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    border:1px solid var(--border-light);
+    border-radius:12px;
+    background:#fff;
+    box-shadow:0 6px 18px rgba(0,0,0,.05);
+  }
+  .data-table{
+    width:100%;
+    min-width:560px;
+    border-collapse:collapse;
+  }
+  .data-table thead th{
+    background:var(--pink);
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:1.4px;
+    text-transform:uppercase;
+    text-align:left;
+    padding:14px 20px;
+    white-space:nowrap;
+  }
+  .data-table td{
+    padding:15px 20px;
+    font-size:14px;
+    line-height:1.65;
+    color:var(--text-dark);
+    border-bottom:1px solid var(--border-light);
+    vertical-align:top;
+  }
+  .data-table tbody tr:last-child td{border-bottom:none;}
+  .data-table tbody tr:nth-child(even){background:#fcfcfd;}
+  .data-table tbody tr:hover{background:var(--pink-soft);}
+  .data-table .name{font-weight:700;}
+  .data-table .course,
+  .data-table .date{color:var(--text-muted);}
+  .data-table .course{max-width:330px;}
+  @media (max-width:560px){
+    .data-table thead th,
+    .data-table td{padding:12px 15px;}
+    .data-table td{font-size:13px;}
+  }
+
+  /* ============ GUEST LECTURERS — การ์ดขาวเรียบ (หัวข้อบน / ไอคอนล่างซ้าย / ลูกศรล่างขวา) ============ */
+  .lecturer-grid{
+    margin-top:30px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    text-align:left; /* กันไม่ให้ .is-centered ดันข้อความในการ์ดไปกลาง */
+  }
+  .lecturer-card{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    min-height:210px;
+    padding:22px 20px 18px;
+    background:#fff;
+    border:1px solid #ededf0;
+    border-radius:14px;
+    box-shadow:0 4px 16px rgba(0,0,0,.05);
+    text-decoration:none;
+    color:inherit;
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background .2s ease;
+  }
+  /* hover / touch: การ์ดเปลี่ยนเป็นสีชมพู */
+  .lecturer-card:hover,
+  .lecturer-card:active,
+  .lecturer-card:focus-visible{
+    transform:translateY(-4px);
+    background:var(--pink-soft);
+    border-color:#f4c3d8;
+    box-shadow:0 14px 30px rgba(234,75,136,.16);
+  }
+  .lecturer-card:hover .l-name,
+  .lecturer-card:active .l-name,
+  .lecturer-card:focus-visible .l-name{color:var(--pink-dark);}
+  .lecturer-card:focus-visible{
+    outline:2px solid var(--pink);
+    outline-offset:3px;
+  }
+  .lecturer-card .badge{
+    display:inline-block;
+    align-self:flex-start;
+    margin-bottom:8px;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.8px;
+    text-transform:uppercase;
+    color:var(--pink);
+  }
+  .lecturer-card .l-name{
+    font-family:var(--font-display);
+    font-size:16px;
+    font-weight:700;
+    line-height:1.35;
+    color:var(--text-dark);
+    margin-bottom:8px;
+  }
+  .content .lecturer-card .l-meta{
+    font-size:12px;
+    line-height:1.6;
+    color:var(--text-muted);
+    margin:0;
+  }
+  .lecturer-card .l-meta .when{
+    display:block;
+    margin-top:4px;
+    font-variant-numeric:tabular-nums;
+    color:#8a8a8a;
+  }
+  .lecturer-card .l-foot{
+    margin-top:auto;
+    padding-top:22px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .lecturer-card .l-ic{
+    color:#c08a9e;
+    flex-shrink:0;
+    transition:color .2s ease;
+  }
+  .lecturer-card .l-ic svg{width:34px;height:34px;display:block;}
+  .lecturer-card .l-arrow{
+    width:34px;height:34px;
+    flex-shrink:0;
+    border-radius:50%;
+    background:#f1f1f3;
+    color:#55555c;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .2s ease,color .2s ease;
+  }
+  .lecturer-card .l-arrow svg{
+    width:15px;height:15px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+  .lecturer-card:hover .l-arrow,
+  .lecturer-card:active .l-arrow,
+  .lecturer-card:focus-visible .l-arrow{background:var(--pink);color:#fff;}
+  .lecturer-card:hover .l-ic,
+  .lecturer-card:active .l-ic,
+  .lecturer-card:focus-visible .l-ic{color:var(--pink);}
+  @media (max-width:900px){
+    .lecturer-grid{grid-template-columns:repeat(3,1fr);gap:18px;}
+  }
+  @media (max-width:640px){
+    .lecturer-grid{grid-template-columns:repeat(2,1fr);gap:14px;}
+    .lecturer-card{min-height:190px;padding:18px 16px 15px;}
+    .lecturer-card .l-name{font-size:14.5px;}
+  }
+
+
+  /* cta band — แถบเต็มความกว้าง ไม่มีกรอบ พื้นหลังชมพูอ่อนไล่เฉด + blob ลอยช้าๆ */
+  .cta-band{
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    background:linear-gradient(100deg,#fdf8fb 0%,#fbeaf2 52%,#f5dae7 100%);
+    color:var(--text-dark);
+    text-align:center;
+    padding:clamp(52px,7vw,76px) 24px;
+  }
+  /* สองก้อนนี้คือพื้นหลังที่เคลื่อนไหว — ขยับด้วย transform อย่างเดียวเพื่อความลื่น */
+  .cta-band::before,
+  .cta-band::after{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    border-radius:50%;
+    pointer-events:none;
+    will-change:transform;
+  }
+  .cta-band::before{
+    width:70%;
+    aspect-ratio:1;
+    top:-30%;
+    right:2%;
+    background:radial-gradient(circle at 50% 50%, #f2c6dd 0%, rgba(242,198,221,.55) 45%, rgba(242,198,221,0) 70%);
+    animation:ctaDriftA 22s ease-in-out infinite alternate;
+  }
+  .cta-band::after{
+    width:60%;
+    aspect-ratio:1;
+    bottom:-34%;
+    left:-4%;
+    background:radial-gradient(circle at 50% 50%, #ffffff 0%, rgba(255,255,255,.6) 42%, rgba(255,255,255,0) 70%);
+    animation:ctaDriftB 28s ease-in-out infinite alternate;
+  }
+  @keyframes ctaDriftA{
+    from{transform:translate3d(0,0,0) scale(1);}
+    to  {transform:translate3d(-9%,10%,0) scale(1.18);}
+  }
+  @keyframes ctaDriftB{
+    from{transform:translate3d(0,0,0) scale(1.06);}
+    to  {transform:translate3d(12%,-8%,0) scale(.92);}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .cta-band::before,
+    .cta-band::after{animation:none;}
+  }
+  .cta-inner{max-width:820px;margin:0 auto;position:relative;z-index:1;}
+  .cta-band h3{
+    font-family:var(--font-display);
+    font-size:clamp(24px,3.2vw,32px);
+    color:var(--pink);
+    margin-bottom:12px;
+  }
+  .cta-band p{color:var(--text-muted);margin-bottom:24px;font-size:14px;}
+  /* ปุ่มใช้ระบบ pill กลาง (.btn-base.is-outline) — สไตล์เฉพาะแถบ CTA อยู่ใน site.css
+     ปกติ: พิลล์ขาวล้วนไม่มีเส้นกรอบ → สัมผัส/hover: ทึบดำ ตัวอักษรขาว */
+
+</style>
+</head>
+
+<body>
+
+  <!-- ============ MAIN HEADER (ใช้ร่วมกันทุกหน้า) ============ -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+
+      <a href="index.html" class="logo" aria-label="TEFL Program home">
+        <img src="img/logo.png" alt="TEFL Program Logo">
+      </a>
+
+      <nav class="main-nav" id="mainNav" aria-label="Main menu">
+        <ul>
+
+          <li>
+            <a href="about.html" class="active" data-dropdown="dd-about">About
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-about">
+              <div class="dd-menu">
+                <a class="dd-title" href="about.html">About the Program</a>
+                <ul>
+                  <li><a href="about.html#goals">Goals and Objectives</a></li>
+                  <li><a href="about.html#academic-staff">Academic Staff</a></li>
+                  <li><a href="about.html#guest-lecturers">Guest Lecturers</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="academics.html" data-dropdown="dd-academics">Academics
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-academics">
+              <div class="dd-menu">
+                <a class="dd-title" href="academics.html">Academics</a>
+                <ul>
+                  <li><a href="academics.html#curriculum-info">Curriculum Info.</a></li>
+                  <li><a href="academics.html#list-of-courses">List of Courses</a></li>
+                  <li><a href="academics.html#study-plan">Study Plan</a></li>
+                  <li><a href="academics.html#class-schedule">Class Schedule</a></li>
+                  <li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li>
+                  <li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="admission.html" data-dropdown="dd-admission">Admission
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-admission">
+              <div class="dd-menu">
+                <a class="dd-title" href="admission.html">Admission</a>
+                <ul>
+                  <li><a href="admission.html#admission-requirements">Admission Requirements</a></li>
+                  <li><a href="admission.html#admission-procedures">Admission Procedures</a></li>
+                  <li><a href="admission.html#admission-deadline">Admission Deadline</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="research.html" data-dropdown="dd-research">Research
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-research">
+              <div class="dd-menu">
+                <a class="dd-title" href="research.html">Research</a>
+                <ul>
+                  <li><a href="research.html#research-guidelines">Guidelines for Research Procedures</a></li>
+                  <li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li>
+                  <li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="activities.html" data-dropdown="dd-activities">Activities
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-activities">
+              <div class="dd-menu">
+                <a class="dd-title" href="activities.html">Activities</a>
+                <ul>
+                  <li><a href="activities.html#activities-list">Activities List</a></li>
+                  <li><a href="activities.html#intensive-course">Intensive Course</a></li>
+                  <li><a href="index.html#news">News &amp; Events</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="forms-and-links.html" data-dropdown="dd-forms">Forms &amp; Links
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-forms">
+              <div class="dd-menu">
+                <a class="dd-title" href="forms-and-links.html">Forms and Links</a>
+                <ul>
+                  <li><a href="forms-and-links.html#request-forms">Request Forms</a></li>
+                  <li><a href="forms-and-links.html#thesis-forms">Thesis and Master Project Forms</a></li>
+                  <li><a href="forms-and-links.html#research-collaboration-letters">Research Collaboration Letters</a></li>
+                  <li><a href="forms-and-links.html#graduation-request">Graduation Request</a></li>
+                  <li><a href="forms-and-links.html#useful-links">Useful Links</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li><a href="faqs.html">FAQs</a></li>
+
+          <li><a href="contact.html">Contact</a></li>
+
+        </ul>
+      </nav>
+
+      <div class="header-tools">
+        <button class="tool-btn" id="searchToggle" aria-label="Search" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        </button>
+
+        <button class="tool-btn burger" id="mobileToggle" aria-label="Open full menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ============ SEARCH OVERLAY ============ -->
+  <div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Search this site">
+    <button class="tool-btn search-close" id="searchClose" aria-label="Close search">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="search-box">
+      <form id="searchForm" role="search">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        <input type="search" id="searchInput" placeholder="Search the TEFL site&hellip;" autocomplete="off">
+      </form>
+      <p class="search-hint">Try &ldquo;admission&rdquo;, &ldquo;tuition&rdquo;, &ldquo;thesis&rdquo;, &ldquo;schedule&rdquo;.</p>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- ============ FULL MENU DRAWER ============ -->
+  <div class="nav-drawer" id="navDrawer" role="dialog" aria-modal="true" aria-label="Full menu">
+    <a href="index.html" class="drawer-logo" aria-label="TEFL Program home">
+      <img src="img/logo.png" alt="TEFL Program Logo">
+    </a>
+    <button class="tool-btn drawer-close" id="drawerClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="drawer-body" id="drawerBody"></div>
+  </div>
+
+  <!-- ============ PAGE BANNER ============ -->
+  <section class="page-banner">
+    <div class="inner">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html" aria-label="Home">
+          <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2 3 10.4V21h6v-6h6v6h6V10.4z"/></svg>
+        </a>
+        <svg class="sep" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+        <span class="current" aria-current="page">About</span>
+      </nav>
+      <h1>About TEFL</h1>
+      <p class="subtitle">Program overview, goals, academic staff and guest lecturers of the TEFL Program</p>
+    </div>
+  </section>
+
+  <!-- ============ PAGE BODY ============ -->
+  <div class="page-wrap">
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- 1.1 PROGRAM OVERVIEW -->
+      <section id="program-overview" class="about-intro">
+        <div class="eyebrow">Who We Are</div>
+        <span class="rule"></span>
+        <h2>Program Overview</h2>
+        <p>
+          TEFL Chula is the Master of Education program in Teaching English as a
+          Foreign Language (International Program) at the Faculty of Education,
+          Chulalongkorn University. The program has run for many years; it moved to an English-medium
+          curriculum in 2003, and since 2009 has operated fully as an
+          international program. The department continues working to broaden its
+          international academic environment by recruiting more overseas students
+          and inviting visiting scholars.
+        </p>
+        <div class="feature-img">
+          <img src="img/pic2.jpeg" alt="TEFL Program, Faculty of Education, Chulalongkorn University" loading="lazy" decoding="async" width="2048" height="1365">
+        </div>
+      </section>
+
+      <!-- 1.2 GOALS AND OBJECTIVES -->
+      <section id="goals" class="is-centered">
+       
+        <div class="goal-band"> <div class="eyebrow">What Drives Us</div>
+        <span class="rule"></span>
+        <h2>Goals and Objectives</h2>
+       
+          <div class="goal-grid">
+
+            <a href="academics.html" class="goal-item">
+              <span class="ic">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M24 9 44 18 24 27 4 18z"/>
+                  <path d="M12 22v11c0 3.3 5.4 6 12 6s12-2.7 12-6V22"/>
+                  <path d="M40 20v11"/>
+                </svg>
+              </span>
+              <h5>Graduating professional teachers</h5>
+              <p>
+                To graduate teachers who can competently develop EFL curricula and
+                manage instruction by drawing on linguistics, pedagogy and
+                research, while working effectively across culturally diverse
+                settings.
+              </p>
+            </a>
+
+            <a href="research.html" class="goal-item">
+              <span class="ic">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M7 12a5 5 0 0 1 5-5h12v33H12a5 5 0 0 0-5 5z"/>
+                  <path d="M24 7h12a5 5 0 0 1 5 5v10"/>
+                  <circle cx="33" cy="31" r="8"/>
+                  <path d="m39 37 5 5"/>
+                </svg>
+              </span>
+              <h5>Generating research and new knowledge</h5>
+              <p>
+                To generate research and new knowledge that improves English
+                instruction, learner development and teaching methods across
+                different contexts.
+              </p>
+            </a>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- 1.3 ACADEMIC STAFF -->
+      <section id="academic-staff" class="is-centered">
+        <div class="eyebrow">Our People</div>
+        <span class="rule"></span>
+        <h2>Academic Staff</h2>
+
+        <!-- Program Chair — featured portrait -->
+        <div class="staff-lead">
+          <div class="lead-role">Program Chair</div>
+          <div class="staff-photo"><img src="img/staff-ruedeerath.jpeg" alt="Asst. Prof. Ruedeerath Chusanachoti, Ph.D." loading="lazy" decoding="async"></div>
+          <div class="lead-name">Asst. Prof. Ruedeerath Chusanachoti, Ph.D.</div>
+          <div class="lead-ext">Ext. 8036</div>
+        </div>
+
+        <div class="staff-grid">
+
+          <div class="staff-card">
+            <div class="staff-photo"><img src="img/staff-nattida.jpeg" alt="Nattida Pattaraworathum, Ph.D." loading="lazy" decoding="async"></div>
+            <div class="s-name">Nattida Pattaraworathum, Ph.D.</div>
+            <div class="s-role">Program Secretary</div>
+            <div class="s-ext">Ext. 8044</div>
+          </div>
+
+          <div class="staff-card">
+            <div class="staff-photo"><img src="img/staff-apasara.jpg" alt="Asst. Prof. Apasara Chinwonno, Ph.D." loading="lazy" decoding="async"></div>
+            <div class="s-name">Asst. Prof. Apasara Chinwonno, Ph.D.</div>
+            <div class="s-role">Instructor</div>
+            <div class="s-ext">Ext. 8038</div>
+          </div>
+
+          <div class="staff-card">
+            <div class="staff-photo"><img src="img/staff-pornpimol.jpg" alt="Asst. Prof. Pornpimol Sukavatee, Ph.D." loading="lazy" decoding="async"></div>
+            <div class="s-name">Asst. Prof. Pornpimol Sukavatee, Ph.D.</div>
+            <div class="s-role">Instructor</div>
+            <div class="s-ext">Ext. 8046</div>
+          </div>
+
+          <div class="staff-card">
+            <div class="staff-photo"><img src="img/staff-jutarat.jpeg" alt="Asst. Prof. Jutarat Vibulphol, Ph.D." loading="lazy" decoding="async"></div>
+            <div class="s-name">Asst. Prof. Jutarat Vibulphol, Ph.D.</div>
+            <div class="s-role">Instructor</div>
+            <div class="s-ext">Ext. 8045</div>
+          </div>
+
+          <div class="staff-card">
+            <div class="staff-photo"><img src="img/staff-maneerat.jpeg" alt="Asst. Prof. Maneerat Ekkayokkaya, Ph.D." loading="lazy" decoding="async"></div>
+            <div class="s-name">Asst. Prof. Maneerat Ekkayokkaya, Ph.D.</div>
+            <div class="s-role">Instructor</div>
+            <div class="s-ext">Ext. 8032</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 1.4 GUEST LECTURERS -->
+      <section id="guest-lecturers" class="is-centered">
+        <div class="eyebrow">Beyond the Classroom</div>
+        <span class="rule"></span>
+        <h2>Guest Lecturers</h2>
+        <p>A selection of recent visiting lecturers hosted by the program.</p>
+        <div class="lecturer-grid">
+
+          <a class="lecturer-card" href="https://repository.eduhk.hk/en/persons/mei-yi-angel-lin/" target="_blank" rel="noopener">
+            <span class="badge">Most Recent</span>
+            <div class="l-name">Prof. Lin, Angel Mei Yi</div>
+            <p class="l-meta">2725717 Selected Topic in Language and Linguistics<span class="when">Jul 17&ndash;26, 2026</span></p>
+            <div class="l-foot">
+              <span class="l-ic"><svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="17" cy="12" r="5.5"/><path d="M6.5 29v-1.5A8.5 8.5 0 0 1 15 19h4a8.5 8.5 0 0 1 8.5 8.5V29"/></svg></span>
+              <span class="l-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </a>
+
+          <a class="lecturer-card" href="https://www.pittstate.edu/education/teaching-and-leadership/faculty-and-staff/tatiana-sildus.html" target="_blank" rel="noopener">
+            <div class="l-name">Prof. Dr. Tatiana Sildus</div>
+            <p class="l-meta">2725733 Teaching English for Young Learners<span class="when">Oct&ndash;Nov 2025</span></p>
+            <div class="l-foot">
+              <span class="l-ic"><svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="17" cy="12" r="5.5"/><path d="M6.5 29v-1.5A8.5 8.5 0 0 1 15 19h4a8.5 8.5 0 0 1 8.5 8.5V29"/></svg></span>
+              <span class="l-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </a>
+
+          <a class="lecturer-card" href="https://willyrenandya.com/" target="_blank" rel="noopener">
+            <div class="l-name">Prof. Dr. Willy Ardian Renandya</div>
+            <p class="l-meta">2725705 Selected Topics in ELT<span class="when">May&ndash;Jun 2025</span></p>
+            <div class="l-foot">
+              <span class="l-ic"><svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="17" cy="12" r="5.5"/><path d="M6.5 29v-1.5A8.5 8.5 0 0 1 15 19h4a8.5 8.5 0 0 1 8.5 8.5V29"/></svg></span>
+              <span class="l-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </a>
+
+          <a class="lecturer-card" href="https://www.southampton.ac.uk/people/5x5kr5/doctor-will-baker" target="_blank" rel="noopener">
+            <div class="l-name">Prof. Dr. Will Baker</div>
+            <p class="l-meta">2725705 Selected Topics in ELT<span class="when">May 24&ndash;Jun 2, 2024</span></p>
+            <div class="l-foot">
+              <span class="l-ic"><svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="17" cy="12" r="5.5"/><path d="M6.5 29v-1.5A8.5 8.5 0 0 1 15 19h4a8.5 8.5 0 0 1 8.5 8.5V29"/></svg></span>
+              <span class="l-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </a>
+
+          <a class="lecturer-card" href="https://search.asu.edu/profile/1097693" target="_blank" rel="noopener">
+            <div class="l-name">Prof. Dr. Paul Kei Matsuda</div>
+            <p class="l-meta">2725705 Selected Topics in ELT<span class="when">Dec 8&ndash;17, 2023</span></p>
+            <div class="l-foot">
+              <span class="l-ic"><svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="17" cy="12" r="5.5"/><path d="M6.5 29v-1.5A8.5 8.5 0 0 1 15 19h4a8.5 8.5 0 0 1 8.5 8.5V29"/></svg></span>
+              <span class="l-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </a>
+
+          <a class="lecturer-card" href="https://www.jimmckinley.me/" target="_blank" rel="noopener">
+            <div class="l-name">Prof. Dr. Jim McKinley</div>
+            <p class="l-meta">2725717 Selected Topics in Language and Linguistics<span class="when">Feb 17&ndash;27, 2023</span></p>
+            <div class="l-foot">
+              <span class="l-ic"><svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="17" cy="12" r="5.5"/><path d="M6.5 29v-1.5A8.5 8.5 0 0 1 15 19h4a8.5 8.5 0 0 1 8.5 8.5V29"/></svg></span>
+              <span class="l-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </a>
+
+          <a class="lecturer-card" href="https://www.education.ox.ac.uk/person/heath-rose/" target="_blank" rel="noopener">
+            <div class="l-name">Prof. Dr. Heath Rose</div>
+            <p class="l-meta">2725705 Selected Topics in ELT<span class="when">Dec 4&ndash;15, 2019</span></p>
+            <div class="l-foot">
+              <span class="l-ic"><svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="17" cy="12" r="5.5"/><path d="M6.5 29v-1.5A8.5 8.5 0 0 1 15 19h4a8.5 8.5 0 0 1 8.5 8.5V29"/></svg></span>
+              <span class="l-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+
+    </div>
+  </div>
+
+  <!-- ============ CTA (แถบเต็มความกว้างหน้าจอ) ============ -->
+  <section class="cta-band">
+    <div class="cta-inner">
+      <h3>Interested in Joining the TEFL Program?</h3>
+      <p>Explore our curriculum, admissions information and student life.</p>
+      <a href="index.html#academics" class="btn-base is-outline">EXPLORE ACADEMICS<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+    </div>
+  </section>
+
+
+  <!-- ============ FOOTER (ใช้ร่วมกันทุกหน้า) ============ -->
+  <footer id="contact">
+
+    <div class="footer-inner">
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>About</h4>
+          <ul>
+            <li><a href="about.html">About the Program</a></li>
+            <li><a href="about.html#goals">Goals and Objectives</a></li>
+            <li><a href="about.html#academic-staff">Academic Staff</a></li>
+            <li><a href="about.html#guest-lecturers">Guest Lecturers</a></li>
+            <li><a href="faqs.html">FAQs</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="forms-and-links.html#request-forms">Request Forms</a></li>
+            <li><a href="forms-and-links.html#thesis-forms">Thesis &amp; Master Project Forms</a></li>
+            <li><a href="forms-and-links.html#graduation-request">Graduation Request</a></li>
+            <li><a href="forms-and-links.html#research-collaboration-letters">Research Collaboration Letters</a></li>
+            <li><a href="forms-and-links.html#useful-links">Useful Links</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Academics</h4>
+          <ul>
+            <li><a href="academics.html#curriculum-info">Curriculum Info</a></li>
+            <li><a href="academics.html#list-of-courses">List of Courses</a></li>
+            <li><a href="academics.html#study-plan">Study Plan</a></li>
+            <li><a href="academics.html#class-schedule">Class Schedule</a></li>
+            <li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li>
+            <li><a href="admission.html">Admission</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col is-split">
+          <h4>Related Links</h4>
+          <ul>
+            <li><a href="https://www.edu.chula.ac.th/" target="_blank" rel="noopener">Faculty of Education</a></li>
+            <li><a href="https://www.chula.ac.th/" target="_blank" rel="noopener">Chulalongkorn University</a></li>
+            <li><a href="https://www.reg.chula.ac.th/" target="_blank" rel="noopener">Reg Chula</a></li>
+            <li><a href="https://mooc.chula.ac.th/" target="_blank" rel="noopener">CHULA MOOC</a></li>
+            <li><a href="https://www.car.chula.ac.th/" target="_blank" rel="noopener">CU Library</a></li>
+            <li><a href="https://www.grad.chula.ac.th/" target="_blank" rel="noopener">Graduate School</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-mid">
+
+        <div class="footer-brand">
+          <img src="img/logo.png" alt="TEFL Chula, Faculty of Education, Chulalongkorn University">
+        </div>
+
+        <div class="f-line">
+          Address: Faculty of Education, Chulalongkorn University<br>
+          254 Phayathai Road, Wang Mai, Pathum Wan, Bangkok 10330
+        </div>
+
+        <div class="f-line">
+          Tel: <a href="tel:+6622182565">0&ndash;2218&ndash;2565</a><br>
+          Email: <a href="mailto:tefl@chula.ac.th">tefl@chula.ac.th</a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+
+        <div class="footer-social">
+          <a href="#" class="is-fb" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.7c0-.9.3-1.6 1.6-1.6h1.7V4.2c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.4V14h2.7v8z"/></svg>
+          </a>
+          <a href="#" class="is-line" aria-label="LINE">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-5 0-9 3.2-9 7.2 0 3.6 3.2 6.6 7.5 7.1.3.1.7.2.8.5.1.3 0 .7 0 .9l-.1.8c0 .3-.2 1 .9.6 1.1-.5 6-3.5 8.2-6 1.5-1.6 2.2-3.2 2.2-4.9C22.5 6.2 18.5 3 12 3zM8.3 12.6H6.5c-.3 0-.5-.2-.5-.5V8.9c0-.3.2-.5.5-.5s.5.2.5.5v2.7h1.3c.3 0 .5.2.5.5s-.2.5-.5.5zm2-.5c0 .3-.2.5-.5.5s-.5-.2-.5-.5V8.9c0-.3.2-.5.5-.5s.5.2.5.5v3.2zm3.9 0c0 .2-.1.4-.3.5h-.2c-.2 0-.3-.1-.4-.2l-1.5-2v1.7c0 .3-.2.5-.5.5s-.5-.2-.5-.5V8.9c0-.2.1-.4.3-.5h.2c.1 0 .3.1.4.2l1.5 2V8.9c0-.3.2-.5.5-.5s.5.2.5.5v3.2zm2.9-2.1c.3 0 .5.2.5.5s-.2.5-.5.5h-1.3v.8h1.3c.3 0 .5.2.5.5s-.2.5-.5.5h-1.8c-.3 0-.5-.2-.5-.5V8.9c0-.3.2-.5.5-.5h1.8c.3 0 .5.2.5.5s-.2.5-.5.5h-1.3v.6z"/></svg>
+          </a>
+          <a href="#" class="is-ig" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zm0 3.8a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0 9.9a3.9 3.9 0 1 1 0-7.8 3.9 3.9 0 0 1 0 7.8zm7.6-10.1a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/></svg>
+          </a>
+        </div>
+
+        <div class="copyright">Copyright &copy; 2026 TEFL Program, Faculty of Education, Chulalongkorn University</div>
+
+      </div>
+    </div>
+
+    <!-- จำเป็นต้องมีตามเงื่อนไขสัญญาอนุญาต CC ของภาพ ห้ามลบ -->
+    <div class="photo-credits">
+      Photo credits (Wikimedia Commons):
+      <a href="https://commons.wikimedia.org/wiki/File:Faculty_of_Arts_Library,_Chulalongkorn_University.jpg" target="_blank" rel="noopener">Faculty of Arts Library</a> &copy; Geonuch (CC BY-SA 4.0) &middot;
+      <a href="https://commons.wikimedia.org/wiki/File:Chulalongkorn_University_Language_Institute_06.23.jpg" target="_blank" rel="noopener">CU Language Institute</a> &copy; Supanut Arunoprayote (CC BY 4.0) &middot;
+      <a href="https://commons.wikimedia.org/wiki/File:Axis_landscape_in_Chula2.jpg" target="_blank" rel="noopener">Axis Landscape</a> &copy; Theerapon Bunnak (CC BY-SA 4.0) &middot;
+      <a href="https://commons.wikimedia.org/wiki/File:Mahachulalongkorn_ChulalongkornUniversity.jpg" target="_blank" rel="noopener">Mahachulalongkorn Building</a> &copy; BunBn (CC BY-SA 4.0)
+    </div>
+
+  </footer>
+
+  <a href="#" class="back-top" id="backTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </a>
+
+  <script src="site.js"></script>
+</body>
+</html>

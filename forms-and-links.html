@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forms and Links | TEFL Program</title>
+<link rel="stylesheet" href="fonts/chula.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+  <!-- ============ MAIN HEADER (ใช้ร่วมกันทุกหน้า) ============ -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+
+      <a href="index.html" class="logo" aria-label="TEFL Program home">
+        <img src="img/logo.png" alt="TEFL Program Logo">
+      </a>
+
+      <nav class="main-nav" id="mainNav" aria-label="Main menu">
+        <ul>
+
+          <li>
+            <a href="about.html" data-dropdown="dd-about">About
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-about">
+              <div class="dd-menu">
+                <a class="dd-title" href="about.html">About the Program</a>
+                <ul>
+                  <li><a href="about.html#goals">Goals and Objectives</a></li>
+                  <li><a href="about.html#academic-staff">Academic Staff</a></li>
+                  <li><a href="about.html#guest-lecturers">Guest Lecturers</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="academics.html" data-dropdown="dd-academics">Academics
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-academics">
+              <div class="dd-menu">
+                <a class="dd-title" href="academics.html">Academics</a>
+                <ul>
+                  <li><a href="academics.html#curriculum-info">Curriculum Info.</a></li>
+                  <li><a href="academics.html#list-of-courses">List of Courses</a></li>
+                  <li><a href="academics.html#study-plan">Study Plan</a></li>
+                  <li><a href="academics.html#class-schedule">Class Schedule</a></li>
+                  <li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li>
+                  <li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="admission.html" data-dropdown="dd-admission">Admission
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-admission">
+              <div class="dd-menu">
+                <a class="dd-title" href="admission.html">Admission</a>
+                <ul>
+                  <li><a href="admission.html#admission-requirements">Admission Requirements</a></li>
+                  <li><a href="admission.html#admission-procedures">Admission Procedures</a></li>
+                  <li><a href="admission.html#admission-deadline">Admission Deadline</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="research.html" data-dropdown="dd-research">Research
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-research">
+              <div class="dd-menu">
+                <a class="dd-title" href="research.html">Research</a>
+                <ul>
+                  <li><a href="research.html#research-guidelines">Guidelines for Research Procedures</a></li>
+                  <li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li>
+                  <li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="activities.html" data-dropdown="dd-activities">Activities
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-activities">
+              <div class="dd-menu">
+                <a class="dd-title" href="activities.html">Activities</a>
+                <ul>
+                  <li><a href="activities.html#activities-list">Activities List</a></li>
+                  <li><a href="activities.html#intensive-course">Intensive Course</a></li>
+                  <li><a href="index.html#news">News &amp; Events</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="forms-and-links.html" class="active" data-dropdown="dd-forms">Forms &amp; Links
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-forms">
+              <div class="dd-menu">
+                <a class="dd-title" href="forms-and-links.html">Forms and Links</a>
+                <ul>
+                  <li><a href="forms-and-links.html#request-forms">Request Forms</a></li>
+                  <li><a href="forms-and-links.html#thesis-forms">Thesis and Master Project Forms</a></li>
+                  <li><a href="forms-and-links.html#research-collaboration-letters">Research Collaboration Letters</a></li>
+                  <li><a href="forms-and-links.html#graduation-request">Graduation Request</a></li>
+                  <li><a href="forms-and-links.html#useful-links">Useful Links</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li><a href="faqs.html">FAQs</a></li>
+
+          <li><a href="contact.html">Contact</a></li>
+
+        </ul>
+      </nav>
+
+      <div class="header-tools">
+        <button class="tool-btn" id="searchToggle" aria-label="Search" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        </button>
+
+        <button class="tool-btn burger" id="mobileToggle" aria-label="Open full menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ============ SEARCH OVERLAY ============ -->
+  <div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Search this site">
+    <button class="tool-btn search-close" id="searchClose" aria-label="Close search">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="search-box">
+      <form id="searchForm" role="search">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        <input type="search" id="searchInput" placeholder="Search the TEFL site&hellip;" autocomplete="off">
+      </form>
+      <p class="search-hint">Try &ldquo;admission&rdquo;, &ldquo;tuition&rdquo;, &ldquo;thesis&rdquo;, &ldquo;schedule&rdquo;.</p>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- ============ FULL MENU DRAWER ============ -->
+  <div class="nav-drawer" id="navDrawer" role="dialog" aria-modal="true" aria-label="Full menu">
+    <a href="index.html" class="drawer-logo" aria-label="TEFL Program home">
+      <img src="img/logo.png" alt="TEFL Program Logo">
+    </a>
+    <button class="tool-btn drawer-close" id="drawerClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="drawer-body" id="drawerBody"></div>
+  </div>
+
+  <!-- ============ PAGE BANNER ============ -->
+  <section class="page-banner">
+    <div class="inner">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html" aria-label="Home">
+          <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2 3 10.4V21h6v-6h6v6h6V10.4z"/></svg>
+        </a>
+        <svg class="sep" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+        <span class="current" aria-current="page">Forms &amp; Links</span>
+      </nav>
+      <h1>Forms and Links</h1>
+      <p class="subtitle">Useful forms and resources for students, applicants, and academic staff.</p>
+    </div>
+  </section>
+
+  <!-- ============ PAGE CONTENT ============ -->
+  <div class="page-wrap">
+    <div class="content">
+
+      <!-- 7.1 REQUEST FORMS -->
+      <section id="request-forms" class="is-centered">
+        <div class="eyebrow">Student Services</div>
+        <span class="rule"></span>
+        <h2>Request Forms Submission Procedures</h2>
+        <p>
+          Students request forms via the Registrar&rsquo;s Google Form; on
+          submission, a PDF is emailed to the student&rsquo;s university address.
+          The student signs it, routes it to their advisor for approval by email,
+          and then forwards the approved form to the program office for
+          processing.
+        </p>
+      </section>
+
+      <!-- 7.2 THESIS AND MASTER PROJECT FORMS -->
+      <section id="thesis-forms">
+        <div class="sec-head">
+          <div class="eyebrow">Downloads</div>
+          <span class="rule"></span>
+          <h2>Thesis &amp; Master Project Forms</h2>
+        </div>
+        <p>Forms related to theses and master projects, available as PDF/Word files:</p>
+
+        <!-- สไลด์การ์ดทรงสูง (รูปเต็มใบ + ตัวอักษรทับบนภาพ) — คลาส .is-poster ใน site.css
+             รูป img/forms-*.jpg มาจาก StockSnap.io สัญญาอนุญาต CC0 (ใช้เชิงพาณิชย์ได้ ไม่ต้องให้เครดิต) -->
+        <div class="news-carousel is-poster" aria-label="Thesis and master project forms">
+          <div class="nc-inner">
+
+            <div class="nc-viewport" tabindex="0" role="region" aria-label="Form groups, scrollable">
+              <div class="nc-track">
+
+                <article class="nc-card">
+                  <a href="https://portal.edu.chula.ac.th/pub/tefl/index.php/forms-and-links/thesis-and-master-project-forms" target="_blank" rel="noopener">
+                    <div class="nc-media"><img src="img/forms-plan.jpg" alt="" loading="lazy"></div>
+                    <div class="nc-body">
+                      <h3>Thesis Plan<br>&amp; Progress</h3>
+                      <p class="nc-sub">Thesis Plan Report Form<br>Thesis Work-in-progress Report Form</p>
+                    </div>
+                  </a>
+                </article>
+
+                <article class="nc-card">
+                  <a href="https://portal.edu.chula.ac.th/pub/tefl/index.php/forms-and-links/thesis-and-master-project-forms" target="_blank" rel="noopener">
+                    <div class="nc-media"><img src="img/forms-proposal.jpg" alt="" loading="lazy"></div>
+                    <div class="nc-body">
+                      <h3>Thesis Proposal</h3>
+                      <p class="nc-sub">Thesis Proposal Form<br>AI Declaration Form</p>
+                    </div>
+                  </a>
+                </article>
+
+                <article class="nc-card">
+                  <a href="https://portal.edu.chula.ac.th/pub/tefl/index.php/forms-and-links/thesis-and-master-project-forms" target="_blank" rel="noopener">
+                    <div class="nc-media"><img src="img/forms-evaluation.jpg" alt="" loading="lazy"></div>
+                    <div class="nc-body">
+                      <h3>Thesis Evaluation</h3>
+                      <p class="nc-sub">Thesis Proposal Evaluation (Program Committee)<br>Thesis Proposal Evaluation Form<br>Thesis Defense Evaluation Form</p>
+                    </div>
+                  </a>
+                </article>
+
+                <article class="nc-card">
+                  <a href="https://portal.edu.chula.ac.th/pub/tefl/index.php/forms-and-links/thesis-and-master-project-forms" target="_blank" rel="noopener">
+                    <div class="nc-media"><img src="img/forms-project.jpg" alt="" loading="lazy"></div>
+                    <div class="nc-body">
+                      <h3>Master Project</h3>
+                      <p class="nc-sub">Master Project Proposal Form<br>Master Project Proposal Evaluation Form<br>Master Project Defense Evaluation Form</p>
+                    </div>
+                  </a>
+                </article>
+
+                <article class="nc-card">
+                  <a href="https://portal.edu.chula.ac.th/pub/tefl/index.php/forms-and-links/thesis-and-master-project-forms" target="_blank" rel="noopener">
+                    <div class="nc-media"><img src="img/forms-committee.jpg" alt="" loading="lazy"></div>
+                    <div class="nc-body">
+                      <h3>Examination<br>Committee</h3>
+                      <p class="nc-sub">Request for Inviting Thesis Examination Committee</p>
+                    </div>
+                  </a>
+                </article>
+
+              </div>
+            </div>
+
+            <div class="nc-controls">
+              <div class="nc-dots"></div>
+              <div class="nc-arrows">
+                <button type="button" class="btn-base is-outline is-icon" data-nc="prev" aria-label="Previous forms">
+                  <svg class="arrow arrow-left" viewBox="0 0 26 14" aria-hidden="true"><path d="M25 7H1M7 1L1 7l6 6"/></svg>
+                </button>
+                <button type="button" class="btn-base is-outline is-icon" data-nc="next" aria-label="Next forms">
+                  <svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- 7.3 RESEARCH COLLABORATION LETTERS -->
+      <section id="research-collaboration-letters">
+        <div class="sec-head">
+          <div class="eyebrow">Research Support</div>
+          <span class="rule"></span>
+          <h2>Research Collaboration Letters</h2>
+        </div>
+        <p>
+          Students conducting research with schools or other institutions can
+          request official letters supporting the collaboration. The request is
+          submitted to the program office, which prepares the letter on the
+          student&rsquo;s behalf.
+        </p>
+      </section>
+
+      <!-- GRADUATION REQUEST -->
+      <section id="graduation-request">
+        <div class="sec-head">
+          <div class="eyebrow">Finishing Up</div>
+          <span class="rule"></span>
+          <h2>Graduation Request</h2>
+        </div>
+        <p>
+          The graduation request covers the procedures and documents that must be
+          submitted to the Faculty of Education in order to graduate, including
+          the final thesis or master project deliverables.
+        </p>
+      </section>
+
+      <!-- 7.4 USEFUL LINKS -->
+      <section id="useful-links">
+        <div class="sec-head">
+          <div class="eyebrow">Elsewhere</div>
+          <span class="rule"></span>
+          <h2>Useful Links</h2>
+        </div>
+        <div class="tile-grid is-5up">
+
+          <a href="https://www.chula.ac.th/" target="_blank" rel="noopener" class="tile-card">
+            <span class="t-label">University</span>
+            <div class="t-name">Chulalongkorn<br>University</div>
+            <p class="t-meta">chula.ac.th</p>
+            <div class="t-foot">
+              <span class="t-ic">
+                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 4 4 11h28z"/><path d="M8 11v14M14 11v14M22 11v14M28 11v14"/><path d="M4 25h28"/><path d="M2 31h32"/></svg>
+              </span>
+              <span class="t-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </a>
+
+          <a href="https://www.edu.chula.ac.th/" target="_blank" rel="noopener" class="tile-card">
+            <span class="t-label">Faculty</span>
+            <div class="t-name">Faculty of Education</div>
+            <p class="t-meta">edu.chula.ac.th</p>
+            <div class="t-foot">
+              <span class="t-ic">
+                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 3 13l15 7 15-7z"/><path d="M9 16.5V25c0 2.2 4 4 9 4s9-1.8 9-4v-8.5"/><path d="M33 13v8"/></svg>
+              </span>
+              <span class="t-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </a>
+
+          <a href="https://www.car.chula.ac.th/" target="_blank" rel="noopener" class="tile-card">
+            <span class="t-label">Library</span>
+            <div class="t-name">Chulalongkorn<br>University Library</div>
+            <p class="t-meta">car.chula.ac.th</p>
+            <div class="t-foot">
+              <span class="t-ic">
+                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 11.5C15.5 9 11 8 5 8.5v18c6-.5 10.5.5 13 3"/><path d="M18 11.5C20.5 9 25 8 31 8.5v18c-6-.5-10.5.5-13 3"/><path d="M18 11.5v18"/></svg>
+              </span>
+              <span class="t-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </a>
+
+          <a href="https://www.reg.chula.ac.th/" target="_blank" rel="noopener" class="tile-card">
+            <span class="t-label">Registrar</span>
+            <div class="t-name">Office of<br>the Registrar</div>
+            <p class="t-meta">reg.chula.ac.th</p>
+            <div class="t-foot">
+              <span class="t-ic">
+                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="28" height="20" rx="2"/><circle cx="13" cy="16.5" r="3"/><path d="M8 23.5a5 5 0 0 1 10 0"/><path d="M22 15h6M22 20h6"/></svg>
+              </span>
+              <span class="t-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </a>
+
+          <a href="https://www.grad.chula.ac.th/" target="_blank" rel="noopener" class="tile-card">
+            <span class="t-label">Graduate School</span>
+            <div class="t-name">Graduate School,<br>Chulalongkorn University</div>
+            <p class="t-meta">grad.chula.ac.th</p>
+            <div class="t-foot">
+              <span class="t-ic">
+                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="14" r="8"/><path d="M12.5 21 10 32l8-4 8 4-2.5-11"/></svg>
+              </span>
+              <span class="t-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ============ CTA (แถบเต็มความกว้างหน้าจอ) ============ -->
+  <section class="cta-band">
+    <div class="cta-inner">
+      <h3>Can&rsquo;t Find a Form?</h3>
+      <p>Contact the TEFL office and we&rsquo;ll point you to the right document.</p>
+      <a href="contact.html" class="btn-base is-outline">CONTACT US<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER (ใช้ร่วมกันทุกหน้า) ============ -->
+  <footer id="contact">
+
+    <div class="footer-inner">
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>About</h4>
+          <ul>
+            <li><a href="about.html">About the Program</a></li>
+            <li><a href="about.html#goals">Goals and Objectives</a></li>
+            <li><a href="about.html#academic-staff">Academic Staff</a></li>
+            <li><a href="about.html#guest-lecturers">Guest Lecturers</a></li>
+            <li><a href="faqs.html">FAQs</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="forms-and-links.html#request-forms">Request Forms</a></li>
+            <li><a href="forms-and-links.html#thesis-forms">Thesis &amp; Master Project Forms</a></li>
+            <li><a href="forms-and-links.html#graduation-request">Graduation Request</a></li>
+            <li><a href="forms-and-links.html#research-collaboration-letters">Research Collaboration Letters</a></li>
+            <li><a href="forms-and-links.html#useful-links">Useful Links</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Academics</h4>
+          <ul>
+            <li><a href="academics.html#curriculum-info">Curriculum Info</a></li>
+            <li><a href="academics.html#list-of-courses">List of Courses</a></li>
+            <li><a href="academics.html#study-plan">Study Plan</a></li>
+            <li><a href="academics.html#class-schedule">Class Schedule</a></li>
+            <li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li>
+            <li><a href="admission.html">Admission</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col is-split">
+          <h4>Related Links</h4>
+          <ul>
+            <li><a href="https://www.edu.chula.ac.th/" target="_blank" rel="noopener">Faculty of Education</a></li>
+            <li><a href="https://www.chula.ac.th/" target="_blank" rel="noopener">Chulalongkorn University</a></li>
+            <li><a href="https://www.reg.chula.ac.th/" target="_blank" rel="noopener">Reg Chula</a></li>
+            <li><a href="https://mooc.chula.ac.th/" target="_blank" rel="noopener">CHULA MOOC</a></li>
+            <li><a href="https://www.car.chula.ac.th/" target="_blank" rel="noopener">CU Library</a></li>
+            <li><a href="https://www.grad.chula.ac.th/" target="_blank" rel="noopener">Graduate School</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-mid">
+
+        <div class="footer-brand">
+          <img src="img/logo.png" alt="TEFL Chula, Faculty of Education, Chulalongkorn University">
+        </div>
+
+        <div class="f-line">
+          Address: Faculty of Education, Chulalongkorn University<br>
+          254 Phayathai Road, Wang Mai, Pathum Wan, Bangkok 10330
+        </div>
+
+        <div class="f-line">
+          Tel: <a href="tel:+6622182565">0&ndash;2218&ndash;2565</a><br>
+          Email: <a href="mailto:tefl@chula.ac.th">tefl@chula.ac.th</a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+
+        <div class="footer-social">
+          <a href="#" class="is-fb" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.7c0-.9.3-1.6 1.6-1.6h1.7V4.2c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.4V14h2.7v8z"/></svg>
+          </a>
+          <a href="#" class="is-line" aria-label="LINE">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-5 0-9 3.2-9 7.2 0 3.6 3.2 6.6 7.5 7.1.3.1.7.2.8.5.1.3 0 .7 0 .9l-.1.8c0 .3-.2 1 .9.6 1.1-.5 6-3.5 8.2-6 1.5-1.6 2.2-3.2 2.2-4.9C22.5 6.2 18.5 3 12 3zM8.3 12.6H6.5c-.3 0-.5-.2-.5-.5V8.9c0-.3.2-.5.5-.5s.5.2.5.5v2.7h1.3c.3 0 .5.2.5.5s-.2.5-.5.5zm2-.5c0 .3-.2.5-.5.5s-.5-.2-.5-.5V8.9c0-.3.2-.5.5-.5s.5.2.5.5v3.2zm3.9 0c0 .2-.1.4-.3.5h-.2c-.2 0-.3-.1-.4-.2l-1.5-2v1.7c0 .3-.2.5-.5.5s-.5-.2-.5-.5V8.9c0-.2.1-.4.3-.5h.2c.1 0 .3.1.4.2l1.5 2V8.9c0-.3.2-.5.5-.5s.5.2.5.5v3.2zm2.9-2.1c.3 0 .5.2.5.5s-.2.5-.5.5h-1.3v.8h1.3c.3 0 .5.2.5.5s-.2.5-.5.5h-1.8c-.3 0-.5-.2-.5-.5V8.9c0-.3.2-.5.5-.5h1.8c.3 0 .5.2.5.5s-.2.5-.5.5h-1.3v.6z"/></svg>
+          </a>
+          <a href="#" class="is-ig" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zm0 3.8a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0 9.9a3.9 3.9 0 1 1 0-7.8 3.9 3.9 0 0 1 0 7.8zm7.6-10.1a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/></svg>
+          </a>
+        </div>
+
+        <div class="copyright">Copyright &copy; 2026 TEFL Program, Faculty of Education, Chulalongkorn University</div>
+
+      </div>
+    </div>
+
+    <!-- จำเป็นต้องมีตามเงื่อนไขสัญญาอนุญาต CC ของภาพ ห้ามลบ -->
+    <div class="photo-credits">
+      Photo credits (Wikimedia Commons):
+      <a href="https://commons.wikimedia.org/wiki/File:Faculty_of_Arts_Library,_Chulalongkorn_University.jpg" target="_blank" rel="noopener">Faculty of Arts Library</a> &copy; Geonuch (CC BY-SA 4.0) &middot;
+      <a href="https://commons.wikimedia.org/wiki/File:Chulalongkorn_University_Language_Institute_06.23.jpg" target="_blank" rel="noopener">CU Language Institute</a> &copy; Supanut Arunoprayote (CC BY 4.0) &middot;
+      <a href="https://commons.wikimedia.org/wiki/File:Axis_landscape_in_Chula2.jpg" target="_blank" rel="noopener">Axis Landscape</a> &copy; Theerapon Bunnak (CC BY-SA 4.0) &middot;
+      <a href="https://commons.wikimedia.org/wiki/File:Mahachulalongkorn_ChulalongkornUniversity.jpg" target="_blank" rel="noopener">Mahachulalongkorn Building</a> &copy; BunBn (CC BY-SA 4.0)
+    </div>
+
+  </footer>
+
+  <a href="#" class="back-top" id="backTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </a>
+
+  <script src="site.js"></script>
+</body>
+</html>

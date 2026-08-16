@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>(TEFL) Teaching English as a Foreign Language</title>
+<link rel="stylesheet" href="fonts/chula.css">
+<link rel="stylesheet" href="site.css">
+<style>
+  /* ============ HERO (full screen + audience switcher) ============ */
+  .hero{
+    position:relative;
+    width:100%;
+    min-height:calc(100vh - var(--hdr-h));
+    overflow:hidden;
+    background:#1a1316;
+  }
+  .hero-track{
+    position:absolute;
+    inset:0;
+    display:flex;
+    transition:transform .8s cubic-bezier(.4,0,.2,1);
+  }
+  .hero-slide{
+    min-width:100%;
+    height:100%;
+    position:relative;
+    flex-shrink:0;
+    background-position:center;
+    background-size:cover;
+    background-repeat:no-repeat;
+  }
+  .slide-1{background-image:url('img/pic1.jpeg');}
+  .slide-2{background-image:url('img/pic2.jpeg');}
+  .slide-3{background-image:url('img/pic3.jpeg');}
+  .slide-4{background-image:url('img/pic4.jpeg');}
+  .slide-5{background-image:url('img/pic5.jpeg');}
+  /* darken the photo so the hero text stays readable */
+  .hero-slide::after{
+    content:"";
+    position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(16,10,14,.46) 0%,rgba(16,10,14,.30) 40%,rgba(16,10,14,.74) 100%);
+  }
+  .hero-inner{
+    position:relative;
+    z-index:3;
+    min-height:calc(100vh - var(--hdr-h));
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    justify-items:center;
+    align-items:center;
+    padding:56px 24px 64px;
+  }
+  .hero-copy{
+    text-align:center;
+    color:#fff;
+    max-width:min(1120px,100%);
+    transition:opacity .45s ease,transform .45s ease;
+  }
+  .hero-copy.is-out{opacity:0;transform:translateY(14px);}
+  .hero-copy h1{
+    font-family:var(--font-display);
+    font-size:clamp(31px,4.8vw,70px);
+    font-weight:700;
+    line-height:1.2;
+    letter-spacing:0;
+    text-shadow:0 6px 30px rgba(0,0,0,.34);
+  }
+  .hero-copy .sub{
+    margin-top:20px;
+    font-size:clamp(14px,1.25vw,18px);
+    font-weight:500;
+    letter-spacing:.4px;
+    opacity:.94;
+    text-shadow:0 3px 18px rgba(0,0,0,.32);
+  }
+  .slider-dots{
+    position:absolute;
+    bottom:22px;left:50%;
+    transform:translateX(-50%);
+    z-index:6;
+    display:flex;gap:9px;
+  }
+  .slider-dots button{
+    width:9px;height:9px;
+    border-radius:50%;
+    border:1.5px solid rgba(255,255,255,.6);
+    background:transparent;
+    cursor:pointer;
+    transition:all .25s;
+    padding:0;
+  }
+  .slider-dots button.active{
+    background:#fff;border-color:#fff;
+    transform:scale(1.25);
+  }
+  @media (max-width:900px){
+    .hero,.hero-inner{min-height:calc(100vh - var(--hdr-h));}
+    .hero-inner{padding:40px 0 58px;}
+    .hero-copy{padding:0 20px;}
+  }
+
+  /* ============ WELCOME ============ */
+  .welcome{
+    max-width:860px;
+    margin:0 auto;
+    text-align:center;
+    padding:64px 24px 56px;
+  }
+  /* heading handled by the shared .section-head component */
+  .welcome p{
+    font-size:14.5px;
+    line-height:2;
+    color:var(--text-muted);
+    margin-bottom:26px;
+  }
+  /* .btn-link now uses the shared pill system (.btn-base.is-outline) */
+
+  /* ============ MISSIONS ============ */
+  /* พื้นหลังรูปตึกทับด้วยม่านสีน้ำเงิน ไอคอนวงกลมขาวเรียงสี่ช่อง */
+  .missions {
+  text-align: center;
+
+  padding: clamp(48px, 5vw, 72px) 24px clamp(44px, 4.6vw, 64px);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(47, 111, 181, 0.9) 0%,
+      rgba(27, 58, 107, 0.93) 100%
+    ),
+    url('img/pic2.jpeg') center/cover no-repeat;
+
+  color: #fff;
+}
+  .missions .inner{max-width:1180px;margin:0 auto;}
+  .missions h2{
+    font-size:clamp(28px,3vw,38px);
+    font-family:var(--font-display);
+    color:#fff;
+    margin-bottom:clamp(30px,3.4vw,44px);
+    letter-spacing:.5px;
+  }
+  .mission-cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:clamp(18px,2.4vw,34px);
+    margin-bottom:clamp(28px,3vw,40px);
+  }
+  .mission-card{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    color:#fff;
+  }
+  .mission-card .m-icon{
+    width:clamp(92px,9.5vw,140px);
+    aspect-ratio:1;
+    border-radius:50%;
+    background:#fff;
+    display:grid;
+    place-items:center;
+    box-shadow:0 10px 26px rgba(20,36,86,.22);
+    transition:transform .3s ease,box-shadow .3s ease;
+  }
+  .mission-card .m-icon svg{width:56%;height:56%;}
+  /* ไอคอนรูปภาพ (ตัดจาก img/icon.png) วางเต็มวงกลมขาว */
+  .mission-card .m-icon img{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    display:block;
+  }
+  .mission-card:hover .m-icon{
+    transform:translateY(-6px) scale(1.03);
+    box-shadow:0 18px 36px rgba(20,36,86,.32);
+  }
+  .mission-card h4{
+    margin-top:clamp(16px,1.8vw,24px);
+    font-size:clamp(16px,1.4vw,21px);
+    font-weight:700;
+    line-height:1.3;
+    color:#fff;
+  }
+  .mission-card p{
+    margin-top:10px;
+    font-size:clamp(12.5px,1vw,14.5px);
+    line-height:1.65;
+    color:rgba(255,255,255,.9);
+    max-width:30ch;
+  }
+
+  /* ปุ่มในเซคชันนี้: พื้นขาวล้วนไม่มีเส้นขอบเข้ม ตัวหนังสือ+ลูกศรสีดำ
+     เมื่อ hover / สัมผัส → พื้นดำ ตัวหนังสือขาว */
+  .missions .btn-base.is-outline{
+    background:#fff;
+    border-color:#fff;
+    color:#1f1f1f;
+  }
+  .missions .btn-base.is-outline:hover,
+  .missions .btn-base.is-outline:focus-visible,
+  .missions .btn-base.is-outline:active{
+    background:#1f1f1f;
+    border-color:#1f1f1f;
+    color:#fff;
+  }
+
+  @media (max-width:980px){
+    .mission-cards{grid-template-columns:repeat(2,1fr);gap:32px 20px;}
+  }
+  @media (max-width:560px){
+    .mission-cards{grid-template-columns:1fr;gap:30px;}
+    .mission-card .m-icon{width:110px;}
+  }
+
+  /* .btn-ghost now uses the shared pill system (.btn-base.is-outline) */
+
+  /* ============ DISCOVER OUR COURSES ============ */
+  /* จัดเป็นแถวการ์ด: หัวข้ออยู่บน แล้ววางการ์ดเรียงแนวนอน
+     การ์ดใบแรกเป็นสีแบรนด์เพื่อเป็นจุดนำสายตา ที่เหลือเป็นการ์ดขาวมีเงาอ่อน */
+  .discover{
+    padding:clamp(40px,4.2vw,58px) 24px clamp(44px,4.6vw,62px);
+    background:#fff;
+  }
+  .discover .inner{
+    max-width:1180px;
+    margin:0 auto;
+  }
+  /* หัวข้อใช้คอมโพเนนต์ .section-head ร่วมกับส่วนอื่น */
+  .discover .section-head{margin-bottom:clamp(20px,2.4vw,30px);}
+
+  .course-index{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:clamp(14px,1.6vw,22px);
+  }
+  .course-cta{
+    display:flex;
+    justify-content:center;
+    margin-top:clamp(18px,2.2vw,26px);
+  }
+  /* การ์ดรูปแนวตั้ง: รูปเต็มใบ + ม่านไล่สีทับด้านบน หัวข้ออยู่บน ปุ่ม + อยู่มุมล่างขวา */
+  .course-card{
+    position:relative;
+    display:block;
+    aspect-ratio:3/4;
+    border-radius:18px;
+    overflow:hidden;
+    background:#eceff1;
+    box-shadow:0 6px 18px rgba(43,43,43,.10);
+    transition:transform .3s ease,box-shadow .3s ease;
+  }
+  .course-card:hover,
+  .course-card:focus-visible{
+    transform:translateY(-6px);
+    box-shadow:0 18px 38px rgba(43,43,43,.20);
+  }
+  .course-card:focus-visible{outline:2px solid var(--pink-dark);outline-offset:3px;}
+
+  /* รูปเต็มใบ — ใส่รูปจริงที่ style="--img:url('img/ชื่อไฟล์.jpg')" */
+  .course-card .c-photo{
+    position:absolute;inset:0;
+    background-image:var(--img,none);
+    background-size:cover;
+    background-position:center bottom;
+    transition:transform .5s ease;
+  }
+  .course-card:hover .c-photo{transform:scale(1.05);}
+
+  /* ม่านไล่สี: ขาวทึบด้านบนให้ตัวหนังสืออ่านออก จางลงจนเห็นรูปเต็มด้านล่าง
+     ใช้เฉดเดียวกันทุกใบ */
+  .course-card .c-bg{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg,
+      rgba(255,255,255,1) 0%,
+      rgba(255,255,255,1) 34%,
+      rgba(255,255,255,.72) 56%,
+      rgba(255,255,255,.28) 80%,
+      rgba(255,255,255,0) 100%);
+  }
+
+  .course-card .c-body{
+    position:relative;
+    padding:20px 18px 0;
+  }
+  .course-card h5{
+    font-size:clamp(15px,1.25vw,18px);
+    font-weight:700;
+    line-height:1.32;
+    color:var(--text-dark);
+  }
+  .course-card p{
+    margin-top:7px;
+    font-size:12px;
+    line-height:1.6;
+    color:var(--text-muted);
+  }
+  .course-card .plus{
+    position:absolute;
+    right:16px;bottom:16px;
+    width:38px;height:38px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 4px 12px rgba(0,0,0,.18);
+    transition:transform .3s ease,background .3s ease;
+  }
+  .course-card .plus svg{width:16px;height:16px;color:#3a3a3a;transition:color .3s ease;}
+  .course-card:hover .plus,
+  .course-card:focus-visible .plus{transform:rotate(90deg) scale(1.08);background:var(--btn-solid-bg);}
+  .course-card:hover .plus svg,
+  .course-card:focus-visible .plus svg{color:#fff;}
+
+  @media (prefers-reduced-motion:reduce){
+    .course-card,.course-card .c-photo,.course-card .plus{transition:none;}
+    .course-card:hover .c-photo{transform:none;}
+  }
+
+  @media (max-width:1024px){
+    .course-index{grid-template-columns:repeat(3,1fr);}
+  }
+  @media (max-width:760px){
+    .course-index{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:460px){
+    .course-index{grid-template-columns:1fr;}
+    .course-card{aspect-ratio:16/10;}
+    .course-card .c-body{padding:18px 16px 0;max-width:74%;}
+  }
+
+  /* ============ PROGRAM BLOCKS ============ */
+  .programs{
+    max-width:1180px;
+    margin:0 auto;
+    padding:20px 24px 30px;
+  }
+  .program-block{
+    display:flex;
+    align-items:center;
+    gap:56px;
+    margin-bottom:70px;
+    flex-wrap:wrap;
+  }
+  .program-block.reverse{flex-direction:row-reverse;}
+  .program-text{flex:1 1 380px;}
+  .program-text h3{
+    font-family:var(--font-display);
+    font-size:30px;
+     color:var(--pink);
+    margin-bottom:16px;
+  }
+  .program-text p{
+    font-size:14.5px;
+    line-height:2;
+    color:var(--text-muted);
+    margin-bottom:20px;
+  }
+  /* .btn-solid now uses the shared pill system (.btn-base.is-solid) */
+  .program-img{
+    flex:1 1 380px;
+    height:290px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#8aa6cf,#4a6da0);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+    font-size:13px;
+    letter-spacing:2px;
+    box-shadow:0 16px 36px rgba(36,58,97,.22);
+  }
+  .program-img.alt{background:linear-gradient(135deg,#e78ab0,#c9538a);}
+.program-img {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+  border-radius: 40px;
+}
+
+.program-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+  /* ============ INTRO / ทำความรู้จักจุฬาฯ ============ */
+  .intro-about{
+    position:relative;
+    overflow:hidden;
+    isolation:isolate;
+    padding:clamp(64px,8vw,112px) 0;
+    background:linear-gradient(105deg,#ffffff 0%,#fffdfe 45%,#fdf7fa 78%,#faf0f5 100%);
+  }
+  /* ชั้นพื้นหลังคลื่น (เคลื่อนไหว) */
+  .intro-bg{
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+  }
+  .intro-bg .w{
+    position:absolute;
+    inset:-14%;
+    will-change:transform;
+    transform-origin:50% 50%;
+  }
+  .intro-bg .w svg{width:100%;height:100%;display:block;}
+  .intro-bg .w-1{filter:blur(22px);opacity:.5;animation:introWaveA 22s ease-in-out infinite alternate;}
+  .intro-bg .w-2{filter:blur(30px);opacity:.34;animation:introWaveB 30s ease-in-out infinite alternate;}
+  .intro-bg .w-3{filter:blur(38px);opacity:.28;animation:introWaveC 26s ease-in-out infinite alternate;}
+  /* ล้างฝั่งซ้ายให้ขาวสะอาด ตัวหนังสืออ่านง่าย */
+  .intro-bg::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(95deg,rgba(255,255,255,.92) 0%,rgba(255,255,255,.6) 42%,rgba(255,255,255,.12) 72%,rgba(255,255,255,0) 100%);
+  }
+  /* ดวงแสงนุ่ม ๆ ลอยช้า */
+  .intro-bg .glow{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(60px);
+    will-change:transform;
+  }
+  .intro-bg .glow-1{
+    width:46vw;height:46vw;
+    top:-18%;right:-6%;
+    background:radial-gradient(circle,rgba(232,168,196,.34),rgba(232,168,196,0) 68%);
+    animation:introGlowA 24s ease-in-out infinite alternate;
+  }
+  .intro-bg .glow-2{
+    width:38vw;height:38vw;
+    bottom:-22%;left:-8%;
+    background:radial-gradient(circle,rgba(206,180,204,.26),rgba(206,180,204,0) 70%);
+    animation:introGlowB 28s ease-in-out infinite alternate;
+  }
+  @keyframes introWaveA{
+    from{transform:translate3d(-2%,0,0) scaleY(1);}
+    to{transform:translate3d(3%,-2.5%,0) scaleY(1.08);}
+  }
+  @keyframes introWaveB{
+    from{transform:translate3d(2%,1%,0) scaleY(1.05);}
+    to{transform:translate3d(-3%,-1.5%,0) scaleY(.94);}
+  }
+  @keyframes introWaveC{
+    from{transform:translate3d(-1%,2%,0) scaleX(1);}
+    to{transform:translate3d(4%,-1%,0) scaleX(1.06);}
+  }
+  @keyframes introGlowA{
+    from{transform:translate3d(0,0,0) scale(1);}
+    to{transform:translate3d(-6%,6%,0) scale(1.12);}
+  }
+  @keyframes introGlowB{
+    from{transform:translate3d(0,0,0) scale(1.08);}
+    to{transform:translate3d(7%,-5%,0) scale(.96);}
+  }
+  .intro-inner{
+    position:relative;
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  .intro-copy{
+    max-width:760px;
+    padding-left:clamp(0px,6vw,110px);
+  }
+  /* ตัวเลขสถิติบนพื้นหลังคลื่น */
+  .intro-stats{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:clamp(40px,7vw,96px);
+    text-align:center;
+  }
+  .i-stat .num{
+    font-family:var(--font-display);
+    font-size:clamp(38px,4.4vw,56px);
+    font-weight:700;
+    line-height:1;
+    color:var(--pink);
+  }
+  .i-stat .label{
+    font-size:13px;
+    letter-spacing:.6px;
+    font-weight:700;
+    color:var(--text-muted);
+    margin-top:12px;
+  }
+  .intro-eyebrow{
+    font-size:15px;
+    color:var(--pink);
+    margin-bottom:clamp(18px,2.4vw,30px);
+  }
+  .intro-title{
+    font-family:var(--font-body);
+    font-weight:400;
+    font-size:clamp(24px,3vw,38px);
+    line-height:1.75;
+    color:var(--text-dark);
+    letter-spacing:.2px;
+    margin-bottom:clamp(26px,3.4vw,44px);
+  }
+  .btn-base.intro-btn{
+    letter-spacing:.3px;
+    font-weight:400;
+    font-size:15px;
+    padding:12px 26px;
+    background:rgba(255,255,255,.75);
+    backdrop-filter:blur(4px);
+  }
+  @media (max-width:640px){
+    .intro-copy{padding-left:0;}
+    /* จอเล็กจัดเป็น 2x2 ไม่ให้ตกบรรทัดแบบ 3+1 */
+    .intro-stats{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:clamp(28px,7vw,44px);
+    }
+    .intro-bg .glow-1{width:86vw;height:86vw;}
+    .intro-bg .glow-2{width:80vw;height:80vw;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .intro-bg .w,
+    .intro-bg .glow{animation:none;}
+  }
+
+  /* ============ STATS ============ */
+  .stats{
+    position:relative;
+    background:#1a1316 url('img/pic3.jpeg') center/cover no-repeat;
+    padding:56px 24px;
+    overflow:hidden;
+  }
+  /* darken the photo so the numbers stay readable */
+  .stats::after{
+    content:"";
+    position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(20,14,17,.72),rgba(20,14,17,.62));
+  }
+  .stats-inner{
+    position:relative;
+    z-index:1;
+    max-width:1080px;
+    margin:0 auto;
+    display:flex;
+    justify-content:center;
+    gap:90px;
+    flex-wrap:wrap;
+    text-align:center;
+  }
+  .stat .num{
+    font-family:var(--font-display);
+    font-size:44px;
+    font-weight:700;
+    color:#e8eaec;
+    line-height:1;
+    text-shadow:0 2px 10px rgba(0,0,0,.45);
+  }
+  /* ไล่เฉดเทาบนตัวเลข (เบราว์เซอร์ที่ไม่รองรับจะได้สีเทาอ่อนด้านบนแทน) */
+  @supports (-webkit-background-clip:text) or (background-clip:text){
+    .stat .num{
+      background:linear-gradient(180deg,#ffffff 0%,#dfe3e6 45%,#98a0a7 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-shadow:none;
+      filter:drop-shadow(0 2px 10px rgba(0,0,0,.5));
+    }
+  }
+  .stat .label{
+    font-size:12.5px;
+    color:#f4ece9;
+    margin-top:10px;
+    letter-spacing:.5px;
+    font-weight:600;
+    text-shadow:0 1px 6px rgba(0,0,0,.5);
+  }
+
+  /* ============ NEWS CAROUSEL ============ */
+  /* ย้ายไป site.css แล้ว (คลาส .news-carousel / .nc-*) ใช้ร่วมกับหน้าอื่น */
+
+  /* ============ FAQ ============ */
+  .faq{
+    max-width:840px;
+    margin:0 auto;
+    padding:10px 24px 84px;
+  }
+  .faq h2{
+    text-align:center;
+    font-family:var(--font-display);
+    font-size:32px;
+    margin-bottom:36px;
+    color:var(--text-dark);
+  }
+  .faq-item{
+    border:1px solid var(--border-light);
+    border-radius:10px;
+    margin-bottom:12px;
+    overflow:hidden;
+    background:#fff;
+    transition:box-shadow .2s;
+  }
+  .faq-item[open]{box-shadow:0 8px 20px rgba(0,0,0,.06);}
+  .faq-item summary{
+    cursor:pointer;
+    list-style:none;
+    padding:18px 22px;
+    font-size:14.5px;
+    font-weight:600;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:var(--text-dark);
+  }
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{
+    content:"+";
+    font-size:20px;
+    color:var(--pink);
+    margin-left:14px;
+    flex-shrink:0;
+  }
+  .faq-item[open] summary::after{content:"\2013";}
+  .faq-item .answer{
+    padding:0 22px 20px;
+    font-size:13.5px;
+    line-height:1.9;
+    color:var(--text-muted);
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- ============ MAIN HEADER (ใช้ร่วมกันทุกหน้า) ============ -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+
+      <a href="index.html" class="logo" aria-label="TEFL Program home">
+        <img src="img/logo.png" alt="TEFL Program Logo">
+      </a>
+
+      <nav class="main-nav" id="mainNav" aria-label="Main menu">
+        <ul>
+
+          <li>
+            <a href="about.html" data-dropdown="dd-about">About
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-about">
+              <div class="dd-menu">
+                <a class="dd-title" href="about.html">About the Program</a>
+                <ul>
+                  <li><a href="about.html#goals">Goals and Objectives</a></li>
+                  <li><a href="about.html#academic-staff">Academic Staff</a></li>
+                  <li><a href="about.html#guest-lecturers">Guest Lecturers</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="academics.html" data-dropdown="dd-academics">Academics
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-academics">
+              <div class="dd-menu">
+                <a class="dd-title" href="academics.html">Academics</a>
+                <ul>
+                  <li><a href="academics.html#curriculum-info">Curriculum Info.</a></li>
+                  <li><a href="academics.html#list-of-courses">List of Courses</a></li>
+                  <li><a href="academics.html#study-plan">Study Plan</a></li>
+                  <li><a href="academics.html#class-schedule">Class Schedule</a></li>
+                  <li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li>
+                  <li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="admission.html" data-dropdown="dd-admission">Admission
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-admission">
+              <div class="dd-menu">
+                <a class="dd-title" href="admission.html">Admission</a>
+                <ul>
+                  <li><a href="admission.html#admission-requirements">Admission Requirements</a></li>
+                  <li><a href="admission.html#admission-procedures">Admission Procedures</a></li>
+                  <li><a href="admission.html#admission-deadline">Admission Deadline</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="research.html" data-dropdown="dd-research">Research
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-research">
+              <div class="dd-menu">
+                <a class="dd-title" href="research.html">Research</a>
+                <ul>
+                  <li><a href="research.html#research-guidelines">Guidelines for Research Procedures</a></li>
+                  <li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li>
+                  <li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="activities.html" data-dropdown="dd-activities">Activities
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-activities">
+              <div class="dd-menu">
+                <a class="dd-title" href="activities.html">Activities</a>
+                <ul>
+                  <li><a href="activities.html#activities-list">Activities List</a></li>
+                  <li><a href="activities.html#intensive-course">Intensive Course</a></li>
+                  <li><a href="index.html#news">News &amp; Events</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="forms-and-links.html" data-dropdown="dd-forms">Forms &amp; Links
+              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+            </a>
+            <div class="dropdown" id="dd-forms">
+              <div class="dd-menu">
+                <a class="dd-title" href="forms-and-links.html">Forms and Links</a>
+                <ul>
+                  <li><a href="forms-and-links.html#request-forms">Request Forms</a></li>
+                  <li><a href="forms-and-links.html#thesis-forms">Thesis and Master Project Forms</a></li>
+                  <li><a href="forms-and-links.html#research-collaboration-letters">Research Collaboration Letters</a></li>
+                  <li><a href="forms-and-links.html#graduation-request">Graduation Request</a></li>
+                  <li><a href="forms-and-links.html#useful-links">Useful Links</a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <li><a href="faqs.html">FAQs</a></li>
+
+          <li><a href="contact.html">Contact</a></li>
+
+        </ul>
+      </nav>
+
+      <div class="header-tools">
+        <button class="tool-btn" id="searchToggle" aria-label="Search" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        </button>
+
+        <button class="tool-btn burger" id="mobileToggle" aria-label="Open full menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ============ SEARCH OVERLAY ============ -->
+  <div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Search this site">
+    <button class="tool-btn search-close" id="searchClose" aria-label="Close search">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="search-box">
+      <form id="searchForm" role="search">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        <input type="search" id="searchInput" placeholder="Search the TEFL site&hellip;" autocomplete="off">
+      </form>
+      <p class="search-hint">Try &ldquo;admission&rdquo;, &ldquo;tuition&rdquo;, &ldquo;thesis&rdquo;, &ldquo;schedule&rdquo;.</p>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- ============ FULL MENU DRAWER ============ -->
+  <div class="nav-drawer" id="navDrawer" role="dialog" aria-modal="true" aria-label="Full menu">
+    <a href="index.html" class="drawer-logo" aria-label="TEFL Program home">
+      <img src="img/logo.png" alt="TEFL Program Logo">
+    </a>
+    <button class="tool-btn drawer-close" id="drawerClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="drawer-body" id="drawerBody"></div>
+  </div>
+
+  <main>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="home">
+      <div class="hero-track" id="heroTrack">
+        <div class="hero-slide slide-1" role="img" aria-label="TEFL students at Chulalongkorn University"></div>
+        <div class="hero-slide slide-2" role="img" aria-label="Classroom activity"></div>
+        <div class="hero-slide slide-3" role="img" aria-label="Seminar session"></div>
+        <div class="hero-slide slide-4" role="img" aria-label="Group work"></div>
+        <div class="hero-slide slide-5" role="img" aria-label="Campus life"></div>
+      </div>
+
+      <div class="hero-inner">
+        <div class="hero-copy" id="heroCopy">
+          <h1>Teaching English as a<br>Foreign Language Program</h1>
+          <p class="sub">Faculty of Education, Chulalongkorn University</p>
+        </div>
+      </div>
+
+      <div class="slider-dots" id="sliderDots">
+        <button class="active" data-slide="0" aria-label="Slide 1"></button>
+        <button data-slide="1" aria-label="Slide 2"></button>
+        <button data-slide="2" aria-label="Slide 3"></button>
+        <button data-slide="3" aria-label="Slide 4"></button>
+        <button data-slide="4" aria-label="Slide 5"></button>
+      </div>
+    </section>
+
+
+    <!-- ============ WELCOME ============ -->
+    <section class="welcome" id="about">
+      <div class="section-head">
+        <div class="eyebrow">Faculty of Education</div>
+        <span class="rule"></span>
+        <h2>Welcome to the Teaching English as a Foreign Language Program</h2>
+      </div>
+      <p>
+        The TEFL Program at the Faculty of Education, Chulalongkorn University,
+        is committed to developing knowledgeable, skilled and professional
+        English language educators. Our students are cultivated to develop
+        pedagogical knowledge, language proficiency, research skills and
+        practical teaching experience, well-equipped to grow personally and
+        professionally in the international community.
+      </p>
+      <a href="#academics" class="btn-base is-outline">Read More<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+    </section>
+
+
+    <!-- ============ MISSIONS ============ -->
+    <section class="missions" id="missions">
+      <div class="inner">
+        <h2>Our Missions</h2>
+        <div class="mission-cards">
+
+          <a href="#about" class="mission-card">
+            <span class="m-icon">
+              <img src="img/icon-research.png" alt="" loading="lazy" decoding="async" width="400" height="400">
+            </span>
+            <h4>Research Excellence</h4>
+            <p>Advancing knowledge through innovative research in language teaching, learning and assessment.</p>
+          </a>
+
+          <a href="#about" class="mission-card">
+            <span class="m-icon">
+              <img src="img/icon-global.png" alt="" loading="lazy" decoding="async" width="400" height="400">
+            </span>
+            <h4>Global Perspective</h4>
+            <p>Preparing educators to teach English effectively in diverse and international contexts.</p>
+          </a>
+
+          <a href="#about" class="mission-card">
+            <span class="m-icon">
+              <img src="img/icon-collab.png" alt="" loading="lazy" decoding="async" width="400" height="400">
+            </span>
+            <h4>Collaborative Learning</h4>
+            <p>Fostering a vibrant academic community where diverse perspectives enhance understanding.</p>
+          </a>
+
+          <a href="#about" class="mission-card">
+            <span class="m-icon">
+              <img src="img/icon-practical.png" alt="" loading="lazy" decoding="async" width="400" height="400">
+            </span>
+            <h4>Practical Application</h4>
+            <p>Bridging theory and practice to prepare graduates for meaningful teaching careers.</p>
+          </a>
+
+        </div>
+        <a href="#about" class="btn-base is-outline">VIEW ALL MISSIONS<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+      </div>
+    </section>
+
+
+    <!-- ============ DISCOVER OUR COURSES ============ -->
+    <section class="discover" id="academics">
+      <div class="inner">
+
+        <div class="section-head">
+          <div class="eyebrow">Discover Our</div>
+          <span class="rule"></span>
+          <h2>Courses</h2>
+        </div>
+
+        <div class="course-index" id="courses">
+          <a class="course-card" href="academics.html#list-of-courses">
+            <div class="c-photo" style="--img:url('img/pic2.jpeg')"></div>
+            <div class="c-bg"></div>
+            <div class="c-body">
+              <h5>Required Courses</h5>
+              <p>Core courses essential for all TEFL students</p>
+            </div>
+            <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </a>
+          <a class="course-card" href="academics.html#list-of-courses">
+            <div class="c-photo" style="--img:url('img/pic5.jpeg')"></div>
+            <div class="c-bg"></div>
+            <div class="c-body">
+              <h5>Elective Courses</h5>
+              <p>Specialized courses based on your interests</p>
+            </div>
+            <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </a>
+          <a class="course-card" href="academics.html#curriculum-info">
+            <div class="c-photo" style="--img:url('img/pic3.jpeg')"></div>
+            <div class="c-bg"></div>
+            <div class="c-body">
+              <h5>Teaching Practicum</h5>
+              <p>Supervised practical teaching experience in real classrooms</p>
+            </div>
+            <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </a>
+          <a class="course-card" href="about.html#guest-lecturers">
+            <div class="c-photo" style="--img:url('img/pic1.jpeg')"></div>
+            <div class="c-bg"></div>
+            <div class="c-body">
+              <h5>Guest Lectures</h5>
+              <p>Talks by visiting scholars and professionals</p>
+            </div>
+            <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </a>
+          <a class="course-card" href="academics.html#list-of-courses">
+            <div class="c-photo" style="--img:url('img/pic4.jpeg')"></div>
+            <div class="c-bg"></div>
+            <div class="c-body">
+              <h5>Educational Technology</h5>
+              <p>Digital tools and technology for modern language education</p>
+            </div>
+            <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </a>
+        </div>
+
+        <div class="course-cta">
+          <a href="academics.html#curriculum-info" class="btn-base is-outline is-sm">CURRICULUM INFO<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ============ PROGRAM BLOCKS ============ -->
+    <section class="programs" id="faculty">
+
+      <div class="program-block">
+        <div class="program-text">
+          <h3>TEFL Program Overview</h3>
+          <p>
+            The program combines theoretical knowledge with practical experience
+            in English language teaching and learning. Students are encouraged
+            to develop critical thinking, creativity, communication and
+            professional teaching competencies.
+          </p>
+          <a href="#contact" class="btn-base is-outline">LEARN MORE<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+        </div>
+        <div class="program-img"><img src="img/pic1.jpeg" alt="TEFL Program"></div>
+      </div>
+
+      <div class="program-block reverse">
+        <div class="program-text">
+          <h3>Learning Beyond the Classroom</h3>
+          <p>
+            Students have opportunities to participate in academic activities,
+            workshops, educational projects and professional learning
+            communities. These experiences support the development of practical
+            skills and professional identity.
+          </p>
+          <a href="#students" class="btn-base is-outline">EXPLORE ACTIVITIES<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+        </div>
+        <div class="program-img alt"><img src="img/pic2.jpeg" alt="Learning & Experience"></div>
+      </div>
+
+    </section>
+
+
+    <!-- ============ INTRO / ทำความรู้จักจุฬาฯ ============ -->
+    <section class="intro-about" id="students">
+
+      <div class="intro-bg" aria-hidden="true">
+        <div class="w w-1">
+          <svg viewBox="0 0 1440 560" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="introGradA" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#f7e3ea"/>
+                <stop offset="55%" stop-color="#eec6d6"/>
+                <stop offset="100%" stop-color="#e2aec6"/>
+              </linearGradient>
+            </defs>
+            <path fill="url(#introGradA)"
+              d="M-200,250 C 120,110 320,300 640,246 C 960,192 1140,52 1640,128 L1640,-140 L-200,-140 Z"/>
+          </svg>
+        </div>
+
+        <div class="w w-2">
+          <svg viewBox="0 0 1440 560" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="introGradB" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#efdfe6" stop-opacity="0"/>
+                <stop offset="40%" stop-color="#e7cad9" stop-opacity=".9"/>
+                <stop offset="100%" stop-color="#d9bfd2" stop-opacity=".5"/>
+              </linearGradient>
+            </defs>
+            <path fill="none" stroke="url(#introGradB)" stroke-width="90" stroke-linecap="round"
+              d="M-220,330 C 180,210 340,420 700,340 C 1020,268 1240,150 1660,214"/>
+          </svg>
+        </div>
+
+        <div class="w w-3">
+          <svg viewBox="0 0 1440 560" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="introGradC" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0%" stop-color="#f3e6ec"/>
+                <stop offset="100%" stop-color="#e8d3e0" stop-opacity=".6"/>
+              </linearGradient>
+            </defs>
+            <path fill="url(#introGradC)"
+              d="M-200,520 C 220,430 400,566 780,486 C 1090,420 1300,528 1640,470 L1640,760 L-200,760 Z"/>
+          </svg>
+        </div>
+
+        <span class="glow glow-1"></span>
+        <span class="glow glow-2"></span>
+      </div>
+
+      <div class="intro-inner">
+        <div class="intro-stats">
+          <div class="i-stat">
+            <div class="num">2001</div>
+            <div class="label">Year Established</div>
+          </div>
+          <div class="i-stat">
+            <div class="num">25+</div>
+            <div class="label">Years of Excellence</div>
+          </div>
+          <div class="i-stat">
+            <div class="num">500+</div>
+            <div class="label">Graduates &amp; Alumni</div>
+          </div>
+          <div class="i-stat">
+            <div class="num">30+</div>
+            <div class="label">Expert Faculty</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ============ NEWS CAROUSEL ============ -->
+    <section class="news-carousel" id="news" aria-label="Latest News">
+      <div class="nc-inner">
+
+        <div class="nc-head">
+          <h2>Latest News</h2>
+          <a href="#" class="btn-base is-outline is-sm">View All<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+        </div>
+
+        <div class="nc-viewport" tabindex="0" role="region" aria-label="News items, scrollable">
+          <div class="nc-track">
+
+            <article class="nc-card">
+              <a href="#">
+                <div class="nc-thumb"><img src="img/pic1.jpeg" alt=""></div>
+                <div class="nc-body">
+                  <h3>TEFL Program welcomes the incoming cohort of graduate students</h3>
+                  <span class="nc-tag">News &amp; Announcements</span>
+                </div>
+              </a>
+            </article>
+
+            <article class="nc-card">
+              <a href="#">
+                <div class="nc-thumb"><img src="img/pic2.jpeg" alt=""></div>
+                <div class="nc-body">
+                  <h3>Workshop on classroom research methods for English language teachers</h3>
+                  <span class="nc-tag">Academic Activities</span>
+                </div>
+              </a>
+            </article>
+
+            <article class="nc-card">
+              <a href="#">
+                <div class="nc-thumb"><img src="img/pic3.jpeg" alt=""></div>
+                <div class="nc-body">
+                  <h3>Student teaching practicum: reflections from the field</h3>
+                  <span class="nc-tag">Student Activities</span>
+                </div>
+              </a>
+            </article>
+
+            <article class="nc-card">
+              <a href="#">
+                <div class="nc-thumb"><img src="img/pic4.jpeg" alt=""></div>
+                <div class="nc-body">
+                  <h3>Guest lecture series on technology-enhanced language learning</h3>
+                  <span class="nc-tag">Academic Activities</span>
+                </div>
+              </a>
+            </article>
+
+            <article class="nc-card">
+              <a href="#">
+                <div class="nc-thumb"><img src="img/pic5.jpeg" alt=""></div>
+                <div class="nc-body">
+                  <h3>Faculty and students present at the international TEFL conference</h3>
+                  <span class="nc-tag">Research</span>
+                </div>
+              </a>
+            </article>
+
+            <article class="nc-card">
+              <a href="#">
+                <div class="nc-thumb"><img src="img/pic2.jpeg" alt=""></div>
+                <div class="nc-body">
+                  <h3>Admission open for the next academic year — information session announced</h3>
+                  <span class="nc-tag">News &amp; Announcements</span>
+                </div>
+              </a>
+            </article>
+
+          </div>
+        </div>
+
+        <div class="nc-controls">
+          <div class="nc-dots"></div>
+          <div class="nc-arrows">
+            <button type="button" class="btn-base is-outline is-icon" data-nc="prev" aria-label="Previous news">
+              <svg class="arrow arrow-left" viewBox="0 0 26 14" aria-hidden="true"><path d="M25 7H1M7 1L1 7l6 6"/></svg>
+            </button>
+            <button type="button" class="btn-base is-outline is-icon" data-nc="next" aria-label="Next news">
+              <svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ============ FAQ ============ -->
+    <section class="faq">
+      <h2>Frequently Asked Questions</h2>
+
+      <details class="faq-item">
+        <summary>What is the TEFL Program?</summary>
+        <div class="answer">
+          TEFL stands for Teaching English as a Foreign Language. The program
+          focuses on English language education, teaching methodology and
+          professional development for future English teachers.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Who should enroll in the TEFL Program?</summary>
+        <div class="answer">
+          The program is ideal for students who are passionate about English
+          language education and aim to become professional English teachers
+          in Thai and international contexts.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>What can students learn from the program?</summary>
+        <div class="answer">
+          Students develop English language proficiency, pedagogical knowledge,
+          research skills and practical experience in language teaching.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Are there activities outside the classroom?</summary>
+        <div class="answer">
+          Yes. Students can participate in academic activities, workshops,
+          educational projects and professional learning experiences.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>How can I contact the TEFL Program?</summary>
+        <div class="answer">
+          Please use the contact information provided in the footer of this
+          website, or reach us by email at tefl@chula.ac.th.
+        </div>
+      </details>
+    </section>
+
+  </main>
+
+
+  <!-- ============ FOOTER (ใช้ร่วมกันทุกหน้า) ============ -->
+  <footer id="contact">
+
+    <div class="footer-inner">
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>About</h4>
+          <ul>
+            <li><a href="about.html">About the Program</a></li>
+            <li><a href="about.html#goals">Goals and Objectives</a></li>
+            <li><a href="about.html#academic-staff">Academic Staff</a></li>
+            <li><a href="about.html#guest-lecturers">Guest Lecturers</a></li>
+            <li><a href="faqs.html">FAQs</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="forms-and-links.html#request-forms">Request Forms</a></li>
+            <li><a href="forms-and-links.html#thesis-forms">Thesis &amp; Master Project Forms</a></li>
+            <li><a href="forms-and-links.html#graduation-request">Graduation Request</a></li>
+            <li><a href="forms-and-links.html#research-collaboration-letters">Research Collaboration Letters</a></li>
+            <li><a href="forms-and-links.html#useful-links">Useful Links</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Academics</h4>
+          <ul>
+            <li><a href="academics.html#curriculum-info">Curriculum Info</a></li>
+            <li><a href="academics.html#list-of-courses">List of Courses</a></li>
+            <li><a href="academics.html#study-plan">Study Plan</a></li>
+            <li><a href="academics.html#class-schedule">Class Schedule</a></li>
+            <li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li>
+            <li><a href="admission.html">Admission</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col is-split">
+          <h4>Related Links</h4>
+          <ul>
+            <li><a href="https://www.edu.chula.ac.th/" target="_blank" rel="noopener">Faculty of Education</a></li>
+            <li><a href="https://www.chula.ac.th/" target="_blank" rel="noopener">Chulalongkorn University</a></li>
+            <li><a href="https://www.reg.chula.ac.th/" target="_blank" rel="noopener">Reg Chula</a></li>
+            <li><a href="https://mooc.chula.ac.th/" target="_blank" rel="noopener">CHULA MOOC</a></li>
+            <li><a href="https://www.car.chula.ac.th/" target="_blank" rel="noopener">CU Library</a></li>
+            <li><a href="https://www.grad.chula.ac.th/" target="_blank" rel="noopener">Graduate School</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-mid">
+
+        <div class="footer-brand">
+          <img src="img/logo.png" alt="TEFL Chula, Faculty of Education, Chulalongkorn University">
+        </div>
+
+        <div class="f-line">
+          Address: Faculty of Education, Chulalongkorn University<br>
+          254 Phayathai Road, Wang Mai, Pathum Wan, Bangkok 10330
+        </div>
+
+        <div class="f-line">
+          Tel: <a href="tel:+6622182565">0&ndash;2218&ndash;2565</a><br>
+          Email: <a href="mailto:tefl@chula.ac.th">tefl@chula.ac.th</a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+
+        <div class="footer-social">
+          <a href="#" class="is-fb" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.7c0-.9.3-1.6 1.6-1.6h1.7V4.2c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.4V14h2.7v8z"/></svg>
+          </a>
+          <a href="#" class="is-line" aria-label="LINE">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-5 0-9 3.2-9 7.2 0 3.6 3.2 6.6 7.5 7.1.3.1.7.2.8.5.1.3 0 .7 0 .9l-.1.8c0 .3-.2 1 .9.6 1.1-.5 6-3.5 8.2-6 1.5-1.6 2.2-3.2 2.2-4.9C22.5 6.2 18.5 3 12 3zM8.3 12.6H6.5c-.3 0-.5-.2-.5-.5V8.9c0-.3.2-.5.5-.5s.5.2.5.5v2.7h1.3c.3 0 .5.2.5.5s-.2.5-.5.5zm2-.5c0 .3-.2.5-.5.5s-.5-.2-.5-.5V8.9c0-.3.2-.5.5-.5s.5.2.5.5v3.2zm3.9 0c0 .2-.1.4-.3.5h-.2c-.2 0-.3-.1-.4-.2l-1.5-2v1.7c0 .3-.2.5-.5.5s-.5-.2-.5-.5V8.9c0-.2.1-.4.3-.5h.2c.1 0 .3.1.4.2l1.5 2V8.9c0-.3.2-.5.5-.5s.5.2.5.5v3.2zm2.9-2.1c.3 0 .5.2.5.5s-.2.5-.5.5h-1.3v.8h1.3c.3 0 .5.2.5.5s-.2.5-.5.5h-1.8c-.3 0-.5-.2-.5-.5V8.9c0-.3.2-.5.5-.5h1.8c.3 0 .5.2.5.5s-.2.5-.5.5h-1.3v.6z"/></svg>
+          </a>
+          <a href="#" class="is-ig" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zm0 3.8a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0 9.9a3.9 3.9 0 1 1 0-7.8 3.9 3.9 0 0 1 0 7.8zm7.6-10.1a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/></svg>
+          </a>
+        </div>
+
+        <div class="copyright">Copyright &copy; 2026 TEFL Program, Faculty of Education, Chulalongkorn University</div>
+
+      </div>
+    </div>
+
+    <!-- จำเป็นต้องมีตามเงื่อนไขสัญญาอนุญาต CC ของภาพ ห้ามลบ -->
+    <div class="photo-credits">
+      Photo credits (Wikimedia Commons):
+      <a href="https://commons.wikimedia.org/wiki/File:Faculty_of_Arts_Library,_Chulalongkorn_University.jpg" target="_blank" rel="noopener">Faculty of Arts Library</a> &copy; Geonuch (CC BY-SA 4.0) &middot;
+      <a href="https://commons.wikimedia.org/wiki/File:Chulalongkorn_University_Language_Institute_06.23.jpg" target="_blank" rel="noopener">CU Language Institute</a> &copy; Supanut Arunoprayote (CC BY 4.0) &middot;
+      <a href="https://commons.wikimedia.org/wiki/File:Axis_landscape_in_Chula2.jpg" target="_blank" rel="noopener">Axis Landscape</a> &copy; Theerapon Bunnak (CC BY-SA 4.0) &middot;
+      <a href="https://commons.wikimedia.org/wiki/File:Mahachulalongkorn_ChulalongkornUniversity.jpg" target="_blank" rel="noopener">Mahachulalongkorn Building</a> &copy; BunBn (CC BY-SA 4.0)
+    </div>
+
+  </footer>
+
+  <a href="#" class="back-top" id="backTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </a>
+
+  <!-- ============ JAVASCRIPT ============ -->
+  <script src="site.js"></script>
+  <script>
+    /* ============ HERO: slides + copy ============ */
+    const heroTrack = document.getElementById('heroTrack');
+    const heroCopy  = document.getElementById('heroCopy');
+    const slides    = document.querySelectorAll('.hero-slide');
+    const dots      = document.querySelectorAll('#sliderDots button');
+
+    let currentSlide = 0;
+    let sliderTimer;
+
+    function showSlide(index){
+      if(index < 0) index = slides.length - 1;
+      if(index >= slides.length) index = 0;
+      currentSlide = index;
+      heroTrack.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+      dots.forEach((dot,i) => dot.classList.toggle('active', i === currentSlide));
+    }
+
+    function restartSlider(){
+      clearInterval(sliderTimer);
+      sliderTimer = setInterval(() => showSlide(currentSlide + 1), 6500);
+    }
+
+    dots.forEach(function(dot){
+      dot.addEventListener('click', function(){
+        showSlide(Number(dot.dataset.slide)); restartSlider();
+      });
+    });
+    restartSlider();
+
+    /* ============ NEWS CAROUSEL ============ */
+    /* ย้ายไป site.js แล้ว — ทำงานอัตโนมัติกับทุกบล็อก .news-carousel */
+
+    /* ============ KEYBOARD: เลื่อนสไลด์ฮีโร่ ============ */
+    document.addEventListener('keydown', function(event){
+      /* ถ้าเมนู/ช่องค้นหาเปิดอยู่ ปล่อยให้ site.js จัดการ */
+      if(window.siteHeader && window.siteHeader.isOverlayOpen()) return;
+      const typing = ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName);
+      if(typing) return;
+      /* let the news carousel handle its own left/right scrolling */
+      if(document.activeElement.closest && document.activeElement.closest('.news-carousel')) return;
+      if(event.key === 'ArrowRight'){ showSlide(currentSlide + 1); restartSlider(); }
+      if(event.key === 'ArrowLeft'){ showSlide(currentSlide - 1); restartSlider(); }
+    });
+  </script>
+
+</body>
+</html>

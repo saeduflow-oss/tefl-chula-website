@@ -1,0 +1,53 @@
+/* ฟอนต์จุฬาฯ ใช้ร่วมกันทั้งเว็บไซต์
+   - Chulalongkorn      : ฟอนต์หัวเรื่อง / display
+   - Chula Charas New   : ฟอนต์เนื้อความ (มี italic ครบ)
+   ไฟล์ฟอนต์อยู่โฟลเดอร์เดียวกับ CSS นี้ */
+
+@font-face{
+  font-family:'Chulalongkorn';
+  src:url('CHULALONGKORNReg.otf') format('opentype');
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Chulalongkorn';
+  src:url('CHULALONGKORNBold.otf') format('opentype');
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
+
+@font-face{
+  font-family:'Chula Charas New';
+  src:url('ChulaCharasNewReg.ttf') format('truetype');
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Chula Charas New';
+  src:url('ChulaCharasNewBold.ttf') format('truetype');
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Chula Charas New';
+  src:url('ChulaCharasNewIta.ttf') format('truetype');
+  font-weight:400;
+  font-style:italic;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Chula Charas New';
+  src:url('ChulaCharasNewBoldIta.ttf') format('truetype');
+  font-weight:700;
+  font-style:italic;
+  font-display:swap;
+}
+
+:root{
+  --font-body:'Chula Charas New','Chulalongkorn','Segoe UI',Tahoma,sans-serif;
+  --font-display:'Chulalongkorn','Chula Charas New',Georgia,serif;
+}
