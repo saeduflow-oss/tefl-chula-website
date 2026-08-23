@@ -20,11 +20,11 @@
     --btn-solid-bg-hover:#2b2b2b;
     --btn-outline-border:#000000;
     --btn-outline-text:#000000;
-    /* วัดความสูง header จริง: stripe 6 + pad 11 + โลโก้ 68 + pad 11 + border 1 */
-    --hdr-h:97px;
+    /* วัดความสูง header จริง: stripe 6 + pad 9 + โลโก้ 96 + pad 9 + border 1 */
+    --hdr-h:121px;
   }
-  @media (max-width:1360px){ :root{--hdr-h:87px;} }   /* โลโก้ 60 + pad 10 */
-  @media (max-width:1100px){ :root{--hdr-h:81px;} }   /* โลโก้ 54 + pad 10 */
+  @media (max-width:1360px){ :root{--hdr-h:109px;} }  /* โลโก้ 84 + pad 9 */
+  @media (max-width:1100px){ :root{--hdr-h:99px;} }   /* โลโก้ 74 + pad 9 */
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
   body{
@@ -141,7 +141,7 @@
 
   /* ============ MAIN HEADER (mega-menu style) ============ */
   .site-header{
-    --hdr-pad-y:11px;          /* header vertical padding — the dropdown hangs off it */
+    --hdr-pad-y:9px;           /* header vertical padding — the dropdown hangs off it */
     --hdr-accent-h:6px;        /* the accent stripe pinned above the header */
     position:sticky;
     top:0;
@@ -161,11 +161,11 @@
   .header-inner{
     max-width:1280px;          /* sits close to the 1180px content column below */
     margin:0 auto;
-    padding:var(--hdr-pad-y) 44px;
+    padding:var(--hdr-pad-y) 36px;
     display:grid;
     grid-template-columns:auto 1fr auto;
     align-items:center;
-    gap:8px;                   /* nav is right-aligned, so the search btn sits just after Contact */
+    gap:6px;                   /* nav is right-aligned, so the search btn sits just after Contact */
   }
   .logo{
     display:flex;
@@ -175,9 +175,11 @@
   }
   .logo img{
     display:block;
-    height:68px;
+    /* ไฟล์โลโก้ถูกครอปขอบโปร่งใสออกแล้ว (485×277) ตัวโลโก้จึงเต็มกรอบพอดี
+       ชื่อคณะเป็นตัวอักษรเล็กมาก ต้องสูงระดับนี้ถึงจะอ่านออก — ความสูงนี้ผูกกับ --hdr-h */
+    height:96px;
     width:auto;
-    max-width:320px;
+    max-width:240px;
     object-fit:contain;
   }
 
@@ -187,16 +189,16 @@
     display:flex;
     align-items:stretch;
     height:100%;
-    gap:4px;
+    gap:2px;
   }
   .main-nav > ul > li{position:relative;display:flex;}
   .main-nav > ul > li > a{
     position:relative;
     display:flex;
     align-items:center;
-    gap:7px;
-    padding:0 16px;
-    font-size:14.5px;
+    gap:6px;
+    padding:0 14px;
+    font-size:18px;
     font-weight:600;
     color:var(--text-dark);
     white-space:nowrap;
@@ -206,9 +208,9 @@
   .main-nav > ul > li > a::after{
     content:"";
     position:absolute;
-    left:16px;right:16px;
+    left:14px;right:14px;
     /* tracks the text, not the row: the tall logo stretches these links well past it */
-    top:calc(50% + 13px);
+    top:calc(50% + 15px);
     height:3px;
     border-radius:2px;
     background:var(--text-dark);
@@ -223,7 +225,7 @@
     transform:scaleX(1);
   }
   .main-nav > ul > li > a .chev{
-    width:12px;height:12px;
+    width:14px;height:14px;
     opacity:.55;
     transition:transform .22s;
   }
@@ -267,7 +269,7 @@
   }
   .dd-title{
     display:block;
-    font-size:15.5px;
+    font-size:17px;
     font-weight:700;
     line-height:1.4;
     color:var(--text-dark);
@@ -280,7 +282,7 @@
   .dd-menu li > a{
     display:block;
     padding:11px 0;
-    font-size:14.5px;
+    font-size:16px;
     line-height:1.45;
     color:#3d3d3d;
     transition:color .18s ease;
@@ -312,7 +314,7 @@
     transition:background .18s,color .18s;
   }
   .tool-btn:hover{background:var(--brand-soft);color:var(--brand);}
-  .tool-btn svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+  .tool-btn svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
   .tool-btn.burger svg{width:24px;height:24px;}
   /* the full nav is already on screen here — no burger needed (it comes back ≤1100px) */
   .tool-btn.burger{display:none;}
@@ -349,7 +351,7 @@
   .search-box input::-webkit-search-cancel-button{-webkit-appearance:none;}
   .search-hint{
     margin-top:14px;
-    font-size:13px;
+    font-size:14px;
     color:var(--text-muted);
   }
   .search-results{margin-top:26px;display:grid;gap:4px;}
@@ -357,7 +359,7 @@
     display:block;
     padding:12px 14px;
     border-radius:10px;
-    font-size:14.5px;
+    font-size:15.5px;
     color:var(--text-dark);
   }
   .search-results a:hover{background:var(--brand-soft);color:var(--brand);}
@@ -380,7 +382,7 @@
   .nav-drawer.open{display:block;}
   .drawer-close{position:absolute;top:24px;right:28px;}
   .drawer-logo{position:absolute;top:16px;left:30px;}
-  .drawer-logo img{height:52px;width:auto;max-width:200px;object-fit:contain;}
+  .drawer-logo img{height:60px;width:auto;max-width:200px;object-fit:contain;}
   .drawer-body{
     max-width:1500px;
     margin:0 auto;
@@ -400,20 +402,20 @@
      (the group heading already links to the section page, so drop the card title) */
   .drawer-group .dd-title{display:none;}
   .drawer-group .dd-menu ul{padding-top:0;}
-  .drawer-group .dd-menu li > a{padding:9px 0;font-size:14px;}
+  .drawer-group .dd-menu li > a{padding:9px 0;font-size:15px;}
 
   @media (max-width:1360px){
-    .site-header{--hdr-pad-y:10px;}
-    .header-inner{padding:var(--hdr-pad-y) 20px;gap:6px;}
-    .main-nav > ul > li > a{padding:0 11px;font-size:12.6px;gap:4px;}
+    .site-header{--hdr-pad-y:9px;}
+    .header-inner{padding:var(--hdr-pad-y) 16px;gap:4px;}
+    .main-nav > ul > li > a{padding:0 11px;font-size:16px;gap:5px;}
     .main-nav > ul > li > a::after{left:11px;right:11px;}
-    .logo img{height:60px;max-width:260px;}
+    .logo img{height:84px;max-width:200px;}
   }
   @media (max-width:1100px){
     .main-nav{display:none;}
     .tool-btn.burger{display:flex;}
     .header-inner{grid-template-columns:auto 1fr;}
-    .logo img{height:54px;}
+    .logo img{height:74px;}
     .nav-drawer,.search-overlay{padding-left:20px;padding-right:20px;}
   }
   @media (max-width:700px){
@@ -450,7 +452,7 @@
   .footer-col li{margin-bottom:18px;break-inside:avoid;}
   .footer-col li:last-child{margin-bottom:0;}
   .footer-col a{
-    font-size:14.5px;
+    font-size:15.5px;
     line-height:1.55;
     color:#c4c4c4;
     transition:color .2s;
@@ -475,7 +477,7 @@
     height:auto;
   }
   .footer-mid .f-line{
-    font-size:14px;
+    font-size:15px;
     line-height:2.15;
     color:#b5b5b5;
   }
@@ -497,28 +499,40 @@
     display:flex;
     gap:14px;
   }
-  .footer-social a{
-    width:34px;height:34px;
+  /* ปุ่มโซเชียลกลม — ใช้ร่วมกันสองที่: footer ของทุกหน้า และแถวท้ายการ์ดใน contact.html (.ci-social)
+     สีแบรนด์กับขนาดไอคอนถูกประกาศไว้ที่นี่ที่เดียว แก้แล้วมีผลทั้งสองที่ กันไม่ให้ค่อย ๆ เพี้ยนออกจากกัน
+     ต่างกันแค่ขนาดวงกลม (footer 34px / การ์ด 36px) ซึ่งแยกไว้ด้านล่าง */
+  .footer-social a,
+  .ci-social a{
     border-radius:50%;
     display:flex;align-items:center;justify-content:center;
     color:#fff;
     background:#2e2e2e;
     transition:transform .2s ease,filter .2s ease;
   }
-  .footer-social a.is-fb{background:#1877f2;}
-  .footer-social a.is-line{background:#06c755;}
-  .footer-social a.is-ig{background:linear-gradient(45deg,#f9ce34,#ee2a7b 55%,#6228d7);}
-  .footer-social a:hover{transform:translateY(-2px);filter:brightness(1.1);}
-  .footer-social svg{width:17px;height:17px;}
+  .footer-social a{width:34px;height:34px;}
+  .ci-social a{width:36px;height:36px;}
+  .footer-social a.is-fb,   .ci-social a.is-fb{background:#1877f2;}
+  .footer-social a.is-line, .ci-social a.is-line{background:#06c755;}
+  .footer-social a.is-ig,   .ci-social a.is-ig{background:linear-gradient(45deg,#f9ce34,#ee2a7b 55%,#6228d7);}
+  .footer-social a:hover,
+  .ci-social a:hover{transform:translateY(-2px);filter:brightness(1.1);}
+  .footer-social a svg,
+  .ci-social a svg{width:17px;height:17px;fill:currentColor;display:block;}
+  /* ชดเชยน้ำหนักสายตา — โลโก้สามตัวทึบไม่เท่ากัน ถ้าตั้งขนาดเท่ากันเป๊ะ
+     ตัว f ของ FB จะดูลีบ ส่วนสี่เหลี่ยมทึบของ IG จะกลายเป็นก้อนหนักกว่าเพื่อน */
+  .footer-social a.is-fb svg,   .ci-social a.is-fb svg{width:18px;height:18px;}
+  .footer-social a.is-line svg, .ci-social a.is-line svg{width:19px;height:19px;}
+  .footer-social a.is-ig svg,   .ci-social a.is-ig svg{width:16px;height:16px;}
   footer .copyright{
-    font-size:12.5px;
+    font-size:13.5px;
     color:#8c8c8c;
   }
   .photo-credits{
     max-width:1180px;
     margin:0 auto;
     padding:0 24px 26px;
-    font-size:10.5px;
+    font-size:11.5px;
     line-height:1.8;
     color:#7d7d7d;
   }
@@ -610,7 +624,7 @@
     text-shadow:0 3px 16px rgba(120,40,15,.28);
   }
   .page-banner .subtitle{
-    font-size:17px;
+    font-size:18.5px;
     color:rgba(255,255,255,.94);
     max-width:640px;
     text-shadow:0 2px 10px rgba(120,40,15,.25);
@@ -661,7 +675,7 @@
     padding:28px 26px;
     box-shadow:0 12px 28px rgba(0,0,0,.05);
     /* กัน header ที่ติดบนจอบังหัวข้อ เวลากดลิงก์ #anchor จากเมนู */
-    scroll-margin-top:110px;
+    scroll-margin-top:135px;
   }
   .page-content .card h2{
     font-family:var(--font-display);
@@ -670,7 +684,7 @@
     color:var(--text-dark);
   }
   .page-content .card p,
-  .page-content .card li{font-size:15px;color:var(--text-muted);line-height:1.75;}
+  .page-content .card li{font-size:16px;color:var(--text-muted);line-height:1.75;}
   .page-content .card p + p{margin-top:10px;}
   .page-content .card ul{padding-left:18px;margin-top:12px;list-style:disc;}
   .page-content .card li{margin-bottom:8px;}
@@ -682,7 +696,7 @@
     margin:0 auto;
     padding:56px 24px 84px;
   }
-  .content section{margin-bottom:46px;scroll-margin-top:110px;}
+  .content section{margin-bottom:46px;scroll-margin-top:135px;}
   .content section:last-child{margin-bottom:0;}
   .content .eyebrow{
     font-size:12px;
@@ -706,13 +720,13 @@
   }
   .content h4{
     font-family:var(--font-display);
-    font-size:15px;
+    font-size:16.5px;
     color:var(--brand-dark);
     margin:19px 0 7px;
     letter-spacing:.2px;
   }
   .content p{
-    font-size:14.5px;
+    font-size:16px;
     line-height:1.9;
     color:var(--text-muted);
     margin-bottom:12px;
@@ -762,7 +776,7 @@
     max-width:760px;
     margin-left:auto;
     margin-right:auto;
-    font-size:15px;
+    font-size:16px;
   }
   @media (max-width:560px){
     .content .is-centered .eyebrow{font-size:11px;letter-spacing:2px;}
@@ -782,7 +796,7 @@
   .content .bullets li{
     position:relative;
     padding-left:26px;
-    font-size:14px;
+    font-size:15.5px;
     line-height:1.9;
     color:var(--text-muted);
   }
@@ -804,7 +818,7 @@
     border:1px solid rgba(232,64,26,.16);
     border-radius:14px;
     background:linear-gradient(135deg,#fff6f4 0%,#fffaf6 100%);
-    font-size:13.5px;
+    font-size:14.5px;
     line-height:1.95;
     color:var(--text-muted);
     text-align:left;      /* กัน .is-centered ดันข้อความในกล่องไปกลาง */
@@ -858,7 +872,7 @@
     cursor:pointer;
     list-style:none;
     padding:18px 22px;
-    font-size:14.5px;
+    font-size:16px;
     font-weight:600;
     display:flex;
     justify-content:space-between;
@@ -877,13 +891,13 @@
   .faq-item[open] summary::after{content:"\2013";}
   .content .faq-item .answer{
     padding:0 22px 20px;
-    font-size:13.5px;
+    font-size:14.5px;
     line-height:1.9;
     color:var(--text-muted);
     margin-bottom:0;
   }
   @media (max-width:560px){
-    .faq-item summary{padding:16px 18px;font-size:14px;}
+    .faq-item summary{padding:16px 18px;font-size:15px;}
     .content .faq-item .answer{padding:0 18px 18px;}
   }
 
@@ -915,7 +929,7 @@
   }
   .data-table td{
     padding:15px 20px;
-    font-size:14px;
+    font-size:15px;
     line-height:1.65;
     color:var(--text-dark);
     border-bottom:1px solid var(--border-light);
@@ -939,7 +953,7 @@
   @media (max-width:560px){
     .data-table thead th,
     .data-table td{padding:12px 15px;}
-    .data-table td{font-size:13px;}
+    .data-table td{font-size:14px;}
   }
 
   /* full-width CTA band */
@@ -1033,7 +1047,7 @@
     color:var(--brand);
     margin-bottom:12px;
   }
-  .cta-band p{color:var(--text-muted);margin-bottom:24px;font-size:14px;}
+  .cta-band p{color:var(--text-muted);margin-bottom:24px;font-size:15.5px;}
   /* ปุ่มในแถบ CTA — พิลล์สีขาวล้วน ไม่มีเส้นกรอบสีดำ */
   .cta-band .btn-base.is-outline{
     background:#fff;
@@ -1142,14 +1156,14 @@
   }
   .mission-band .mission-card h4{
     margin-top:clamp(14px,1.6vw,20px);
-    font-size:clamp(15px,1.2vw,18px);
+    font-size:clamp(16px,1.3vw,19.5px);
     font-weight:700;
     line-height:1.3;
     color:#fff;
   }
   .content .mission-band .mission-card p{
     margin:10px 0 0;
-    font-size:clamp(12.5px,1vw,13.5px);
+    font-size:clamp(13.5px,1.1vw,15px);
     line-height:1.7;
     color:rgba(255,255,255,.9);
     max-width:34ch;
@@ -1162,12 +1176,12 @@
   .mission-band .is-single .m-icon{width:clamp(62px,5vw,74px);}
   .mission-band .is-single .mission-card h4{
     font-family:var(--font-display);
-    font-size:clamp(18px,1.9vw,22px);
+    font-size:clamp(19.5px,2vw,24px);
     line-height:1.3;
     letter-spacing:.3px;
   }
   .content .mission-band .is-single .mission-card p{
-    font-size:clamp(12.5px,1vw,13.5px);
+    font-size:clamp(13.5px,1.1vw,15px);
     max-width:50ch;
   }
   /* การ์ดคู่ (เช่น Goals and Objectives) — 2 คอลัมน์ ไอคอน/ตัวอักษรใหญ่ขึ้น */
@@ -1180,12 +1194,12 @@
   .mission-band .is-duo .m-icon{width:clamp(62px,5vw,74px);}
   .mission-band .is-duo .mission-card h4{
     font-family:var(--font-display);
-    font-size:clamp(15px,1.35vw,17.5px);
+    font-size:clamp(16px,1.45vw,19px);
     line-height:1.35;
     letter-spacing:.3px;
   }
   .content .mission-band .is-duo .mission-card p{
-    font-size:clamp(12.5px,1vw,13.5px);
+    font-size:clamp(13.5px,1.1vw,15px);
     max-width:38ch;
   }
   /* eyebrow + rule ที่วางบนแถบสี — กลับสีเป็นขาว */
@@ -1378,7 +1392,7 @@
   .content .plan-card .p-list li{
     position:relative;
     padding-left:24px;
-    font-size:13.5px;
+    font-size:14.5px;
     line-height:1.8;
     color:var(--text-muted);
   }
@@ -1421,7 +1435,7 @@
   }
   .content .highlight-panel .hp-note{
     margin:10px 0 0;
-    font-size:13.5px;
+    font-size:14.5px;
     color:var(--text-muted);
   }
 
@@ -1435,7 +1449,7 @@
   }
   .table-label .t-title{
     font-family:var(--font-display);
-    font-size:16px;
+    font-size:17px;
     font-weight:700;
     color:var(--text-dark);
   }
@@ -1475,14 +1489,14 @@
   }
   .group-card h5{
     font-family:var(--font-display);
-    font-size:15.5px;
+    font-size:16.5px;
     font-weight:700;
     color:var(--text-dark);
     margin-bottom:10px;
     line-height:1.35;
   }
   .content .group-card p{
-    font-size:13px;
+    font-size:14px;
     line-height:1.85;
     margin:0;
   }
@@ -1515,8 +1529,8 @@
     padding:20px 16px 16px;
   }
   .tile-grid.is-5up .t-label{font-size:9.5px;letter-spacing:1.1px;}
-  .tile-grid.is-5up .t-name{font-size:15px;line-height:1.35;}
-  .content .tile-grid.is-5up .t-meta{font-size:11.5px;}
+  .tile-grid.is-5up .t-name{font-size:16px;line-height:1.35;}
+  .content .tile-grid.is-5up .t-meta{font-size:12.5px;}
   .tile-grid.is-5up .t-foot{padding-top:18px;}
   .tile-grid.is-5up .t-ic svg{width:30px;height:30px;}
   .tile-grid.is-5up .t-arrow,
@@ -1556,7 +1570,7 @@
   }
   .tile-card .t-name{
     font-family:var(--font-display);
-    font-size:17px;
+    font-size:18px;
     font-weight:700;
     line-height:1.4;
     color:var(--text-dark);
@@ -1564,7 +1578,7 @@
   }
   .content .tile-card .t-meta{
     margin:10px 0 0;
-    font-size:12.5px;
+    font-size:13.5px;
     line-height:1.75;
     color:var(--text-muted);
     transition:color .22s ease;
@@ -1737,7 +1751,7 @@
     padding:22px 24px 24px;
   }
   .nc-body h3{
-    font-size:16.5px;
+    font-size:18px;
     font-weight:600;
     line-height:1.6;
     color:var(--text-dark);
@@ -1862,7 +1876,7 @@
   .is-poster .nc-sub,
   .content .is-poster .nc-sub{
     margin:0;
-    font-size:13px;
+    font-size:14px;
     line-height:1.75;
     color:rgba(255,255,255,.84);
   }
@@ -1903,7 +1917,7 @@
     margin:0 0 12px;
   }
   .content .contact-panel .panel-lead{
-    font-size:14px;
+    font-size:15.5px;
     line-height:1.85;
     color:var(--text-muted);
     margin:0 0 26px;
@@ -1936,7 +1950,7 @@
     stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
   }
   .ci-title{
-    font-size:14.5px;
+    font-size:15.5px;
     font-weight:700;
     line-height:1.5;
     color:var(--text-dark);
@@ -1944,7 +1958,7 @@
   }
   .content .ci-text{
     margin:0;
-    font-size:13.5px;
+    font-size:14.5px;
     line-height:1.8;
     color:var(--text-muted);
     word-break:break-word;
@@ -1964,20 +1978,8 @@
     align-items:center;
     gap:10px;
   }
-  .ci-social a{
-    width:36px;height:36px;
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    background:var(--brand-soft);
-    color:var(--brand);
-    transition:background .2s ease,color .2s ease,transform .2s ease;
-  }
-  .ci-social a svg{width:17px;height:17px;fill:currentColor;display:block;}
-  .ci-social a:hover{
-    background:linear-gradient(135deg,var(--brand) 0%,var(--orange) 130%);
-    color:#fff;
-    transform:translateY(-2px);
-  }
+  /* หน้าตาของปุ่ม (สีแบรนด์จริง + ขนาดไอคอน) อยู่ในบล็อก FOOTER ด้านบน ใช้ร่วมกับ .footer-social
+     ตรงนี้เหลือแค่การจัดวางแถว เพราะเคยแยกเป็นสีส้มโทนเดียวแล้วดูจางจนไม่เหมือนปุ่ม */
 
   /* แผนที่ท้ายการ์ดซ้าย — ยืดเต็มพื้นที่ว่างที่เหลือให้สูงเท่าการ์ดฟอร์ม */
   .ci-map{
@@ -2043,7 +2045,7 @@
   .field{display:flex;flex-direction:column;}
   .field.is-full{grid-column:1 / -1;}
   .field label{
-    font-size:13.5px;
+    font-size:14.5px;
     font-weight:700;
     color:var(--text-dark);
     margin-bottom:8px;
@@ -2060,7 +2062,7 @@
   .field select,
   .field textarea{
     font-family:inherit;
-    font-size:14.5px;
+    font-size:15.5px;
     line-height:1.7;
     color:var(--text-dark);
     padding:12px 15px;
@@ -2119,7 +2121,7 @@
   }
   .content .form-hint{
     margin:0;
-    font-size:12.5px;
+    font-size:13.5px;
     line-height:1.7;
     color:var(--text-muted);
   }
@@ -2160,7 +2162,7 @@
     margin-top:20px;
     padding:16px 18px;
     border-radius:12px;
-    font-size:13.5px;
+    font-size:14.5px;
     line-height:1.85;
     border:1px solid transparent;
   }
@@ -2237,8 +2239,8 @@
     min-height:198px;
     padding:22px 18px 16px;
   }
-  .tile-grid.is-4up .t-name{font-size:15.5px;line-height:1.4;}
-  .content .tile-grid.is-4up .t-meta{font-size:12px;}
+  .tile-grid.is-4up .t-name{font-size:16.5px;line-height:1.4;}
+  .content .tile-grid.is-4up .t-meta{font-size:13px;}
   @media (max-width:900px){
     .tile-grid.is-4up{grid-template-columns:repeat(3,minmax(0,1fr));}
   }
@@ -2308,7 +2310,50 @@
 
   .content .dl-note{
     margin-top:18px;
-    font-size:13px;
+    font-size:14px;
     line-height:1.8;
     color:var(--text-muted);
+  }
+
+  /* ============ SITE SOUND — ปุ่มเปิด/ปิดเสียงประกอบ (ทุกหน้า)
+     มาร์กอัปถูกสร้างโดย site.js ไม่ได้เขียนไว้ใน HTML — จะได้ไม่ต้องก็อป 9 ไฟล์ ============ */
+  /* วางมุมซ้ายล่าง คู่กับปุ่มกลับขึ้นบน (.back-top) ที่อยู่มุมขวาล่าง
+     ต่างกันตรงที่ปุ่มนี้ต้องเห็นตลอดเวลาไม่ต้องรอเลื่อนหน้า — คนที่ไม่อยากได้ยินเสียง
+     ต้องกดปิดได้ทันทีที่เข้าเว็บ ไม่งั้นจะกลายเป็นเสียงที่ปิดไม่ได้ */
+  .sound-toggle{
+    position:fixed;
+    left:clamp(16px,2.4vw,34px);
+    bottom:clamp(16px,2.4vw,34px);
+    width:54px;height:54px;
+    padding:0;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:#1c1c1c;
+    color:#fff;
+    border:1px solid rgba(255,255,255,.18);
+    box-shadow:0 8px 22px rgba(0,0,0,.35);
+    cursor:pointer;
+    transition:background .2s ease,border-color .2s ease;
+    z-index:60;
+  }
+  .sound-toggle:hover{background:var(--brand);border-color:var(--brand);}
+  .sound-toggle:focus-visible{outline:2px solid #fff;outline-offset:3px;}
+  .sound-toggle svg{
+    width:21px;height:21px;
+    fill:none;stroke:currentColor;
+    stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+  }
+  /* ไอคอน 2 แบบซ้อนอยู่ในปุ่ม สลับโชว์ด้วยคลาส .is-on ที่ JS ใส่ให้ */
+  .sound-toggle .ic-on{display:none;}
+  .sound-toggle.is-on .ic-off{display:none;}
+  .sound-toggle.is-on .ic-on{display:block;}
+  /* คลื่นเสียงกระพริบเบา ๆ ตอนกำลังเล่น บอกให้รู้ว่าเสียงมาจากปุ่มนี้ */
+  .sound-toggle.is-on .wave{animation:soundWave 1.7s ease-in-out infinite;}
+  @keyframes soundWave{0%,100%{opacity:.3;}50%{opacity:1;}}
+  @media (prefers-reduced-motion:reduce){
+    .sound-toggle.is-on .wave{animation:none;opacity:1;}
+  }
+  @media (max-width:560px){
+    .sound-toggle{width:46px;height:46px;}
+    .sound-toggle svg{width:19px;height:19px;}
   }

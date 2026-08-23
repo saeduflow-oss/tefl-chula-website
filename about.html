@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About | (TEFL) Teaching English as a Foreign Language</title>
+<!-- ไอคอนแท็บ: ตัดเปลวไฟจาก img/logo.png เพราะโลโก้เต็มเป็นแนวนอน ย่อเหลือ 16px แล้วอ่านไม่ออก -->
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="stylesheet" href="fonts/chula.css">
 <link rel="stylesheet" href="site.css">
 <style>
@@ -18,7 +21,7 @@
   /* .page-banner ใช้สไตล์กลางจาก site.css ทั้งหมด (รวม responsive) */
 
   /* ============ CONTENT ============ */
-  .content section{margin-bottom:64px;scroll-margin-top:110px;}
+  .content section{margin-bottom:64px;scroll-margin-top:135px;}
   .content section:last-child{margin-bottom:0;}
   .content .eyebrow{
     font-size:12px;
@@ -109,10 +112,16 @@
 
 
   /* ============ ACADEMIC STAFF — การ์ดรูปเต็มใบ + ตัวอักษรทับบนภาพ (ชุดเดียวกับ Guest Lecturers) ============ */
+  /* หัวหน้าสาขา — รูปซ้าย ข้อมูลติดต่อขวา
+     การ์ดในกริดกว้างแค่ 218px ถ้าวางอีเมล/เบอร์/CV ทับบนภาพจะอ่านไม่ออก
+     จึงยกข้อมูลออกมาเป็นแผงข้าง ๆ แทนการซ้อนบนรูปแบบการ์ดใบอื่น */
   .staff-lead{
     margin-top:34px;
     display:flex;
     justify-content:center;
+    align-items:center;
+    gap:36px;
+    flex-wrap:wrap;
   }
   /* การ์ดรูปร่วม: ใช้ทั้งหัวหน้าสาขาและอาจารย์ประจำ */
   .staff-photo{
@@ -187,6 +196,21 @@
     margin-top:2px;
     font-variant-numeric:tabular-nums;
   }
+  /* อีเมลบนการ์ด — ใส่เฉพาะใบที่มีข้อมูลจริง ใบที่ยังไม่มีให้เว้นว่างไว้
+     break-all กันอีเมลยาวดันความกว้างการ์ดจนกริดเพี้ยน
+     ต้องนำหน้าด้วย .content เพื่อชนะ .content a:not(.btn-base) ใน site.css
+     ที่ระบายลิงก์เป็นสีแบรนด์ (0,2,1) ไม่งั้นอีเมลจะกลายเป็นสีส้มอ่านไม่ออกบนพื้นเข้ม */
+  .content .staff-photo .s-mail{
+    display:block;
+    margin-top:4px;
+    font-size:11px;
+    line-height:1.35;
+    color:rgba(255,255,255,.9);
+    text-decoration:underline;
+    text-underline-offset:2px;
+    word-break:break-all;
+  }
+  .content .staff-photo .s-mail:hover{color:#fff;}
   /* ป้ายมุมซ้ายบน (ชุดเดียวกับป้าย Most Recent ของ Guest Lecturers) */
   .staff-photo .badge{
     position:absolute;
@@ -209,10 +233,65 @@
     width:min(218px,100%);
     box-shadow:0 10px 26px rgba(0,0,0,.14);
   }
-  /* ต้นฉบับถ่ายเต็มตัว จึงซูมเข้าโดยยึดจุดที่ใบหน้าอยู่ (50% แนวนอน / 38% แนวตั้ง) */
+  /* ต้นฉบับเป็นพอร์เทรตครึ่งตัวสัดส่วน 3:4 ตรงกับกรอบการ์ดพอดี จึงไม่ต้องซูม
+     (เดิมตั้ง --zoom:1.55 ไว้ ทำให้ใบหน้าถูกขยายจนล้นกรอบโดยไม่จำเป็น) */
   .staff-lead .staff-photo img{
-    --zoom:1.55;
-    transform-origin:50% 38%;
+    --zoom:1;
+    object-position:center top;
+  }
+  /* การ์ดหัวหน้าสาขาไม่มีตัวอักษรทับบนรูปแล้ว จึงปิดเฉดเข้มด้านล่างทิ้ง
+     ถ้าเปิดไว้ภาพจะมืดครึ่งใบโดยไม่มีข้อความให้อ่าน */
+  .staff-lead .staff-photo::after{display:none;}
+
+  .lead-info{
+    text-align:left;
+    max-width:430px;
+  }
+  .lead-info .li-role{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--brand);
+  }
+  .lead-info .li-name{
+    font-family:var(--font-display);
+    font-size:26px;
+    font-weight:700;
+    line-height:1.25;
+    color:var(--text-dark);
+    margin-top:6px;
+  }
+  .lead-info .li-rule{
+    display:block;
+    width:64px;
+    height:3px;
+    border-radius:2px;
+    background:var(--brand);
+    margin:14px 0 16px;
+  }
+  .lead-info dl{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:9px 14px;
+    font-size:15px;
+    line-height:1.5;
+  }
+  .lead-info dt{font-weight:700;color:var(--text-dark);}
+  .lead-info dd{color:var(--text-muted);}
+  .lead-info dd a{
+    color:var(--brand-dark);
+    text-decoration:underline;
+    text-underline-offset:2px;
+  }
+  .lead-info dd a:hover{color:var(--brand);}
+  /* จอแคบ: วางรูปบน ข้อมูลล่าง และจัดกึ่งกลางให้เข้ากับ .is-centered */
+  @media (max-width:640px){
+    .staff-lead{gap:22px;}
+    .lead-info{text-align:center;max-width:none;}
+    .lead-info .li-rule{margin-left:auto;margin-right:auto;}
+    .lead-info dl{grid-template-columns:1fr;gap:2px;justify-items:center;}
+    .lead-info dt{margin-top:8px;}
   }
   .staff-grid{
     margin-top:30px;
@@ -814,10 +893,12 @@
           <div class="staff-photo">
             <img src="img/staff-ruedeerath.jpeg" alt="Asst. Prof. Ruedeerath Chusanachoti, Ph.D." loading="lazy" decoding="async">
             <span class="badge">Program Chair</span>
-            <div class="s-body">
-              <div class="s-name">Asst. Prof. Ruedeerath Chusanachoti, Ph.D.</div>
-              <div class="s-ext">Ext. 8036</div>
-            </div>
+          </div>
+          <div class="lead-info">
+            <div class="li-role">Assistant Professor</div>
+            <h3 class="li-name">Ruedeerath Chusanachoti, Ph.D.</h3>
+            <span class="li-rule"></span>
+            
           </div>
         </div>
 
@@ -841,6 +922,18 @@
                 <div class="s-name">Assoc. Prof. Pornpimol Sukavatee, Ph.D.</div>
                 <div class="s-role">Instructor</div>
                 <div class="s-ext">Ext. 8046</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="staff-card">
+            <div class="staff-photo">
+              <img src="img/staff-apasara.jpg" alt="Asst. Prof. Apasara Chinwonno, Ph.D." loading="lazy" decoding="async">
+              <div class="s-body">
+                <div class="s-name">Asst. Prof. Apasara Chinwonno, Ph.D.</div>
+                <div class="s-role">Instructor</div>
+                <div class="s-ext">Ext. 8038</div>
+               
               </div>
             </div>
           </div>
@@ -1094,13 +1187,13 @@
       <div class="footer-bottom-inner">
 
         <div class="footer-social">
-          <a href="#" class="is-fb" aria-label="Facebook">
+          <a href="https://www.facebook.com/TEFL.Chula/" class="is-fb" aria-label="Facebook" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.7c0-.9.3-1.6 1.6-1.6h1.7V4.2c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.4V14h2.7v8z"/></svg>
           </a>
           <a href="#" class="is-line" aria-label="LINE">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-5 0-9 3.2-9 7.2 0 3.6 3.2 6.6 7.5 7.1.3.1.7.2.8.5.1.3 0 .7 0 .9l-.1.8c0 .3-.2 1 .9.6 1.1-.5 6-3.5 8.2-6 1.5-1.6 2.2-3.2 2.2-4.9C22.5 6.2 18.5 3 12 3zM8.3 12.6H6.5c-.3 0-.5-.2-.5-.5V8.9c0-.3.2-.5.5-.5s.5.2.5.5v2.7h1.3c.3 0 .5.2.5.5s-.2.5-.5.5zm2-.5c0 .3-.2.5-.5.5s-.5-.2-.5-.5V8.9c0-.3.2-.5.5-.5s.5.2.5.5v3.2zm3.9 0c0 .2-.1.4-.3.5h-.2c-.2 0-.3-.1-.4-.2l-1.5-2v1.7c0 .3-.2.5-.5.5s-.5-.2-.5-.5V8.9c0-.2.1-.4.3-.5h.2c.1 0 .3.1.4.2l1.5 2V8.9c0-.3.2-.5.5-.5s.5.2.5.5v3.2zm2.9-2.1c.3 0 .5.2.5.5s-.2.5-.5.5h-1.3v.8h1.3c.3 0 .5.2.5.5s-.2.5-.5.5h-1.8c-.3 0-.5-.2-.5-.5V8.9c0-.3.2-.5.5-.5h1.8c.3 0 .5.2.5.5s-.2.5-.5.5h-1.3v.6z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2C6.6 3.2 2.2 6.7 2.2 11c0 3.85 3.48 7.08 8.18 7.69.32.07.75.21.86.49.1.25.06.64.03.89l-.14.85c-.04.25-.2.97.85.53s5.65-3.33 7.7-5.7c1.42-1.56 2.1-3.15 2.1-4.75 0-4.3-4.4-7.8-9.78-7.8z"/></svg>
           </a>
-          <a href="#" class="is-ig" aria-label="Instagram">
+          <a href="https://www.instagram.com/p/DbiparfD3FO/?img_index=18" class="is-ig" aria-label="Instagram" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zm0 3.8a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0 9.9a3.9 3.9 0 1 1 0-7.8 3.9 3.9 0 0 1 0 7.8zm7.6-10.1a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/></svg>
           </a>
         </div>

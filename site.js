@@ -292,6 +292,185 @@
     if(event.key === 'Escape'){ setSearch(false); setDrawer(false); }
   });
 
+  /* ============ SITE SOUND — เสียงประกอบต่อเนื่องทุกหน้า ============
+     มาร์กอัปสร้างจากที่นี่ ไม่ได้เขียนใน HTML เพราะไม่งั้นต้องก็อปลงทั้ง 9 ไฟล์
+
+     ทำไมใช้ <video> ไม่ใช่ <audio> — ทดสอบกับ Chrome จริงแล้ว:
+       <audio>            เล่นเองไม่ได้เลย แม้ตั้ง muted (NotAllowedError)
+       <video muted>      เล่นเองได้ และเวลาเดินจริง
+     กฎ "ปิดเสียงแล้วเล่นอัตโนมัติได้" ของเบราว์เซอร์ใช้กับ <video> เท่านั้น
+     เราเลยใช้ <video> ที่ซ่อนไว้เป็นเครื่องเล่นเสียง — ได้ประโยชน์สองอย่าง:
+       1. เพลงเดินอยู่เงียบ ๆ ตั้งแต่เปิดหน้า ตำแหน่งจึงถูกบันทึกไว้ให้หน้าถัดไปต่อได้จริง
+          (ของเดิมใช้ <audio> พอโดนบล็อก timeupdate ไม่ยิงเลย ตำแหน่งเป็น 0 ตลอด = ทุกหน้าเริ่มใหม่)
+       2. พอผู้ใช้แตะหน้าเว็บครั้งแรก แค่ปลดปิดเสียงก็ได้ยินทันทีจากจุดที่เพลงเดินมาถึง
+
+     สิ่งที่ยังทำไม่ได้และไม่มีทางทำได้: ให้ "มีเสียง" ตั้งแต่วินาทีแรกโดยผู้ใช้ยังไม่แตะอะไรเลย
+     เบราว์เซอร์ทุกตัวห้ามไว้ และการปลดปิดเสียงเองโดยไม่มี gesture จะโดนสั่งหยุดทันที ============ */
+  (function(){
+    const SRC       = 'img/song.m4a';
+    const KEY_STATE = 'tefl-sound';       /* เปิด/ปิด — จำข้ามการเข้าเว็บ (localStorage) */
+    const KEY_TIME  = 'tefl-sound-time';  /* วินาทีที่ค้างไว้ — ต่อเนื่องเฉพาะแท็บนี้ (sessionStorage) */
+    /* เฉพาะ event ที่นับเป็น user activation จริง — scroll ไม่นับ ใส่ไปก็ปลดล็อกเสียงไม่ได้ */
+    const GESTURES  = ['pointerdown','keydown','touchend','click'];
+
+    if(!document.body) return;
+
+    /* โหมดส่วนตัวของบางเบราว์เซอร์อ่าน/เขียน storage ไม่ได้และจะโยน exception
+       ห้ามให้ทั้งบล็อกพังเพราะเรื่องนี้ — ถือว่า "ยังไม่เคยปิด" แล้วเล่นต่อไปตามปกติ */
+    function wantsSound(){
+      try{ return localStorage.getItem(KEY_STATE) !== 'off'; }catch(e){ return true; }
+    }
+    function rememberState(value){
+      try{ localStorage.setItem(KEY_STATE, value); }catch(e){}
+    }
+    function readTime(){
+      try{ return parseFloat(sessionStorage.getItem(KEY_TIME)) || 0; }catch(e){ return 0; }
+    }
+    function writeTime(value){
+      try{ sessionStorage.setItem(KEY_TIME, value); }catch(e){}
+    }
+
+    /* ---- เครื่องเล่น: <video> ที่ซ่อนไว้ ----
+       ใช้วางนอกจอแทน display:none เพราะบางเบราว์เซอร์หยุดเล่นวิดีโอที่ถูกซ่อนสนิทเพื่อประหยัดแบต */
+    const player = document.createElement('video');
+    player.src      = SRC;
+    player.loop     = true;
+    player.muted    = true;      /* ต้องเริ่มแบบปิดเสียง ไม่งั้นเบราว์เซอร์ไม่ยอมให้เล่นเอง */
+    player.volume   = 0.35;      /* เป็นเสียงประกอบ ไม่ใช่ตัวเอก ดังกว่านี้จะกวนคนอ่าน */
+    player.preload  = 'auto';    /* ต้องมี metadata ก่อนถึงจะ seek ไปต่อจุดเดิมได้ */
+    player.setAttribute('playsinline','');   /* กัน iOS เปิดเป็นเครื่องเล่นเต็มจอ */
+    player.setAttribute('aria-hidden','true');
+    player.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none';
+    document.body.appendChild(player);
+
+    /* ---- ปุ่มเปิด/ปิด ---- */
+    const button = document.createElement('button');
+    button.type      = 'button';
+    button.id        = 'soundToggle';
+    button.className = 'sound-toggle';
+    button.innerHTML =
+      '<svg class="ic-off" viewBox="0 0 24 24" aria-hidden="true">' +
+        '<path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4z"/>' +
+        '<path d="M16.5 9.8l4.5 4.4M21 9.8l-4.5 4.4"/>' +
+      '</svg>' +
+      '<svg class="ic-on" viewBox="0 0 24 24" aria-hidden="true">' +
+        '<path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4z"/>' +
+        '<path class="wave" d="M15.6 9.2a4 4 0 0 1 0 5.6"/>' +
+        '<path class="wave" d="M18.4 6.6a8 8 0 0 1 0 10.8"/>' +
+      '</svg>';
+    document.body.appendChild(button);
+
+    /* "เปิด" = ได้ยินจริง ไม่ใช่แค่กำลังเดินอยู่เงียบ ๆ */
+    function audible(){ return !player.paused && !player.muted; }
+    function paint(){
+      const on = audible();
+      button.classList.toggle('is-on', on);
+      button.setAttribute('aria-pressed', on ? 'true' : 'false');
+      button.setAttribute('aria-label', on ? 'Turn background music off' : 'Turn background music on');
+    }
+    paint();
+    /* volumechange ยิงตอน muted เปลี่ยนด้วย จึงครอบคลุมทั้งสามทาง */
+    ['play','pause','volumechange'].forEach(function(type){ player.addEventListener(type, paint); });
+
+    /* ---- ต่อจากจุดเดิมของหน้าที่แล้ว ---- */
+    function seekTo(seconds){
+      /* กันกรณีไฟล์ถูกเปลี่ยนให้สั้นลง แล้ววินาทีที่จำไว้เกินความยาวจริง */
+      try{
+        if(isFinite(player.duration) && seconds > 0 && seconds < player.duration - 0.3){
+          player.currentTime = seconds;
+        }
+      }catch(e){}
+    }
+    const resumeAt = readTime();
+
+    /* ---- เก็บตำแหน่งไว้ให้หน้าถัดไป ---- */
+    let lastSave = 0;
+    player.addEventListener('timeupdate', function(){
+      const now = Date.now();
+      if(now - lastSave < 1000) return;   /* timeupdate ยิงถี่มาก เขียน storage วินาทีละครั้งพอ */
+      lastSave = now;
+      writeTime(player.currentTime);
+    });
+    /* pagehide เชื่อถือได้กว่า beforeunload บนมือถือ (Safari ไม่ยิง beforeunload ตอนสลับแอป) */
+    window.addEventListener('pagehide', function(){ writeTime(player.currentTime); });
+
+    /* ---- เล่นเงียบ / เปิดเสียง ---- */
+    function runSilently(){
+      player.muted = true;
+      const attempt = player.play();
+      if(attempt && attempt.catch) attempt.catch(function(){ armGestures(); });
+    }
+    function goAudible(){
+      player.muted = false;
+      const attempt = player.play();
+      if(attempt && attempt.catch){
+        attempt.then(disarmGestures).catch(function(){
+          /* ยังไม่ได้รับอนุญาตให้มีเสียง — กลับไปเดินเงียบ ๆ ไว้ก่อน แล้วรอจังหวะผู้ใช้ */
+          runSilently();
+          armGestures();
+        });
+      }
+    }
+    /* ---- กู้สถานะเมื่อเบราว์เซอร์สั่งหยุดเอง ----
+       ตอนถูกปฏิเสธไม่ให้เล่นมีเสียง เบราว์เซอร์จะสั่ง pause ทิ้งไว้ ถ้าปล่อยไว้นาฬิกาจะหยุด
+       ตำแหน่งไม่ถูกบันทึก แล้วหน้าถัดไปจะเริ่มเพลงใหม่ = ความต่อเนื่องพัง
+       จึงดักไว้: ถ้าไม่ใช่ผู้ใช้เป็นคนสั่งปิด ให้กลับไปเดินเงียบ ๆ ต่อ */
+    let userPaused = false;
+    let lastRecover = 0;
+    player.addEventListener('pause', function(){
+      if(userPaused || !wantsSound()) return;
+      const now = Date.now();
+      if(now - lastRecover < 1000) return;   /* กันวนรัวถ้าเล่นไม่ได้จริง ๆ */
+      lastRecover = now;
+      runSilently();
+    });
+
+    function onGesture(event){
+      /* ถ้าจังหวะแรกคือการกดปุ่มเสียงเอง ให้ handler ของปุ่มตัดสินใจ ไม่งั้นจะเปิดเสียงก่อน
+         แล้วโดน click สั่งปิดทันที กลายเป็นกดแล้วไม่มีเสียง */
+      if(event && event.target && event.target.closest && event.target.closest('#soundToggle')) return;
+      disarmGestures();
+      if(wantsSound()) goAudible();
+    }
+    function armGestures(){
+      GESTURES.forEach(function(type){ window.addEventListener(type, onGesture, {passive:true}); });
+    }
+    function disarmGestures(){
+      GESTURES.forEach(function(type){ window.removeEventListener(type, onGesture); });
+    }
+
+    button.addEventListener('click', function(){
+      if(audible()){
+        userPaused = true;            /* ผู้ใช้สั่งเอง — ตัวกู้สถานะข้างบนต้องไม่ไปเปิดซ้ำ */
+        rememberState('off');
+        player.pause();
+        writeTime(player.currentTime);
+      }else{
+        userPaused = false;
+        rememberState('on');
+        goAudible();       /* คลิกปุ่มคือ gesture อยู่แล้ว เปิดเสียงได้แน่นอน */
+      }
+    });
+
+    /* ---- ลำดับการเริ่ม ----
+       seek ให้เสร็จก่อนค่อยเล่น ไม่งั้นผู้ใช้จะได้ยินท่อนต้นแวบหนึ่งแล้วกระโดด ฟังเหมือนเสียงสะดุด */
+    function start(){
+      if(!wantsSound()){ paint(); return; }   /* ผู้ใช้กดปิดไว้ ก็ไม่ต้องเดินให้เปลืองแบต */
+      /* ลองแบบมีเสียงก่อนเสมอ — ถ้าผู้ใช้เคยฟังเว็บนี้มาพอ เบราว์เซอร์จะอนุญาตเองตั้งแต่วินาทีแรก
+         ถ้ายังไม่อนุญาต จะถอยไปเดินเงียบ ๆ (เวลายังเดิน ตำแหน่งยังถูกบันทึก) แล้วเปิดเสียงให้เอง
+         ทันทีที่ผู้ใช้แตะอะไรก็ได้ครั้งแรก โดยไม่ต้องให้เขากดปุ่มอะไรทั้งสิ้น */
+      goAudible();
+    }
+    if(resumeAt > 0 && player.readyState < 1){
+      player.addEventListener('loadedmetadata', function(){ seekTo(resumeAt); start(); }, {once:true});
+      /* กันเหนียว: เน็ตช้าจน metadata ไม่มาสักที ให้เริ่มเล่นไปก่อน เดี๋ยว seek ตามทีหลังเอง */
+      setTimeout(function(){ if(player.paused) start(); }, 1500);
+    }else{
+      if(resumeAt > 0) seekTo(resumeAt);
+      start();
+    }
+  })();
+
   /* เผยฟังก์ชันให้สคริปต์เฉพาะหน้าเรียกใช้ได้ (เช่น ตรวจว่าเมนูเปิดอยู่ไหม) */
   window.siteHeader = {
     setDrawer: setDrawer,
