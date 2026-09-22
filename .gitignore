@@ -8,3 +8,10 @@
 # Editor / tooling
 .claude
 node_modules/
+
+# ไฟล์ภาพต้นฉบับจากช่างภาพ (1.4 GB) — ใช้เป็นคลังไว้ครอปเท่านั้น ไม่ต้องเข้า repo
+04.09.69 PRWEB/
+
+# ไฟล์ชั่วคราวของ Supabase CLI
+supabase/.temp
+supabase/.branches

@@ -6,7 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Marketing/information site for the TEFL (Teaching English as a Foreign Language) master's program,
 Faculty of Education, Chulalongkorn University. Nine hand-written static HTML pages plus one shared
-stylesheet and one shared script. **No build step, no package manager, no tests, no framework.**
+stylesheet and two shared scripts, with content served from Supabase and edited through a small
+admin page. **No build step, no package manager, no tests, no framework** — `admin/index.html` and
+`cms.js` talk to the Supabase REST API with plain `fetch`, deliberately avoiding a CDN SDK.
 
 ## Commands
 
@@ -53,8 +55,10 @@ check `git status` — an edit that was never committed is also never deployed.
 ### No templating — the nav is copy-pasted into all 9 pages
 
 The header, search overlay, drawer shell, and footer are duplicated markup in every HTML file.
-**Changing a menu item means editing all 9 files.** `DESIGN.md` §8 has the full checklist for
-adding a page. `index.backup.html` is a stale copy that is not deployed — do not update it in sync.
+The menu *items* now come from the `nav` table (edit them in `/admin` → เมนู; `sync-content.py`
+writes them into all 9 files), but the header shell around them is still copy-pasted. `DESIGN.md`
+§8 has the full checklist for adding a page. `index.backup.html` is a stale copy that is not
+deployed — do not update it in sync.
 
 ### site.js generates markup at runtime
 
@@ -110,9 +114,103 @@ pattern (see the CONTACT PAGE and FORMS & LINKS blocks).
   `site.css` for the current values — they change whenever the logo is resized) and the hero height
   is computed from it. Changing logo size or header padding means updating `--hdr-h` *and* the
   `scroll-margin-top` above, or headings end up hidden behind the header on anchor links.
+- **`data-cms` attributes.** The hooks `cms.js` and `sync-content.py` use to find content
+  containers. Renaming or removing one silently stops that block from updating — the page keeps
+  showing whatever HTML was last written into the file, which looks like "the CMS saved nothing".
 - **External form files.** `forms-and-links.html` deep-links to PDFs on `portal.edu.chula.ac.th`.
   Those filenames contain spaces and **must** be written as `%20` in `href`. If the program renames
   a file upstream, the link breaks and has to be fixed here by hand.
+
+### Content lives in Supabase, not in the HTML (as of Sep 2026)
+
+Two kinds of content now live in Supabase and are edited through `admin/index.html`, served at `/admin`:
+
+- **collections** (`staff`, `lecturers`, `faqs`, `news`, `events`, `links`, `courses`, `tuition`) — repeating
+  items with real columns, marked in the HTML by `data-cms`
+- **blocks** (`blocks`, 58 rows) — the prose and headings of every `<section>` plus four footer
+  regions, stored as raw HTML and marked by `data-cms-block`
+- **nav** (`nav`, two levels via `parent_id`) — the main menu, rendered into `.main-nav ul[data-cms="nav"]`
+  with `class="active"` computed from the current filename
+- **settings** (`settings`, key/value) — the site's external connections: form endpoint, contact
+  email/phone, map place, social URLs, background music. Applied to elements marked
+  `data-setting-href` / `data-setting-text` / `data-setting-map` (with an optional
+  `data-setting-prefix` such as `tel:` or `mailto:`); an empty `href` value hides the element.
+  Exposed as `window.TEFLSettings` and announced with a `tefl:settings` event, which the contact
+  form (`contact.html`) and the music player (`site.js`) consume.
+
+**Blocks must render before collections.** Writing a section's `innerHTML` recreates its `data-cms`
+container empty, so filling collections first means they get wiped. `cms.js` and `sync-content.py`
+both enforce that order.
+
+`data-cms-block` sits on the `<section>` itself rather than on an added wrapper `<div>`, because
+`.content .is-centered > p` selects a direct child — an extra wrapper silently breaks the layout.
+
+Three pieces have to stay in step:
+
+- `cms.js` — loaded by the 7 content pages; swaps DB content into the containers marked `data-cms`
+- `admin/` — the editing UI at `/admin`: `index.html` (markup + script load order), `admin.css`, and
+  `js/` split by concern (`config`, `icons`, `schema`, `core`, `views/{shell,dashboard,list,facebook,account}`,
+  `editor`, `app`). They are classic scripts sharing top-level globals — **load order in `index.html` is
+  the contract**, and `schema.js` must reference later-loaded view functions lazily. `index.html` carries
+  `<base href="../">` because it sits one directory down while every image, font, css and js path is
+  written relative to the site root — remove it and the page loses its styles, scripts, logo and thumbnails
+- `sync-content.py` — writes the DB content back into the HTML files
+
+**The HTML inside a `data-cms` container is generated.** Hand-editing it works until someone runs
+`sync-content.py`, which overwrites it. Change content in `/admin` instead.
+
+`cms.js` and `sync-content.py` build the same markup twice, in two languages. They must stay
+byte-identical to each other *and* to the markup already in the HTML, or the CSS stops matching.
+Editing one without the other is the main way to break this.
+
+### Rebinding after a block render — the silent-breakage trap
+
+Writing a section's `innerHTML` destroys **every element inside it**. The `<section>` survives; its
+children do not. Any script still holding a reference to a child then drives a node that is no
+longer on the page — no error, no console warning, the feature simply stops. That is exactly how
+the homepage hero froze on slide 1 (`index.html` had captured `#heroTrack` and the dot buttons at
+load) and how the news carousel lost its dots and arrows.
+
+So after `renderBlocks()`, `cms.js` calls, in this order:
+
+- `window.TEFLHeroRebind()` — re-applies the current slide to the new `#heroTrack` (`index.html`)
+- `window.TEFLCarouselInit()` — binds the news carousel to the new `.nc-viewport` (`site.js`)
+- `renderNav()` → `window.TEFLDrawerRebuild()` — the mobile drawer is cloned from the nav at load,
+  so a new nav needs a new drawer
+- collections fill, then a `resize` event — recomputes carousel dots and arrow states
+- `applySettings()` — must run **after** blocks, because its targets (footer social links,
+  phone) live inside the `site/footer-*` blocks and would be overwritten otherwise
+- `window.TEFLSearchReindex()` — rebuilds the search index from the new nav, headings and footer
+
+`sync-content.py` mirrors the same dependency: it applies settings to a block's HTML *before*
+writing it, otherwise the block pass and the settings pass overwrite each other on every run.
+
+Two rules for any new script that touches a `data-cms-block` section:
+
+1. Look elements up live inside the handler; never cache an element or NodeList across the render
+   (this is also why the carousel resolves `.nc-card` on every call).
+2. Put an "already initialised" marker on a child that the rewrite replaces — `.nc-viewport` — and
+   **never on the `<section>`**: the section survives the rewrite, so a marker there makes the
+   re-init skip the whole block and the stale bindings stay in place.
+
+The static HTML is deliberately kept and still correct — it is the no-JS/SEO copy and the fallback
+when Supabase is unreachable. That means files drift from the database after every admin edit; run
+`python3 sync-content.py` (or `--check` first) and commit before deploying.
+
+**Latest News is fed from the Facebook page.** The Edge Function `supabase/functions/fb-sync` pulls the
+latest posts into `news` (`placement='home'`, `fb_post_id` set, images copied to `media/fb/`) every 6 hours
+via `pg_cron`, or on demand from the Facebook page in `/admin`, which also shows connection status and lets an
+admin paste a new page token. The token lives in the `integrations` table (admin-only RLS, no anon policy)
+with the function secret `FB_PAGE_TOKEN` as fallback — never in `settings`, `cms.js` or the HTML. Nothing on
+the rendering side knows about Facebook; a synced post is an ordinary news row. The home slider shows the
+first `news.home_count` rows; the Announcements section at the end of `activities.html` shows them all, followed by the
+`events` calendar (there is no separate News page any more — `vercel.json` redirects `/news.html` there). `DESIGN.md` §9.8–9.9 has
+the rules (existing rows are never overwritten, deleted rows come back — hide instead), the CORS gotcha, and
+the one-time setup commands.
+
+Writes are restricted to emails listed in the `admins` table, not merely to logged-in users —
+Supabase allows public self-signup with the publishable key, so `role = authenticated` alone would
+let anyone edit the site. `DESIGN.md` §9 has the schema, the permission table and how to add an admin.
 
 ## DESIGN.md is the design source of truth
 

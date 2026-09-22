@@ -13,5 +13,17 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/news.html",
+      "destination": "/activities.html#announcements",
+      "permanent": true
+    },
+    {
+      "source": "/news",
+      "destination": "/activities.html#announcements",
+      "permanent": true
+    }
   ]
 }

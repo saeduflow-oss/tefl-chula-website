@@ -28,7 +28,8 @@ academics.html        Academics           → #curriculum-info, #list-of-courses
                                             #class-schedule, #tentative-schedule, #tuition-and-fees
 admission.html        Admission           → #admission-requirements, #admission-procedures, #admission-deadline
 research.html         Research            → #research-guidelines, #tefl-research-thesis, #tefl-research-ojed
-activities.html       Activities          → #activities-list, #intensive-course
+activities.html       Activities          → #activities-list, #intensive-course, #announcements, #calendar
+                                            (สองส่วนหลังย้ายมาจากหน้า News & Events ที่ยุบไป ก.ย. 2569)
 forms-and-links.html  Forms and Links     → #request-forms, #thesis-forms,
                                             #research-collaboration-letters, #graduation-request, #useful-links
 faqs.html             FAQs
@@ -68,7 +69,12 @@ index.backup.html     สำรองหน้าแรก (ไม่ใช้�
 
 - footer: `#111111` (พื้น), `#c9c9c9`/`#c4c4c4` (ลิงก์), `#8c8c8c` (copyright), `#2e2e2e` (วงกลมโซเชียล)
 - missions: ม่านสีส้มแบรนด์ `rgba(235,91,54,.90) → rgba(232,64,26,.92) → rgba(205,68,33,.94)` (135deg ชุดเดียวกับ `.mission-band`)
+- การ์ด Courses: พีชอ่อน `--card-peach:#fdf1ea` (ประกาศใน `<style>` ของ index.html หน้าเดียว)
+  - เป็นสีส้มแบรนด์เจือขาวจนเกือบสุด ให้การ์ดมีตัวตนแยกจากพื้นขาวของหน้า โดยไม่ไปแย่งแถบส้ม Our Missions ที่อยู่ข้างบน
+  - เคยลองแบบส้มแบรนด์เต็มใบ (ตัวหนังสือขาว) แล้ว: ส้ม 5 ใบเรียงใต้แถบส้มหนักเกินไป และม่านส้มไปเคลือบหน้าคนจนเป็นรูปย้อมสี
 - hero/stats: พื้นมืด `#110e0d` + ม่านดำโปร่ง
+  - ม่านสไลด์ hero (`.hero-slide::after`) = `rgba(11,7,7,.52) → .44 (42%) → .58 (68%) → .80` แนวตั้ง
+    ช่วงกลางเข้มขึ้นตั้งแต่เปลี่ยนมาใช้รูปห้องเรียน/ห้องสมุดที่สว่างกว่าชุดเดิม — ถ้าลดค่าลง หัวเรื่องขาวจะจมกับพื้นหลัง
 - social: FB `#1877f2`, LINE `#06c755`, IG gradient `#f9ce34 → #ee2a7b → #6228d7`
   - ใช้ชุดเดียวกันทั้ง `.footer-social` (พื้นดำ) และ `.ci-social` (การ์ดขาวหน้า Contact)
   - โลโก้สามตัวมีความทึบไม่เท่ากัน จึง**ตั้งขนาดไอคอนไม่เท่ากันโดยตั้งใจ**
@@ -242,7 +248,7 @@ sticky top, `z-index:200`, พื้นขาว, มีแถบ gradient 6px �
 ### 3.5 Page banner (`.page-banner`) — ใช้ทุกหน้าย่อย
 
 ```html
-<section class="page-banner" style="--banner-img:url('img/pic1.jpeg')">
+<section class="page-banner" style="--banner-img:url('img/hero-campus.jpg')">
   <div class="inner">
     <nav class="breadcrumb">…</nav>
     <h1>ชื่อหน้า</h1>
@@ -253,7 +259,8 @@ sticky top, `z-index:200`, พื้นขาว, มีแถบ gradient 6px �
 
 - ภาพพื้นหลัง **เบลอ 7px** อยู่คนละชั้น (`::before`) เพื่อไม่ให้ข้อความเบลอตาม, `inset:-30px` กันขอบขาวจากการเบลอ
 - ม่านไล่สีส้ม-ปะการัง (`::after`) เข้มซ้าย → จางขวา ทำให้ข้อความฝั่งซ้ายอ่านได้เสมอ
-- ค่าเริ่มต้นคือ `img/pic3.jpeg` — ตอนนี้ทุกหน้าย่อยยังใช้ค่าเริ่มต้น ถ้าอยากให้แต่ละหน้าต่างกัน ให้ตั้ง `--banner-img` inline ตามตัวอย่าง
+- ค่าเริ่มต้นคือ `img/banner-campus.jpg` (ตึกคณะ + เส้นขอบฟ้า) — ตอนนี้ทุกหน้าย่อยยังใช้ค่าเริ่มต้น ถ้าอยากให้แต่ละหน้าต่างกัน ให้ตั้ง `--banner-img` inline ตามตัวอย่าง
+- รูปแบนเนอร์ถูกเบลอหนัก จึงตั้งใจ export ไว้แค่ 1600px/q70 พอ ไม่ต้องใช้ไฟล์ใหญ่
 - breadcrumb เป็นแคปซูลกระจกฝ้า (`backdrop-filter:blur(6px)`) ตัวปัจจุบันตัวหนา
 
 ### 3.6 การ์ดหน้าย่อย (`.page-content .card`)
@@ -474,11 +481,44 @@ img/    logo.png, logo.jpg, icon.png
         favicon.png, apple-touch-icon.png   (ตัดเปลวไฟจาก logo.png — ดูหัวข้อ 7.1)
         icon-collab.png, icon-global.png, icon-practical.png, icon-research.png
         mission-collab.jpg, mission-global.jpg, mission-practical.jpg, mission-research.jpg
-        pic1–pic5.jpeg   (hero 5 สไลด์ / พื้นหลัง banner, missions, stats)
+        hero-cohort/-lab/-classroom/-library/-campus.jpg (สไลด์ hero 5 ใบ, 2400px)
+        missions-bg.jpg  banner-campus.jpg                  (พื้นหลังใต้ม่านสี)
+        program-overview.jpg  program-beyond.jpg            (บล็อกภาพคู่ข้อความหน้าแรก, 1800px)
+        about-program.jpg                                   (ภาพใหญ่หน้า About, 2000px)
+        course-required/-elective/-practicum/-guest/-edtech.jpg  (การ์ด Courses, 1200×992)
+        activity-*.jpg                                      (การ์ดข่าวหน้า Activities 6 ใบ, 1200px)
+        pic1–pic5.jpeg   (ชุดเดิม — เหลือไว้เพราะ index.backup.html และแถวข่าวใน CMS ยังอ้างถึง)
         song.m4a         (เสียงประกอบ เล่นทุกหน้า — AAC โมโน 16kHz ~79 วิ 164KB)
 ```
 
-การใช้รูปพื้นหลังซ้ำ: `pic2` = missions · `pic3` = stats + banner ค่าเริ่มต้น · `pic1–pic5` = hero
+ทุกรูปข้างต้นครอปมาจากโฟลเดอร์ต้นฉบับ `04.09.69 PRWEB/` (168 ไฟล์ 24MP, ~1.4 GB)
+ซึ่งถูกกันไว้ใน `.gitignore` + `.vercelignore` — เก็บเป็นคลังไว้ครอปเพิ่ม ไม่ต้องขึ้น repo/เว็บ
+
+**กติกาเลือกรูป — หนึ่งซีนต่อหนึ่งจุด:** ต้นฉบับถ่ายวันเดียวจบ คนกลุ่มเดิมย้ายไปถ่ายทีละห้อง
+ถ้าหยิบหลายเฟรมจากห้องเดียวกันมาใช้ในหน้าเดียว จะเห็นเป็นคนกลุ่มเดิมซ้ำ ๆ ทันที
+ตอนนี้จึงกระจายไว้ห้องละจุด: แล็บคอมพิวเตอร์ (001–048) · ห้องสัมมนาเก้าอี้เลื่อน (060–079) ·
+ห้องสมุด (090–112) · ห้องประชุมเก้าอี้ส้ม (049–058) · ห้องเรียนบรรยาย (150–168) · อาคาร/วิว (082–089)
+เวลาจะเปลี่ยนรูปจุดไหน ให้เช็คก่อนว่าห้องนั้นถูกใช้อยู่ที่อื่นในหน้าเดียวกันหรือยัง
+
+**รูปการ์ดข่าวไม่ได้อยู่ในไฟล์ HTML** — พาธเก็บอยู่ในคอลัมน์ `image` ของตาราง `news` ใน Supabase
+มาร์กอัปใน `index.html` / `activities.html` เป็นแค่สำเนาสำรองที่ `sync-content.py` เขียนตามฐานข้อมูล
+แก้ที่ `/admin` (หรือแก้ในฐานข้อมูลแล้วรัน `python3 sync-content.py`) การแก้เฉพาะไฟล์จะถูกทับรอบถัดไป
+
+**กติการูปการ์ด Courses:** `.c-photo` ไม่ได้กินเต็มใบ แต่กินเฉพาะ **แถบล่างตั้งแต่ 38% ลงมา**
+กรอบที่ได้มีอัตราส่วนราว **1.21:1 (แนวนอน)** → export รูปที่ 1200×992 ครอปมาให้พอดีกรอบ จัดองค์ประกอบได้เต็มที่
+
+ของเดิมเป็นรูปเต็มใบ 3:4 แล้วเอาม่านขาวทับครึ่งบน ซึ่งใช้ได้ตอนรูปเป็นวิว/สถานที่จาง ๆ
+แต่พอเปลี่ยนเป็นรูปคน มันบังคับให้ครอปชิดมากจนหน้าคนโดนขอบการ์ดตัด และม่านที่ลากถึงขอบล่าง
+ทำให้รูปดูซีดเหมือนโหลดไม่เสร็จ — ถ้าจะย้อนกลับไปเป็นรูปเต็มใบ ต้องเปลี่ยนกลับทั้งสามอย่าง
+(`.c-photo` inset, สต็อปของ `.c-bg`, และอัตราส่วนของไฟล์รูป) พร้อมกัน
+
+ม่าน `.c-bg` ตอนนี้เป็นพีชอ่อน `--card-peach` ทึบถึง 36% แล้วจางหมดที่ 56% กติกาสามข้อที่ผูกกันอยู่:
+
+| ค่า | ทำไมต้องเป็นค่านี้ |
+|---|---|
+| `background` ของ `.course-card` = สต็อปแรกของ `.c-bg` | คนละสีเมื่อไหร่จะเห็นรอยต่อกลางการ์ดทันที |
+| ทึบถึง **36%** | รูปเริ่มที่ 38% ตรงนั้นม่านยังราว .95 จึงกลบขอบบนของรูป ถ้าดันต่ำลงจะเห็นเป็นเส้นตัดขวาง |
+| จางหมดที่ **56%** | ลากยาวกว่านี้สีพีชจะไปเคลือบหน้าคน ขึ้นสูงกว่านี้บรรทัดคำอธิบาย (ยาวถึงราว 44% ในการ์ดแคบ) จะอ่านยาก |
 
 ### 7.1 ไอคอนแท็บ (favicon)
 
@@ -500,9 +540,243 @@ img/    logo.png, logo.jpg, icon.png
 
 ---
 
+## 9. ระบบจัดการเนื้อหา (CMS)
+
+เนื้อหาที่เปลี่ยนบ่อยถูกย้ายออกจาก HTML ไปอยู่ในฐานข้อมูล Supabase แล้ว
+แก้ผ่านหน้า `/admin` โดยไม่ต้องแตะโค้ดและไม่ต้อง deploy ใหม่
+
+### 9.1 ชิ้นส่วน
+
+| ไฟล์ | หน้าที่ |
+|---|---|
+| `admin/index.html` | มาร์กอัปของหน้าจัดการที่ `/admin` (ล็อกอิน, โครงหน้า, modal แก้ไข) และลำดับโหลดสคริปต์ — มี `<base href="../">` เพราะอยู่ลึกลงไปหนึ่งชั้น แต่พาธรูป ฟอนต์ และไฟล์ css/js ทั้งหมดเขียนจากรากเว็บ (`admin/admin.css`, `admin/js/...`) ลบออกแล้วเสียหมด |
+| `admin/admin.css` | สไตล์ของหน้า admin ทั้งหมด (ไม่โหลด `site.css`) |
+| `admin/js/config.js` | URL + publishable key ของ Supabase (ต้องตรงกับ `cms.js` และ `sync-content.py`) |
+| `admin/js/icons.js` | ไอคอน SVG และสีกล่องไอคอน (`ICON`, `TINT`) |
+| `admin/js/schema.js` | `SCHEMA` — นิยามทุกชุดข้อมูล: ตาราง ช่องกรอก การจัดกลุ่ม หน้าพิเศษ (`view`) |
+| `admin/js/core.js` | สถานะร่วม (`session`, `current`, `rows`, …), `api()` + ต่ออายุ token, ล็อกอิน/ออก, ธีม, helper (`$`, `esc`, `toast`, วันที่) |
+| `admin/js/views/shell.js` | แถบข้าง เมนู และ `go(v)` ทางเข้าเดียวของทุกหน้า |
+| `admin/js/views/dashboard.js` · `list.js` · `facebook.js` · `account.js` | แดชบอร์ด · หน้ารายการทั่วไป (โหลด/วาดตาราง/ค้นหา/ซ่อน/เลื่อนลำดับ) · หน้าเชื่อมต่อ Facebook · โปรไฟล์และตั้งค่า |
+| `admin/js/editor.js` | แผงแก้ไข: สร้างช่องกรอกจาก `SCHEMA`, rich editor, อัปโหลดรูป, บันทึก/ลบ |
+| `admin/js/app.js` | จุดเริ่มทำงาน (ต้องโหลดท้ายสุด) |
+
+สคริปต์ของ admin เป็น **classic script** ทั้งหมด (ไม่ใช่ ES module เพราะเปิดจาก `file://` แล้ว `import` โดน CORS ปิด)
+ตัวแปร/ฟังก์ชันระดับบนสุดจึงมองเห็นกันข้ามไฟล์ และ **ลำดับโหลดใน `index.html` คือสัญญา**: config → icons → schema →
+core → views → editor → app · `schema.js` โหลดก่อนหน้า Facebook จึงอ้าง `facebookView`/`syncFacebook` แบบเรียกทีหลัง
+(`view:()=>facebookView()`) — อ้างตรง ๆ ตอนประกาศจะได้ `undefined` เงียบ ๆ
+| `cms.js` | โหลดในหน้าสาธารณะ ดึงข้อมูลมาแทนที่เนื้อหาในกรอบ `data-cms` |
+| `sync-content.py` | เขียนเนื้อหาจากฐานข้อมูลกลับลงไฟล์ HTML |
+
+โปรเจกต์ Supabase: `tefl-chula-website` (`dpyhvsdtbihssapuwert`, ภูมิภาค ap-southeast-1) ในองค์กร **teflduty's Org**
+— ย้ายมาจากโปรเจกต์ชื่อเดียวกัน `pxwvughjkuklefkqrrea` (องค์กร saeduflow-oss) เมื่อ 21 ก.ย. 2569
+โปรเจกต์เดิมยังอยู่แต่โค้ดไม่ได้ชี้ไปแล้ว · repo นี้ผูก (`supabase link`) กับโปรเจกต์ใหม่ไว้แล้ว
+รหัสฐานข้อมูลเก็บไว้ที่ `~/.tefl-supabase-db-password.txt` ในเครื่องเจ้าของเว็บ (ใช้ตอน `supabase db push`)
+
+**ย้ายไปโปรเจกต์ Supabase ใหม่** — มีไฟล์พร้อมอยู่ในโฟลเดอร์ `supabase/` (ไม่ถูก deploy)
+
+| ไฟล์ | ใช้ทำอะไร |
+|---|---|
+| `supabase/migrations/20260921000001_schema.sql` | สร้างตาราง 11 ตาราง, `private.is_admin()`, trigger `updated_at`, RLS policy ครบทุกตาราง, บัคเก็ต `media` — วางใน SQL Editor แล้วรันครั้งเดียว (ตั้งใจให้รันซ้ำไม่ได้) |
+| `supabase/migrations/20260921000002_data.sql` | เนื้อหาทั้งหมด ณ วันที่ export + แถวผู้ดูแลคนแรก — รันหลัง schema.sql, รันซ้ำได้ (`on conflict do nothing`) |
+
+ขั้นตอน (ทาง CLI: `supabase login` → `supabase link --project-ref <ref>` → `supabase db push` จะรันสองไฟล์นี้ตามลำดับให้เอง · หรือวางใน SQL Editor เองก็ได้) → รันสองไฟล์ → Authentication → Users → Add user ด้วยอีเมลในตาราง `admins`
+(auth.users ย้ายผ่าน SQL ไม่ได้) → เอา Project URL + publishable key ใหม่ไปแทนใน
+`cms.js`, `admin/index.html`, `sync-content.py` และบรรทัดข้างบนนี้ → `python3 sync-content.py --check`
+ต้องตอบว่าตรงกับฐานข้อมูล · รูปที่เคยอัปโหลดผ่าน /admin (บัคเก็ต `media`) ต้องอัปโหลดใหม่เอง ถ้ามี
+
+จุดที่พลาดง่าย (เจอตอนทดสอบ): ตาราง `admins` ต้องสร้าง **ก่อน** ฟังก์ชัน `is_admin` เพราะฟังก์ชัน
+`language sql` ถูกตรวจสอบตอนสร้าง ถ้าตารางยังไม่มีจะ error ทันที — ลำดับใน schema.sql จัดไว้ถูกแล้ว
+
+### 9.1.1 หน้าตาของหน้า admin
+
+โครงแบบเครื่องมือภายใน: แถบข้างซ้าย (236px) เป็นเมนูจัดกลุ่ม เนื้อหาเว็บ / บุคลากร / ข้อมูล พร้อมตัวเลขจำนวนรายการ
+แถบบนมีชื่อหน้า ช่องค้นหา (กรองเฉพาะหน้านั้น) และปุ่มสลับธีม พื้นที่ทำงานกว้างสุด 1240px
+แดชบอร์ดมีปุ่มทำบ่อย ตารางตัวเลข 5 คอลัมน์ รายการแก้ไขล่าสุดรวมทุกตาราง และรายการค่าเชื่อมต่อที่ยังว่าง
+หน้ารายการเป็นตาราง (ชื่อ / รายละเอียด / สถานะ / แก้ไขล่าสุด / ปุ่ม) แผงแก้ไขเลื่อนเข้าจากขวาแทนกล่องกลางจอ
+
+พื้นหลังขาวล้วนตามที่ผู้ใช้ขอ เส้นและข้อความรองเป็นเทากลาง (OKLCH, chroma ≈0) ไม่เจือสีแบรนด์
+ฟอนต์ **IBM Plex Sans Thai** จาก Google Fonts (ข้อยกเว้นของกฎไม่พึ่ง CDN: โหลดไม่ได้ก็ตกไปฟอนต์ระบบ ไม่มีอะไรพัง)
+แยกจากฟอนต์จุฬาฯ ของเว็บหลักโดยตั้งใจ เพราะอ่านตารางและตัวเลขได้สบายตากว่า
+ช่องค้นหาและปุ่มเพิ่มอยู่ในกรอบตาราง ไม่ใช่แถบบน; แถบบนแสดงชื่อสั้น หัวในหน้าแสดงชื่อเต็ม
+ธีมสว่างเป็นค่าเริ่มต้นตามระบบ มีสลับมืดและจำค่าไว้ (`localStorage: tefl-cms-theme`)
+ต่ำกว่า 900px แถบข้างซ่อนเป็นลิ้นชัก และตารางซ่อนคอลัมน์รายละเอียด/วันที่
+
+### 9.2 ตารางข้อมูล
+
+แบ่งเป็นสองแบบ เพราะเนื้อหาสองชนิดนี้ต่างกันโดยธรรมชาติ
+
+**คอลเลกชัน** — `staff` · `lecturers` · `faqs` · `news` · `links` · `courses` · `tuition`
+รายการซ้ำ ๆ ที่เพิ่ม ลบ เรียงลำดับได้ แต่ละแถวมีช่องกรอกชัดเจน (ชื่อ ตำแหน่ง รูป ฯลฯ)
+
+**บล็อก** — `blocks` (58 แถว) เก็บข้อความบรรยายและหัวข้อของทุก section เป็น **HTML ทั้งก้อน**
+ไม่แยกเป็นคอลัมน์เพราะแต่ละ section หน้าตาไม่เหมือนกันเลย (ย่อหน้า ตาราง การ์ด ขั้นตอน แผนที่)
+schema ที่จะครอบคลุมทุกแบบจะซับซ้อนมากแต่ยังไม่ครบอยู่ดี จึงเก็บเป็นก้อนแล้วให้หน้า admin
+มีตัวแก้แบบเห็นภาพ (contenteditable + แถบเครื่องมือ) พร้อมโหมดแก้โค้ด HTML สำหรับกรณีพิเศษ
+
+ทุกตารางมี `sort_order` (ลำดับแสดงผล), `is_visible` (ซ่อนโดยไม่ลบ), `updated_at` (trigger ตั้งให้เอง)
+`blocks` ใช้ `key` เป็น primary key แทน `id` แบบตารางอื่น
+
+### 9.3 กรอบ `data-cms` คือสัญญาระหว่างไฟล์กับสคริปต์
+
+`cms.js` และ `sync-content.py` หา container ด้วยแอตทริบิวต์ `data-cms` **ไม่ใช่ชื่อคลาส**
+เพราะชื่อคลาสมีไว้จัดสไตล์ ถ้าเปลี่ยนชื่อคลาสวันหลัง CMS ต้องไม่พังตาม
+**`data-cms`** = กรอบของคอลเลกชัน มี 13 จุดใน 6 หน้า (`staff-lead`, `staff-grid`, `lecturers`,
+`faqs-home/applicants/students`, `news-home/activities`, `links-form/useful`,
+`courses` ×2 พร้อม `data-group`, `tuition`)
+
+**`data-cms-block`** = กรอบของข้อความบรรยาย อยู่บนแท็ก `<section>` เองและบน 4 ก้อนใน footer
+รวม 58 คีย์ ครบทั้ง 9 หน้า
+
+ทำไมมาร์กที่ตัว `<section>` ไม่ครอบ `<div>` เพิ่ม: มีกฎ `.content .is-centered > p` ที่เลือกลูกตรง
+ถ้าครอบ div เข้าไปอีกชั้น กฎนั้นจะไม่จับแล้วหน้าเพี้ยนทันที
+
+**ลำดับสำคัญ: บล็อกต้องมาก่อนคอลเลกชันเสมอ** เพราะการเขียนทับ `innerHTML` ของ section
+จะสร้างกรอบ `data-cms` ขึ้นใหม่แบบว่างเปล่า ถ้าคอลเลกชันเติมไปก่อนจะโดนลบทิ้งทั้งหมด
+กฎนี้บังคับใช้ทั้งใน `cms.js` และ `sync-content.py`
+
+**เนื้อหาข้างในกรอบเหล่านี้ถูกสคริปต์เขียนทับ** — แก้ด้วยมือแล้วจะหายตอนรัน `sync-content.py`
+ถ้าจะแก้เนื้อหาให้แก้ที่หน้า admin
+
+มาร์กอัปที่ `cms.js` กับ `sync-content.py` สร้าง **ต้องเหมือนกันเป๊ะ** และต้องตรงกับที่เขียนไว้ในไฟล์
+แก้ตัวใดตัวหนึ่งต้องแก้อีกตัวเสมอ ไม่งั้น CSS ที่ผูกกับคลาสเดิมจะไม่จับ
+
+### 9.4 ทำไมยังเก็บ HTML ไว้ในไฟล์
+
+`cms.js` ทำงานแบบ **เสริม ไม่ใช่แทน** — HTML ในไฟล์ยังเป็นเนื้อหาจริงที่ใช้งานได้เสมอ
+สคริปต์จะสลับก็ต่อเมื่อโหลดจากฐานข้อมูลสำเร็จ ถ้า fetch ล้มก็เงียบแล้วปล่อยของเดิมไว้
+
+ได้ประโยชน์สองอย่าง: Google อ่าน HTML ดิบเห็นเนื้อหาครบ (ไม่ต้องพึ่ง JS) และเว็บไม่ว่างเปล่าเวลา
+Supabase ล่ม แลกกับข้อเสียว่าไฟล์จะเก่ากว่าฐานข้อมูลหลังแก้ผ่าน admin
+จึงต้องรัน `python3 sync-content.py` แล้ว commit เป็นระยะ (`--check` ดูก่อนได้ว่าต่างตรงไหน)
+
+### 9.4.1 จุดที่ต้องบอก site.js ให้คำนวณใหม่
+
+`site.js` อ่าน DOM ครั้งเดียวตอนโหลด แต่ `cms.js` มาเปลี่ยน DOM ทีหลัง จึงต้องมีสองสะพาน
+
+| สิ่งที่ค้าง | วิธีแก้ |
+|---|---|
+| จุดไข่ปลาและปุ่มลูกศรของสไลด์ | `cms.js` ยิง event `resize` (site.js ผูก `buildDots` ไว้แล้ว) |
+| ดัชนีช่องค้นหา (หัวข้อ section + ลิงก์ footer) | `cms.js` เรียก `window.TEFLSearchReindex()` |
+
+และ `site.js` ต้องอ่าน `.nc-card` แบบสดทุกครั้ง ห้ามเก็บ NodeList ไว้ในตัวแปร
+เพราะการ์ดชุดเดิมหลุดจาก DOM ไปแล้ว `getBoundingClientRect()` จะได้ 0 แล้วปุ่มลูกศรกดไม่ขยับ
+
+### 9.5 สิทธิ์
+
+| ใคร | อ่าน | เขียน |
+|---|---|---|
+| คนทั่วไป (anon) | เฉพาะแถวที่ `is_visible = true` | **ไม่ได้** |
+| ล็อกอินแล้วแต่ไม่อยู่ในรายชื่อ | ไม่ได้ | ไม่ได้ |
+| อยู่ในตาราง `admins` | ทุกแถว | ได้ |
+
+### 9.7 เมนูหลักและการเชื่อมต่อ
+
+**`nav`** — เมนูหลัก 2 ชั้น (`parent_id` ว่าง = แถบบน) เรนเดอร์ลง `.main-nav ul[data-cms="nav"]`
+`class="active"` คำนวณจากชื่อไฟล์ปัจจุบัน จึงใช้เมนูชุดเดียวกับทุกหน้าได้ (ในไฟล์เดิมใส่ต่างกันทีละหน้า)
+หลังเรนเดอร์ต้องเรียก `TEFLDrawerRebuild()` เพราะ site.js โคลนเมนูไปทำลิ้นชักมือถือตอนโหลด
+ปุ่มเลื่อนลำดับในหน้า admin เลื่อนได้เฉพาะในกลุ่มเดียวกัน (พี่น้อง) ไม่ข้ามชั้น
+
+**`settings`** — ค่าการเชื่อมต่อแบบ key/value: ปลายทางฟอร์ม (Formspree/FormSubmit) · อีเมล · เบอร์โทร ·
+สถานที่บนแผนที่ · Facebook / LINE / Instagram · เพลงประกอบ (เปิด-ปิด + ไฟล์)
+ใส่ลงองค์ประกอบที่มาร์ก `data-setting-href` / `data-setting-text` / `data-setting-map`
+(ต่อ `data-setting-prefix` เช่น `tel:` `mailto:` ให้ถ้ามี) — **ค่าว่างของ href = ซ่อนองค์ประกอบ**
+เช่น LINE ที่ยังไม่มีลิงก์จะไม่โชว์ไอคอน แทนที่จะโชว์ไอคอนที่กดแล้วไปไหนไม่ได้
+ประกาศผ่าน `window.TEFLSettings` และ event `tefl:settings` ให้ฟอร์มติดต่อกับเพลงใน site.js ใช้
+
+ต้องใส่ค่า **หลัง** บล็อกเสมอ เพราะเป้าหมาย (โซเชียล/เบอร์ใน footer) อยู่ในบล็อก `site/footer-*`
+และใน `sync-content.py` ต้องใส่ค่าลงบล็อก *ก่อน* เขียนไฟล์ ไม่งั้นสองรอบนี้เขียนทับกันไปมาไม่รู้จบ
+
+ที่ยังอยู่ในไฟล์: โครง header (โลโก้ ปุ่มค้นหา ปุ่มเบอร์เกอร์) และอีเมลใน footer (`tefl@chula.ac.th`)
+ซึ่งต่างจากอีเมลหน้า Contact (`TEFL.Chula@gmail.com`) — สองค่านี้มีมาแต่เดิม ยังไม่ได้รวมเป็นค่าเดียว
+
+Supabase เปิดให้สมัครสมาชิกเองด้วย publishable key ตามค่าเริ่มต้น ถ้า policy เชื่อแค่
+`role = authenticated` ใครก็สมัครแล้วแก้เนื้อหาเว็บได้ จึงต้องเช็กกับตาราง `admins` เสมอ
+ฟังก์ชัน `private.is_admin()` อยู่ใน schema `private` ที่ PostgREST ไม่เปิดเป็น API
+(ย้ายออกจาก `public` เพราะไม่งั้นถูกเรียกผ่าน `/rest/v1/rpc/` ได้จากภายนอก)
+
+เพิ่มผู้ดูแล: สร้าง user ใน Supabase Dashboard → Authentication → Add user
+แล้วเพิ่มอีเมลนั้นลงตาราง `admins` (ผู้ดูแลที่มีอยู่แล้วเพิ่มได้เองผ่าน SQL Editor)
+
+### 9.8 โพสต์จาก Facebook → Latest News / Announcements (หน้า Activities)
+
+สไลด์ Latest News หน้าแรกและส่วน Announcements ใน `activities.html` ดึงโพสต์ล่าสุดของเพจ **TEFL Chulalongkorn University** ผ่าน
+Edge Function `fb-sync` (`supabase/functions/fb-sync/index.ts`) — ฟังก์ชันเขียนโพสต์ลงตาราง `news`
+ที่ `placement = 'home'` เหมือนข่าวที่พิมพ์เอง ดังนั้น `cms.js` / `sync-content.py` / การ์ด `.nc-card`
+ไม่รู้จัก Facebook เลย
+
+| ส่วน | ที่อยู่ |
+|---|---|
+| token ของเพจ / Page ID | ตาราง `integrations` (`facebook.token`, `facebook.page_id`) — แก้ได้ที่ /admin → Facebook → "แก้ Token / Page ID" **ไม่มี policy ให้ anon** จึงไม่รั่วไปเว็บ ต่างจาก `settings` ที่คนทั่วไปอ่านได้ · ถ้าว่างฟังก์ชันถอยไปใช้ secret `FB_PAGE_TOKEN` |
+| สวิตช์ / จำนวนโพสต์ / จำนวนบนหน้าแรก | `settings` → `facebook.sync_enabled`, `facebook.sync_count` (1–50), `news.home_count` (แก้ในหน้า Facebook ของ admin หรือหน้าข้อมูลติดต่อและลิงก์) |
+| แถวที่มาจากเพจ | `news.fb_post_id` (unique) — แถวที่พิมพ์เองเป็น `null`; ในหน้า admin ขึ้นคำว่า "จาก Facebook" |
+| รูป | คัดลอกไปเก็บที่ `media/fb/<post id>.jpg` เพราะ `full_picture` ที่ Graph API คืนมาเป็น URL ชั่วคราว หมดอายุในไม่กี่วัน · ไล่หาตามลำดับ `full_picture` → `attachments[0].media` → `subattachments[0].media` เพราะ**โพสต์ที่แชร์**โพสต์/อัลบั้ม/ลิงก์ของคนอื่นมักไม่มี `full_picture` (เจอจริงกับโพสต์ "Welcome Chuo University") · แถวเก่าที่ `image` ว่างจะถูกลองหารูปใหม่ทุกรอบ sync แต่ช่องอื่นไม่แตะ · ไม่มีรูปเลย = `<img src="">` ซึ่ง `site.css` ซ่อนไว้ให้เห็นแค่พื้นไล่สี |
+| ตารางเวลา | `cron.schedule('fb-sync-news', '0 */6 * * *')` เรียกฟังก์ชันผ่าน `pg_net` ด้วยกุญแจ `x-sync-key` จาก Vault (`fb_sync_key`) · **ต้องส่ง `timeout_milliseconds := 120000`** — ค่าเริ่มต้นของ pg_net คือ 5 วินาที ฟังก์ชันคัดลอกรูปหลายรูปใช้เวลาเกินนั้นเสมอ ถูกตัดสายทุกรอบโดยไม่มี error โผล่ที่ไหน (ดูได้ใน `net._http_response` → `timed_out`) แก้ไว้ใน migration 000005 · สั่งดึงเองจาก SQL ได้ด้วยคำสั่งเดียวกับใน cron (กุญแจไม่ออกจากฐานข้อมูล) |
+| โพสต์ที่ไม่มีรูปให้ดึง | ผลตอบของ `sync` มี `unresolved:[{id,type,reason}]` — `reason: no-source` = Graph API ไม่ให้ media เลย พบกับ `type: native_templates` (การ์ดเทมเพลตของ Facebook เช่นโพสต์ต้อนรับ/พื้นหลังสี) ไม่ใช่บั๊ก ต้องใส่รูปเองในหน้าข่าว แล้ว sync จะไม่มาทับ · `fetch-<status>` = ได้ URL แต่โหลดไม่ได้ |
+| กดดึงเอง / ดูสถานะ | หน้า Facebook ใน /admin: การ์ดสถานะเรียก `{action:'status'}` (คืนชื่อเพจ, 4 ตัวท้ายของ token, เวลาดึงล่าสุด) ปุ่ม "ดึงโพสต์ตอนนี้" เรียก `{action:'sync'}` — ฟังก์ชันตรวจสิทธิ์กับตาราง `admins` ผ่าน RLS |
+
+**หน้าแรกโชว์แค่ N ใบแรก ส่วน Announcements โชว์ครบ** — `news-home` = `placement='home'` ตัดที่ `news.home_count`,
+`news-all` (activities.html#announcements) = ทั้งหมด กติกานี้อยู่ทั้งใน `cms.js` และ `sync-content.py`
+
+กติกาของการ sync (ตั้งใจเลือก อย่าเปลี่ยนโดยไม่อ่านเหตุผล)
+
+- **ไม่เขียนทับแถวที่มีอยู่แล้ว** — ผู้ดูแลแก้หัวข้อหรือซ่อนโพสต์ได้ และรอบถัดไปไม่คืนค่า
+- **ลบแล้วกลับมา** — ถ้าลบแถวที่มาจากเพจ รอบ sync ถัดไปจะดึงมาใหม่ (ยังอยู่ในชุดล่าสุด) ให้ใช้ "ซ่อนจากเว็บ" แทน
+- **โพสต์ที่หลุดจากชุดล่าสุด** (เก่ากว่า `sync_count` หรือถูกลบบนเพจ) ถูกเอาออกพร้อมรูป — ข่าวที่พิมพ์เองไม่ถูกแตะ
+- **ลำดับ** `sort_order = -(นาทีตั้งแต่ epoch ของเวลาโพสต์)` โพสต์ใหม่สุดจึงอยู่หน้าสุดและอยู่ก่อนข่าวที่พิมพ์เอง (เริ่มที่ 0)
+  โดยไม่ต้องจัดลำดับใหม่ ปุ่มลูกศรใน admin สลับค่าได้ตามปกติ
+- **หัวข้อการ์ด** = บรรทัดแรกของโพสต์ที่มีตัวอักษรจริง ตัดแฮชแท็กท้ายบรรทัด จำกัด 120 ตัวอักษร (การ์ดตัดที่ 3 บรรทัดอยู่แล้ว)
+- ฟังก์ชัน deploy แบบ `verify_jwt = false` (ตั้งใน `supabase/config.toml`) เพราะ `pg_cron` ไม่มี JWT ให้ส่ง
+  จึงตรวจสิทธิ์เองข้างในเสมอ — ไม่มีกุญแจถูกต้อง = 401 และไม่ทำอะไร
+- **CORS**: คำตอบ OPTIONS ต้องเป็น `new Response(null, {status:204})` — ใส่ body เข้าไปแล้ว Response โยน error
+  เงียบ ๆ preflight ตอบ 500 และหน้า admin เห็นแค่ "Load failed" (เจอมาแล้ว)
+
+ตั้งค่าครั้งแรก (token ของเพจแบบ long-lived ไม่หมดอายุ แต่ถ้าเพจเปลี่ยนแอดมินหรือรีเซ็ตรหัสผ่านต้องออกใหม่ —
+อาการคือการ์ดสถานะขึ้น "Facebook ปฏิเสธ" ให้ใส่ token ใหม่ในหน้า admin ได้เลย ไม่ต้อง deploy):
+
+```bash
+supabase db push                                   # migrations 0003 (คอลัมน์ + cron), 0004 (integrations, events, หน้า News), 0006 (ยุบหน้า News เข้า Activities)
+supabase secrets set FB_PAGE_TOKEN='<token>' FB_SYNC_KEY='<กุญแจสุ่ม>'
+supabase db query --linked "select vault.create_secret('<กุญแจสุ่มเดียวกัน>', 'fb_sync_key');"
+supabase functions deploy fb-sync
+python3 sync-content.py                            # หลัง sync รอบแรก ให้ HTML ในไฟล์ตามฐานข้อมูล
+```
+
+### 9.9 Announcements และปฏิทินกิจกรรม (ท้ายหน้า Activities)
+
+เดิมเป็นหน้า `news.html` แยก (ก.ย. 2569) แต่ยุบเข้า `activities.html` ในวันเดียวกัน เพื่อให้หน้าน้อยลงและโพสต์กับกิจกรรมอยู่ที่เดียว —
+migration `20260921000006_remove_news_page.sql` ย้ายบล็อก `news/*` → `activities/*` และแก้เมนู · `vercel.json` redirect
+`/news.html` → `/activities.html#announcements` ให้ลิงก์เก่าที่แชร์ไปแล้วยังใช้ได้ · ตาราง `events` และหน้า admin ไม่เปลี่ยน
+
+ต่อจากสไลด์ Recent Activities มีสองส่วน: **Announcements** (`.news-grid[data-cms="news-all"]` — การ์ด `.nc-card` ใบเดียวกับสไลด์
+แต่วางเป็นตาราง 3 → 2 → 1 คอลัมน์ ต้องล้าง `flex-basis` ที่ตั้งไว้สำหรับสไลด์) และ **Event Calendar**
+(`.ev-list[data-cms="events"]`) จากตาราง `events`
+
+ปฏิทินเป็น *รายการตามเดือน* ไม่ใช่ตารางปฏิทิน เพราะกิจกรรมของหลักสูตรมีไม่กี่รายการต่อเดือน ตารางจะว่างเป็นส่วนใหญ่
+มาร์กอัป: `.ev-month` หัวเดือน → `.ev-item` (`.ev-date` แผ่นวันที่ไล่สี brand→orange · `.ev-body` h3 / `.ev-meta`
+ช่วงวัน·เวลา·สถานที่ / `.ev-desc`) — `renderEvents()` ใน cms.js กับ `render_events()` ใน sync-content.py
+ต้องให้ผลตรงกันเป๊ะ (มีเทสต์เทียบไว้ตอนทำ) เรียงตาม `starts_on` เสมอ ไม่ใช่ `sort_order`
+กิจกรรมที่จบไปแล้วใส่ `.is-past` ให้จางลง (แผ่นวันที่เป็นเทา) แต่ไม่ซ่อน — เป็นบันทึกว่าจัดอะไรไปบ้าง
+`.is-past` คำนวณจาก "วันนี้" ตอนเรนเดอร์ ไฟล์ที่ sync ไว้จึงอาจต่างจากเบราว์เซอร์เล็กน้อยเมื่อเวลาผ่านไป
+
+ตาราง `events`: `title`, `starts_on` (date), `ends_on` (date, ว่าง = วันเดียว), `time_text` (พิมพ์อิสระ),
+`location`, `description`, `url` — แก้ที่ /admin → ปฏิทินกิจกรรม (ช่องวันที่เป็น `<input type="date">`;
+ค่าว่างต้องส่งเป็น `null` เพราะคอลัมน์ date รับ `''` ไม่ได้)
+
+เมนู: ไม่มีรายการ News ระดับบนแล้ว — ใต้ **Activities** มีรายการย่อย Announcements / Event Calendar · ปุ่ม View All บนสไลด์
+หน้าแรกและลิงก์ News & Events ใน footer คอลัมน์ About ชี้ไป `activities.html#announcements`
+เมนูบน 8 รายการ (เคยวัดไว้ว่า 9 รายการยังพอดีที่ 1120px ก่อนยุบเป็นเบอร์เกอร์ที่ 1100px — ถ้าเพิ่มรายการอีกต้องวัดใหม่)
+
+### 9.6 รูปที่อัปโหลด
+
+เก็บใน Supabase Storage บัคเก็ต `media` (สาธารณะ, จำกัด 5 MB, เฉพาะไฟล์ภาพ)
+ตั้งชื่อไฟล์ใหม่ด้วย timestamp กันชนกันและกัน CDN คืนรูปเก่าที่แคชไว้
+รูปเดิมที่อยู่ในโฟลเดอร์ `img/` ยังใช้ได้ตามปกติ — ช่องรูปรับทั้งพาธสัมพัทธ์และ URL เต็ม
+
+---
+
 ## 8. วิธีเพิ่มหน้าใหม่ (เช็กลิสต์)
 
-1. คัดลอกโครงจาก `about.html` (มีครบทั้ง header, search overlay, drawer, banner, footer)
+1. คัดลอกโครงจาก `about.html` (มีครบทั้ง header, search overlay, drawer, banner, footer) 
 2. แก้ `<title>` เป็น `ชื่อหน้า | (TEFL) Teaching English as a Foreign Language` (บรรทัด `<link rel="icon">` / `apple-touch-icon` ใต้ `<title>` ติดมากับโครงอยู่แล้ว — อย่าลบ)
 3. ตั้งภาพแบนเนอร์: `<section class="page-banner" style="--banner-img:url('img/…')">` + แก้ breadcrumb
 4. ใส่ `class="active"` ให้เมนูหลักของหมวดนั้น และ `class="current"` ให้ลิงก์ในดรอปดาวน์
@@ -511,4 +785,4 @@ img/    logo.png, logo.jpg, icon.png
 7. ปิดท้ายด้วย `<script src="site.js"></script>`
 8. ตรวจที่ 1360 / 1100 / 900 / 560px และลองกด Tab กับ Esc
 
-> **ข้อจำกัดที่ควรรู้:** header/footer ถูกทำซ้ำใน HTML ทุกไฟล์ (ไม่มี templating) → แก้เมนูครั้งหนึ่งต้องแก้ 9 ไฟล์ ถ้าเว็บโตกว่านี้ควรย้ายไปใช้ static site generator หรือฉีด header ด้วย JS
+> **ข้อจำกัดที่ควรรู้:** header/footer ถูกทำซ้ำใน HTML ทุกไฟล์ (ไม่มี templating) → แก้เมนูครั้งหนึ่งต้องแก้ 10 ไฟล์ ถ้าเว็บโตกว่านี้ควรย้ายไปใช้ static site generator หรือฉีด header ด้วย JS

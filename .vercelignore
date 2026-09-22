@@ -8,3 +8,10 @@
 DESIGN.md
 CLAUDE.md
 index.backup.html
+sync-content.py
+
+# คลังภาพต้นฉบับ ไม่ต้องอัปขึ้นเว็บ
+04.09.69 PRWEB
+
+# ไฟล์ตั้งฐานข้อมูล ใช้ตอนย้ายโปรเจกต์ Supabase เท่านั้น ไม่ต้องขึ้นเว็บ
+supabase

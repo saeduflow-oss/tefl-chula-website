@@ -10,6 +10,10 @@
 <link rel="stylesheet" href="fonts/chula.css">
 <link rel="stylesheet" href="site.css">
 <style>
+  /* พีชอ่อน = สีส้มแบรนด์เจือขาวจนเกือบสุด ใช้เป็นพื้นหัวการ์ด Courses
+     อยู่ในหน้านี้หน้าเดียว ถ้าวันหนึ่งมีหน้าอื่นใช้ด้วย ให้ย้ายไปเป็น token ใน site.css */
+  :root{ --card-peach:#fdf1ea; }
+
   /* ============ HERO (full screen + audience switcher) ============ */
   .hero{
     position:relative;
@@ -33,16 +37,22 @@
     background-size:cover;
     background-repeat:no-repeat;
   }
-  .slide-1{background-image:url('img/pic1.jpeg');}
-  .slide-2{background-image:url('img/pic2.jpeg');}
-  .slide-3{background-image:url('img/pic3.jpeg');}
-  .slide-4{background-image:url('img/pic4.jpeg');}
-  .slide-5{background-image:url('img/pic5.jpeg');}
-  /* darken the photo so the hero text stays readable */
+  .slide-1{background-image:url('img/hero-cohort.jpg');}
+  .slide-2{background-image:url('img/hero-lab.jpg');}
+  .slide-3{background-image:url('img/hero-classroom.jpg');}
+  .slide-4{background-image:url('img/hero-library.jpg');}
+  .slide-5{background-image:url('img/hero-campus.jpg');}
+  /* ม่านดำทับรูปสไลด์ให้ตัวหนังสืออ่านออก
+     สต็อปช่วงกลาง (42–68%) เข้มขึ้นกว่าเดิมเพราะรูปชุดใหม่เป็นห้องเรียน/ห้องสมุดสีสว่าง
+     ถ้าลดค่าตรงนี้ลง หัวเรื่องสีขาวจะจมไปกับพื้นหลังทันที */
   .hero-slide::after{
     content:"";
     position:absolute;inset:0;
-    background:linear-gradient(180deg,rgba(11,7,7,.46) 0%,rgba(11,7,7,.30) 40%,rgba(11,7,7,.74) 100%);
+    background:linear-gradient(180deg,
+      rgba(11,7,7,.52) 0%,
+      rgba(11,7,7,.44) 42%,
+      rgba(11,7,7,.58) 68%,
+      rgba(11,7,7,.80) 100%);
   }
   .hero-inner{
     position:relative;
@@ -134,7 +144,7 @@
       rgba(232, 64, 26, 0.92) 46%,
       rgba(205, 68, 33, 0.94) 100%
     ),
-    url('img/pic2.jpeg') center/cover no-repeat;
+    url('img/missions-bg.jpg') center/cover no-repeat;
 
   color: #fff;
 }
@@ -253,7 +263,7 @@
     aspect-ratio:3/4;
     border-radius:18px;
     overflow:hidden;
-    background:#eceff1;
+    background:var(--card-peach);   /* ต้องเป็นสีเดียวกับสต็อปแรกของ .c-bg เป๊ะ ๆ ไม่งั้นเห็นรอยต่อสี */
     box-shadow:0 6px 18px rgba(43,43,43,.10);
     transition:transform .3s ease,box-shadow .3s ease;
   }
@@ -264,26 +274,33 @@
   }
   .course-card:focus-visible{outline:2px solid var(--brand-dark);outline-offset:3px;}
 
-  /* รูปเต็มใบ — ใส่รูปจริงที่ style="--img:url('img/ชื่อไฟล์.jpg')" */
+  /* รูปอยู่ "แถบล่าง" ของการ์ด (38%→ขอบล่าง) ไม่ใช่เต็มใบ — ใส่รูปที่ style="--img:url('img/ชื่อไฟล์.jpg')"
+     เดิมรูปเต็มใบแล้วเอาม่านขาวทับครึ่งบน ทำให้ต้องครอปรูปชิดมากจนหน้าคนโดนขอบการ์ดตัด
+     กรอบแถบล่างมีอัตราส่วนราว 1.21:1 จึงใช้รูปแนวนอนที่จัดองค์ประกอบมาพอดีกรอบได้เลย */
   .course-card .c-photo{
-    position:absolute;inset:0;
+    position:absolute;
+    top:38%;left:0;right:0;bottom:0;
     background-image:var(--img,none);
     background-size:cover;
-    background-position:center bottom;
+    background-position:center;
     transition:transform .5s ease;
   }
   .course-card:hover .c-photo{transform:scale(1.05);}
 
-  /* ม่านไล่สี: ขาวทึบด้านบนให้ตัวหนังสืออ่านออก จางลงจนเห็นรูปเต็มด้านล่าง
-     ใช้เฉดเดียวกันทุกใบ */
+  /* ม่านไล่สี: หัวการ์ดสีพีชอ่อนทึบให้ตัวหนังสืออ่านออก แล้วจางหมดก่อนถึงกลางรูป ใช้เฉดเดียวกันทุกใบ
+     - ทึบถึง 36% เพราะรูปเริ่มที่ 38% ตรงจุดนั้นม่านยังเข้มราว .95 จึงกลบขอบบนของรูปได้มิด
+       ถ้าลดลงจะเห็นเป็นเส้นตัดขวางการ์ด
+     - จางหมดที่ 56% ห้ามลากยาวกว่านี้ เพราะสีพีชจะไปเคลือบหน้าคนจนดูเป็นรูปย้อมสี
+       (เคยลองแบบทับทั้งใบและแบบส้มแบรนด์เต็มมาแล้ว หน้าคนกลายเป็นสีส้มทั้งคู่)
+     - ห้ามดันจุดทึบขึ้นเกิน ~36% เพราะบรรทัดคำอธิบายในการ์ดแคบยาวลงมาถึงราว 44% */
   .course-card .c-bg{
     position:absolute;inset:0;
     background:linear-gradient(180deg,
-      rgba(255,255,255,1) 0%,
-      rgba(255,255,255,1) 34%,
-      rgba(255,255,255,.72) 56%,
-      rgba(255,255,255,.28) 80%,
-      rgba(255,255,255,0) 100%);
+      var(--card-peach) 0%,
+      var(--card-peach) 36%,
+      rgba(253,241,234,.80) 44%,
+      rgba(253,241,234,.20) 50%,
+      rgba(253,241,234,0) 56%);
   }
 
   .course-card .c-body{
@@ -534,7 +551,7 @@
   /* ============ STATS ============ */
   .stats{
     position:relative;
-    background:#110e0d url('img/pic3.jpeg') center/cover no-repeat;
+    background:#110e0d url('img/banner-campus.jpg') center/cover no-repeat;
     padding:56px 24px;
     overflow:hidden;
   }
@@ -647,113 +664,15 @@
       </a>
 
       <nav class="main-nav" id="mainNav" aria-label="Main menu">
-        <ul>
-
-          <li>
-            <a href="about.html" data-dropdown="dd-about">About
-              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
-            </a>
-            <div class="dropdown" id="dd-about">
-              <div class="dd-menu">
-                <a class="dd-title" href="about.html">About the Program</a>
-                <ul>
-                  <li><a href="about.html#goals">Goals and Objectives</a></li>
-                  <li><a href="about.html#academic-staff">Academic Staff</a></li>
-                  <li><a href="about.html#guest-lecturers">Guest Lecturers</a></li>
-                </ul>
-              </div>
-            </div>
-          </li>
-
-          <li>
-            <a href="academics.html" data-dropdown="dd-academics">Academics
-              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
-            </a>
-            <div class="dropdown" id="dd-academics">
-              <div class="dd-menu">
-                <a class="dd-title" href="academics.html">Academics</a>
-                <ul>
-                  <li><a href="academics.html#curriculum-info">Curriculum Info.</a></li>
-                  <li><a href="academics.html#list-of-courses">List of Courses</a></li>
-                  <li><a href="academics.html#study-plan">Study Plan</a></li>
-                  <li><a href="academics.html#class-schedule">Class Schedule</a></li>
-                  <li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li>
-                  <li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li>
-                </ul>
-              </div>
-            </div>
-          </li>
-
-          <li>
-            <a href="admission.html" data-dropdown="dd-admission">Admission
-              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
-            </a>
-            <div class="dropdown" id="dd-admission">
-              <div class="dd-menu">
-                <a class="dd-title" href="admission.html">Admission</a>
-                <ul>
-                  <li><a href="admission.html#admission-requirements">Admission Requirements</a></li>
-                  <li><a href="admission.html#admission-procedures">Admission Procedures</a></li>
-                  <li><a href="admission.html#admission-deadline">Admission Deadline</a></li>
-                </ul>
-              </div>
-            </div>
-          </li>
-
-          <li>
-            <a href="research.html" data-dropdown="dd-research">Research
-              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
-            </a>
-            <div class="dropdown" id="dd-research">
-              <div class="dd-menu">
-                <a class="dd-title" href="research.html">Research</a>
-                <ul>
-                  <li><a href="research.html#research-guidelines">Guidelines for Research Procedures</a></li>
-                  <li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li>
-                  <li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li>
-                </ul>
-              </div>
-            </div>
-          </li>
-
-          <li>
-            <a href="activities.html" data-dropdown="dd-activities">Activities
-              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
-            </a>
-            <div class="dropdown" id="dd-activities">
-              <div class="dd-menu">
-                <a class="dd-title" href="activities.html">Activities</a>
-                <ul>
-                  <li><a href="activities.html#activities-list">Activities List</a></li>
-                  <li><a href="activities.html#intensive-course">Intensive Course</a></li>
-                  <li><a href="index.html#news">News &amp; Events</a></li>
-                </ul>
-              </div>
-            </div>
-          </li>
-
-          <li>
-            <a href="forms-and-links.html" data-dropdown="dd-forms">Forms &amp; Links
-              <svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
-            </a>
-            <div class="dropdown" id="dd-forms">
-              <div class="dd-menu">
-                <a class="dd-title" href="forms-and-links.html">Forms and Links</a>
-                <ul>
-                  <li><a href="forms-and-links.html#request-forms">Request Forms</a></li>
-                  <li><a href="forms-and-links.html#thesis-forms">Thesis and Master Project Forms</a></li>
-                  <li><a href="forms-and-links.html#research-collaboration-letters">Research Collaboration Letters</a></li>
-                  <li><a href="forms-and-links.html#graduation-request">Graduation Request</a></li>
-                  <li><a href="forms-and-links.html#useful-links">Useful Links</a></li>
-                </ul>
-              </div>
-            </div>
-          </li>
-
+        <ul data-cms="nav">
+          <li><a href="about.html" data-dropdown="dd-about">About<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-about"><div class="dd-menu"><a class="dd-title" href="about.html">About the Program</a><ul><li><a href="about.html#goals">Goals and Objectives</a></li><li><a href="about.html#academic-staff">Academic Staff</a></li><li><a href="about.html#guest-lecturers">Guest Lecturers</a></li></ul></div></div></li>
+          <li><a href="academics.html" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#study-plan">Study Plan</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></div></div></li>
+          <li><a href="admission.html" data-dropdown="dd-admission">Admission<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-admission"><div class="dd-menu"><a class="dd-title" href="admission.html">Admission</a><ul><li><a href="admission.html#admission-requirements">Admission Requirements</a></li><li><a href="admission.html#admission-procedures">Admission Procedures</a></li><li><a href="admission.html#admission-deadline">Admission Deadline</a></li></ul></div></div></li>
+          <li><a href="research.html" data-dropdown="dd-research">Research<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-research"><div class="dd-menu"><a class="dd-title" href="research.html">Research</a><ul><li><a href="research.html#research-guidelines">Guidelines for Research Procedures</a></li><li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li><li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li></ul></div></div></li>
+          <li><a href="activities.html" data-dropdown="dd-activities">Activities<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-activities"><div class="dd-menu"><a class="dd-title" href="activities.html">Activities</a><ul><li><a href="activities.html#activities-list">Activities List</a></li><li><a href="activities.html#intensive-course">Intensive Course</a></li><li><a href="activities.html#announcements">Announcements</a></li><li><a href="activities.html#calendar">Event Calendar</a></li></ul></div></div></li>
+          <li><a href="forms-and-links.html" data-dropdown="dd-forms-links">Forms &amp; Links<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-forms-links"><div class="dd-menu"><a class="dd-title" href="forms-and-links.html">Forms and Links</a><ul><li><a href="forms-and-links.html#request-forms">Request Forms</a></li><li><a href="forms-and-links.html#thesis-forms">Thesis and Master Project Forms</a></li><li><a href="forms-and-links.html#research-collaboration-letters">Research Collaboration Letters</a></li><li><a href="forms-and-links.html#graduation-request">Graduation Request</a></li><li><a href="forms-and-links.html#useful-links">Useful Links</a></li></ul></div></div></li>
           <li><a href="faqs.html">FAQs</a></li>
-
           <li><a href="contact.html">Contact</a></li>
-
         </ul>
       </nav>
 
@@ -799,13 +718,13 @@
   <main>
 
     <!-- ============ HERO ============ -->
-    <section class="hero" id="home">
+    <section class="hero" id="home" data-cms-block="index/home">
       <div class="hero-track" id="heroTrack">
-        <div class="hero-slide slide-1" role="img" aria-label="TEFL students at Chulalongkorn University"></div>
-        <div class="hero-slide slide-2" role="img" aria-label="Classroom activity"></div>
-        <div class="hero-slide slide-3" role="img" aria-label="Seminar session"></div>
-        <div class="hero-slide slide-4" role="img" aria-label="Group work"></div>
-        <div class="hero-slide slide-5" role="img" aria-label="Campus life"></div>
+        <div class="hero-slide slide-1" role="img" aria-label="TEFL students and instructors in the computer lab"></div>
+        <div class="hero-slide slide-2" role="img" aria-label="TEFL students in the faculty computer lab"></div>
+        <div class="hero-slide slide-3" role="img" aria-label="Students working together in a TEFL class"></div>
+        <div class="hero-slide slide-4" role="img" aria-label="Group work in the faculty library"></div>
+        <div class="hero-slide slide-5" role="img" aria-label="Faculty of Education campus"></div>
       </div>
 
       <div class="hero-inner">
@@ -826,7 +745,7 @@
 
 
     <!-- ============ WELCOME ============ -->
-    <section class="welcome" id="about">
+    <section class="welcome" id="about" data-cms-block="index/about">
       <div class="section-head">
         <div class="eyebrow">Faculty of Education</div>
         <span class="rule"></span>
@@ -845,7 +764,7 @@
 
 
     <!-- ============ MISSIONS ============ -->
-    <section class="missions" id="missions">
+    <section class="missions" id="missions" data-cms-block="index/missions">
       <div class="inner">
         <h2>Our Missions</h2>
         <div class="mission-cards">
@@ -889,7 +808,7 @@
 
 
     <!-- ============ DISCOVER OUR COURSES ============ -->
-    <section class="discover" id="academics">
+    <section class="discover" id="academics" data-cms-block="index/academics">
       <div class="inner">
 
         <div class="section-head">
@@ -900,7 +819,7 @@
 
         <div class="course-index" id="courses">
           <a class="course-card" href="academics.html#list-of-courses">
-            <div class="c-photo" style="--img:url('img/pic2.jpeg')"></div>
+            <div class="c-photo" style="--img:url('img/course-required.jpg')"></div>
             <div class="c-bg"></div>
             <div class="c-body">
               <h5>Required Courses</h5>
@@ -909,7 +828,7 @@
             <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </a>
           <a class="course-card" href="academics.html#list-of-courses">
-            <div class="c-photo" style="--img:url('img/pic5.jpeg')"></div>
+            <div class="c-photo" style="--img:url('img/course-elective.jpg')"></div>
             <div class="c-bg"></div>
             <div class="c-body">
               <h5>Elective Courses</h5>
@@ -918,7 +837,7 @@
             <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </a>
           <a class="course-card" href="academics.html#curriculum-info">
-            <div class="c-photo" style="--img:url('img/pic3.jpeg')"></div>
+            <div class="c-photo" style="--img:url('img/course-practicum.jpg')"></div>
             <div class="c-bg"></div>
             <div class="c-body">
               <h5>Teaching Practicum</h5>
@@ -927,7 +846,7 @@
             <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </a>
           <a class="course-card" href="about.html#guest-lecturers">
-            <div class="c-photo" style="--img:url('img/pic1.jpeg')"></div>
+            <div class="c-photo" style="--img:url('img/course-guest.jpg')"></div>
             <div class="c-bg"></div>
             <div class="c-body">
               <h5>Guest Lectures</h5>
@@ -936,7 +855,7 @@
             <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </a>
           <a class="course-card" href="academics.html#list-of-courses">
-            <div class="c-photo" style="--img:url('img/pic4.jpeg')"></div>
+            <div class="c-photo" style="--img:url('img/course-edtech.jpg')"></div>
             <div class="c-bg"></div>
             <div class="c-body">
               <h5>Educational Technology</h5>
@@ -955,8 +874,7 @@
 
 
     <!-- ============ PROGRAM BLOCKS ============ -->
-    <section class="programs" id="faculty">
-
+    <section class="programs" id="faculty" data-cms-block="index/faculty">
       <div class="program-block">
         <div class="program-text">
           <h3>TEFL Program Overview</h3>
@@ -968,7 +886,7 @@
           </p>
           <a href="#contact" class="btn-base is-outline">LEARN MORE<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
         </div>
-        <div class="program-img"><img src="img/pic1.jpeg" alt="TEFL Program"></div>
+        <div class="program-img"><img src="img/program-overview.jpg" alt="An instructor guiding TEFL students during a computer lab session" loading="lazy" decoding="async" width="1800" height="1200"></div>
       </div>
 
       <div class="program-block reverse">
@@ -982,15 +900,13 @@
           </p>
           <a href="#students" class="btn-base is-outline">EXPLORE ACTIVITIES<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
         </div>
-        <div class="program-img alt"><img src="img/pic2.jpeg" alt="Learning & Experience"></div>
+        <div class="program-img alt"><img src="img/program-beyond.jpg" alt="TEFL students reading together in the faculty library" loading="lazy" decoding="async" width="1800" height="1200"></div>
       </div>
-
     </section>
 
 
     <!-- ============ INTRO / ทำความรู้จักจุฬาฯ ============ -->
-    <section class="intro-about" id="students">
-
+    <section class="intro-about" id="students" data-cms-block="index/students">
       <div class="intro-bg" aria-hidden="true">
         <div class="w w-1">
           <svg viewBox="0 0 1440 560" preserveAspectRatio="none">
@@ -1057,82 +973,26 @@
           </div>
         </div>
       </div>
-
     </section>
 
 
     <!-- ============ NEWS CAROUSEL ============ -->
-    <section class="news-carousel" id="news" aria-label="Latest News">
+    <section class="news-carousel" id="news" aria-label="Latest News" data-cms-block="index/news">
       <div class="nc-inner">
 
         <div class="nc-head">
           <h2>Latest News</h2>
-          <a href="#" class="btn-base is-outline is-sm">View All<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+          <a href="activities.html#announcements" class="btn-base is-outline is-sm">View All<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
         </div>
 
         <div class="nc-viewport" tabindex="0" role="region" aria-label="News items, scrollable">
-          <div class="nc-track">
-
-            <article class="nc-card">
-              <a href="#">
-                <div class="nc-thumb"><img src="img/pic1.jpeg" alt=""></div>
-                <div class="nc-body">
-                  <h3>TEFL Program welcomes the incoming cohort of graduate students</h3>
-                  <span class="nc-tag">News &amp; Announcements</span>
-                </div>
-              </a>
-            </article>
-
-            <article class="nc-card">
-              <a href="#">
-                <div class="nc-thumb"><img src="img/pic2.jpeg" alt=""></div>
-                <div class="nc-body">
-                  <h3>Workshop on classroom research methods for English language teachers</h3>
-                  <span class="nc-tag">Academic Activities</span>
-                </div>
-              </a>
-            </article>
-
-            <article class="nc-card">
-              <a href="#">
-                <div class="nc-thumb"><img src="img/pic3.jpeg" alt=""></div>
-                <div class="nc-body">
-                  <h3>Student teaching practicum: reflections from the field</h3>
-                  <span class="nc-tag">Student Activities</span>
-                </div>
-              </a>
-            </article>
-
-            <article class="nc-card">
-              <a href="#">
-                <div class="nc-thumb"><img src="img/pic4.jpeg" alt=""></div>
-                <div class="nc-body">
-                  <h3>Guest lecture series on technology-enhanced language learning</h3>
-                  <span class="nc-tag">Academic Activities</span>
-                </div>
-              </a>
-            </article>
-
-            <article class="nc-card">
-              <a href="#">
-                <div class="nc-thumb"><img src="img/pic5.jpeg" alt=""></div>
-                <div class="nc-body">
-                  <h3>Faculty and students present at the international TEFL conference</h3>
-                  <span class="nc-tag">Research</span>
-                </div>
-              </a>
-            </article>
-
-            <article class="nc-card">
-              <a href="#">
-                <div class="nc-thumb"><img src="img/pic2.jpeg" alt=""></div>
-                <div class="nc-body">
-                  <h3>Admission open for the next academic year — information session announced</h3>
-                  <span class="nc-tag">News &amp; Announcements</span>
-                </div>
-              </a>
-            </article>
-
+          <div class="nc-track" data-cms="news-home">
+            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1113029951076352"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1113029951076352.jpg" alt=""></div><div class="nc-body"><h3>🎓✨ The TEFL Graduation Party: Celebrating Achievement and New Beginnings ✨🎓</h3><span class="nc-tag">Facebook</span></div></a></article>
+            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1106338508412163"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1106338508412163.jpg" alt=""></div><div class="nc-body"><h3>Our Study Room is Officially Alive! 📚🎉</h3><span class="nc-tag">Facebook</span></div></a></article>
+            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1099401705772510"><div class="nc-thumb"><img src="" alt=""></div><div class="nc-body"><h3>🌏 Building International Bridges: Welcome Chuo University 🇯🇵🇹🇭</h3><span class="nc-tag">Facebook</span></div></a></article>
+            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1091044226608258"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1091044226608258.jpg" alt=""></div><div class="nc-body"><h3>🎓✨ You’re Invited! ✨🎓</h3><span class="nc-tag">Facebook</span></div></a></article>
+            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1087455723633775"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1087455723633775.jpg" alt=""></div><div class="nc-body"><h3>🙏✨Wai Kru Ceremony 2026✨🙏</h3><span class="nc-tag">Facebook</span></div></a></article>
+            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1072846615094686"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1072846615094686.jpg" alt=""></div><div class="nc-body"><h3>We would like to extend our deepest gratitude to Professor Angel M. Y. Lin for being our guest lecturer. She delivere…</h3><span class="nc-tag">Facebook</span></div></a></article>
           </div>
         </div>
 
@@ -1153,50 +1013,16 @@
 
 
     <!-- ============ FAQ ============ -->
-    <section class="faq">
+    <section class="faq" data-cms-block="index/faq">
       <h2>Frequently Asked Questions</h2>
 
-      <details class="faq-item">
-        <summary>What is the TEFL Program?</summary>
-        <div class="answer">
-          TEFL stands for Teaching English as a Foreign Language. The program
-          focuses on English language education, teaching methodology and
-          professional development for future English teachers.
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary>Who should enroll in the TEFL Program?</summary>
-        <div class="answer">
-          The program is ideal for students who are passionate about English
-          language education and aim to become professional English teachers
-          in Thai and international contexts.
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary>What can students learn from the program?</summary>
-        <div class="answer">
-          Students develop English language proficiency, pedagogical knowledge,
-          research skills and practical experience in language teaching.
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary>Are there activities outside the classroom?</summary>
-        <div class="answer">
-          Yes. Students can participate in academic activities, workshops,
-          educational projects and professional learning experiences.
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary>How can I contact the TEFL Program?</summary>
-        <div class="answer">
-          Please use the contact information provided in the footer of this
-          website, or reach us by email at tefl@chula.ac.th.
-        </div>
-      </details>
+      <div class="faq-list" data-cms="faqs-home">
+        <details class="faq-item"><summary>What is the TEFL Program?</summary><div class="answer">TEFL stands for Teaching English as a Foreign Language. The program focuses on English language education, teaching methodology and professional development for future English teachers.</div></details>
+        <details class="faq-item"><summary>Who should enroll in the TEFL Program?</summary><div class="answer">The program is ideal for students who are passionate about English language education and aim to become professional English teachers in Thai and international contexts.</div></details>
+        <details class="faq-item"><summary>What can students learn from the program?</summary><div class="answer">Students develop English language proficiency, pedagogical knowledge, research skills and practical experience in language teaching.</div></details>
+        <details class="faq-item"><summary>Are there activities outside the classroom?</summary><div class="answer">Yes. Students can participate in academic activities, workshops, educational projects and professional learning experiences.</div></details>
+        <details class="faq-item"><summary>How can I contact the TEFL Program?</summary><div class="answer">Please use the contact information provided in the footer of this website, or reach us by email at tefl@chula.ac.th.</div></details>
+      </div>
     </section>
 
   </main>
@@ -1207,8 +1033,7 @@
 
     <div class="footer-inner">
 
-      <div class="footer-cols">
-
+      <div class="footer-cols" data-cms-block="site/footer-cols">
         <div class="footer-col">
           <h4>About</h4>
           <ul>
@@ -1216,6 +1041,7 @@
             <li><a href="about.html#goals">Goals and Objectives</a></li>
             <li><a href="about.html#academic-staff">Academic Staff</a></li>
             <li><a href="about.html#guest-lecturers">Guest Lecturers</a></li>
+            <li><a href="activities.html#announcements">News &amp; Events</a></li>
             <li><a href="faqs.html">FAQs</a></li>
             <li><a href="contact.html">Contact Us</a></li>
           </ul>
@@ -1255,11 +1081,9 @@
             <li><a href="https://www.grad.chula.ac.th/" target="_blank" rel="noopener">Graduate School</a></li>
           </ul>
         </div>
-
       </div>
 
-      <div class="footer-mid">
-
+      <div class="footer-mid" data-cms-block="site/footer-mid">
         <div class="footer-brand">
           <img src="img/logo.png" alt="TEFL Chula, Faculty of Education, Chulalongkorn University">
         </div>
@@ -1270,25 +1094,24 @@
         </div>
 
         <div class="f-line">
-          Tel: <a href="tel:+6622182565">0&ndash;2218&ndash;2565</a><br>
+          Tel: <a href="tel:+6622182565" data-setting-href="contact.phone_href" data-setting-prefix="tel:" data-setting-text="contact.phone">0–2218–2565</a><br>
           Email: <a href="mailto:tefl@chula.ac.th">tefl@chula.ac.th</a>
         </div>
-
       </div>
 
     </div>
 
-    <div class="footer-bottom">
+    <div class="footer-bottom" data-cms-block="site/footer-bottom">
       <div class="footer-bottom-inner">
 
         <div class="footer-social">
-          <a href="https://www.facebook.com/TEFL.Chula/" class="is-fb" aria-label="Facebook" target="_blank" rel="noopener">
+          <a href="https://www.facebook.com/TEFL.Chula/" class="is-fb" data-setting-href="social.facebook" aria-label="Facebook" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.7c0-.9.3-1.6 1.6-1.6h1.7V4.2c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.4V14h2.7v8z"/></svg>
           </a>
-          <a href="#" class="is-line" aria-label="LINE">
+          <a href="#" class="is-line" data-setting-href="social.line" aria-label="LINE">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2C6.6 3.2 2.2 6.7 2.2 11c0 3.85 3.48 7.08 8.18 7.69.32.07.75.21.86.49.1.25.06.64.03.89l-.14.85c-.04.25-.2.97.85.53s5.65-3.33 7.7-5.7c1.42-1.56 2.1-3.15 2.1-4.75 0-4.3-4.4-7.8-9.78-7.8z"/></svg>
           </a>
-          <a href="https://www.instagram.com/p/DbiparfD3FO/?img_index=18" class="is-ig" aria-label="Instagram" target="_blank" rel="noopener">
+          <a href="https://www.instagram.com/p/DbiparfD3FO/?img_index=18" class="is-ig" data-setting-href="social.instagram" aria-label="Instagram" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zm0 3.8a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0 9.9a3.9 3.9 0 1 1 0-7.8 3.9 3.9 0 0 1 0 7.8zm7.6-10.1a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/></svg>
           </a>
         </div>
@@ -1299,7 +1122,7 @@
     </div>
 
     <!-- จำเป็นต้องมีตามเงื่อนไขสัญญาอนุญาต CC ของภาพ ห้ามลบ -->
-    <div class="photo-credits">
+    <div class="photo-credits" data-cms-block="site/photo-credits">
       Photo credits (Wikimedia Commons):
       <a href="https://commons.wikimedia.org/wiki/File:Faculty_of_Arts_Library,_Chulalongkorn_University.jpg" target="_blank" rel="noopener">Faculty of Arts Library</a> &copy; Geonuch (CC BY-SA 4.0) &middot;
       <a href="https://commons.wikimedia.org/wiki/File:Chulalongkorn_University_Language_Institute_06.23.jpg" target="_blank" rel="noopener">CU Language Institute</a> &copy; Supanut Arunoprayote (CC BY 4.0) &middot;
@@ -1315,21 +1138,27 @@
 
   <!-- ============ JAVASCRIPT ============ -->
   <script src="site.js"></script>
+  <!-- CMS: ดึงเนื้อหาล่าสุดจากฐานข้อมูลมาทับ ถ้าโหลดไม่ได้ใช้ของในไฟล์นี้แทน -->
+  <script src="cms.js"></script>
   <script>
-    /* ============ HERO: slides + copy ============ */
-    const heroTrack = document.getElementById('heroTrack');
-    const heroCopy  = document.getElementById('heroCopy');
-    const slides    = document.querySelectorAll('.hero-slide');
-    const dots      = document.querySelectorAll('#sliderDots button');
-
+    /* ============ HERO: slides + copy ============
+       ห้ามเก็บ element ไว้ในตัวแปรข้ามเวลา: cms.js เขียนทับ innerHTML ของ
+       <section class="hero" data-cms-block="index/home"> ทั้งก้อนหลังโหลดเสร็จ
+       #heroTrack กับปุ่มจุดไข่ปลาชุดเดิมจึงหลุดออกจากหน้าไปเงียบ ๆ (ไม่มี error)
+       ถ้าไปสั่ง transform ที่ตัวเก่า สไลด์จะค้างอยู่ใบแรกตลอด — เคยพังมาแล้ว
+       จึงต้องอ่าน element ใหม่ทุกครั้ง + ผูก click ที่ document + เปิด TEFLHeroRebind ให้ cms.js เรียก */
     let currentSlide = 0;
     let sliderTimer;
 
     function showSlide(index){
-      if(index < 0) index = slides.length - 1;
-      if(index >= slides.length) index = 0;
+      const track = document.getElementById('heroTrack');
+      const dots  = document.querySelectorAll('#sliderDots button');
+      const count = document.querySelectorAll('.hero-slide').length;
+      if(!track || !count) return;
+      if(index < 0) index = count - 1;
+      if(index >= count) index = 0;
       currentSlide = index;
-      heroTrack.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+      track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
       dots.forEach((dot,i) => dot.classList.toggle('active', i === currentSlide));
     }
 
@@ -1338,11 +1167,17 @@
       sliderTimer = setInterval(() => showSlide(currentSlide + 1), 6500);
     }
 
-    dots.forEach(function(dot){
-      dot.addEventListener('click', function(){
-        showSlide(Number(dot.dataset.slide)); restartSlider();
-      });
+    /* ผูกที่ document ครั้งเดียว ปุ่มจะถูกสร้างใหม่กี่รอบก็ยังกดได้ */
+    document.addEventListener('click', function(event){
+      const dot = event.target.closest && event.target.closest('#sliderDots button');
+      if(!dot) return;
+      showSlide(Number(dot.dataset.slide));
+      restartSlider();
     });
+
+    /* cms.js เรียกหลังเขียนทับบล็อกเสร็จ — มาร์กอัปชุดใหม่เริ่มที่ใบแรกเสมอ ต้องดันกลับมาใบปัจจุบัน */
+    window.TEFLHeroRebind = function(){ showSlide(currentSlide); };
+
     restartSlider();
 
     /* ============ NEWS CAROUSEL ============ */

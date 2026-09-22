@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<!-- ไฟล์นี้อยู่ในโฟลเดอร์ admin/ แต่รูป ฟอนต์ และรูปในเนื้อหาทั้งหมดอ้างพาธจากรากเว็บ
+     base href ตัวนี้ทำให้พาธสัมพัทธ์ทุกอันย้อนขึ้นไปหนึ่งชั้นให้เอง
+     ถ้าลบออก โลโก้ ฟอนต์ และรูปย่อในหน้ารายการจะเสียหมด -->
+<base href="../">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TEFL CMS</title>
+<link rel="icon" type="image/png" href="img/favicon.png">
+<!-- ฟอนต์ของหน้า admin แยกจากเว็บหลักโดยตั้งใจ: เว็บหลักใช้ฟอนต์จุฬาฯ (แบรนด์)
+     ส่วนเครื่องมือภายในใช้ IBM Plex Sans Thai ให้อ่านตารางและตัวเลขได้สบายตากว่า
+     โหลดจาก Google Fonts เป็นข้อยกเว้นของกฎ "ไม่พึ่ง CDN" เพราะถ้าโหลดไม่ได้ก็แค่ตกไปฟอนต์ระบบ ไม่มีอะไรพัง -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="admin/admin.css">
+</head>
+<body>
+
+<!-- ============ ล็อกอิน ============ -->
+<div id="login">
+  <form id="loginForm">
+    <img src="img/logo.png" alt="TEFL Program">
+    <h1>จัดการเนื้อหาเว็บไซต์</h1>
+    <p class="sub">สำหรับผู้ดูแลระบบเท่านั้น</p>
+    <div class="msg err" id="loginMsg"></div>
+    <div class="field">
+      <label for="email">อีเมล</label>
+      <input type="email" id="email" autocomplete="username" required>
+    </div>
+    <div class="field">
+      <label for="password">รหัสผ่าน</label>
+      <input type="password" id="password" autocomplete="current-password" required>
+    </div>
+    <button class="btn accent" style="width:100%;justify-content:center" id="loginBtn">เข้าสู่ระบบ</button>
+  </form>
+</div>
+
+<!-- ============ หน้าจัดการ ============ -->
+<div id="app"><div class="shell">
+  <aside class="side" id="side">
+    <div class="brand">
+      <img src="img/favicon.png" alt="">
+      <div><b>TEFL CMS</b><small>Faculty of Education, Chula</small></div>
+    </div>
+    <button class="btn newbtn" id="newAny">
+      <svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+      เพิ่มรายการใหม่
+    </button>
+    <nav class="menu" id="menu"></nav>
+    <div class="me">
+      <div class="umenu" id="umenu">
+        <a data-v="profile"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>โปรไฟล์</a>
+        <a data-v="prefs"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>ตั้งค่า</a>
+        <hr>
+        <a id="logout" class="out"><svg class="i" viewBox="0 0 24 24"><path d="M9 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>ออกจากระบบ</a>
+      </div>
+      <button class="strip" id="ustrip" aria-haspopup="menu" aria-expanded="false">
+        <div class="av" id="avatar">A</div>
+        <div class="who"><b id="who"></b><small id="whoSub">ผู้ดูแลระบบ</small></div>
+        <svg class="i chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <div class="work">
+    <header class="top">
+      <button class="btn icon" id="sideToggle" aria-label="เมนู">
+        <svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <h1 id="title"></h1>
+      <a class="btn" href="index.html" target="_blank" rel="noopener">ดูหน้าเว็บ ↗</a>
+      <button class="btn icon" id="theme" title="สลับโหมดสว่าง/มืด">
+        <svg class="i" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </header>
+    <main id="view"></main>
+  </div>
+</div></div>
+
+<div class="msg ok toast" id="toast"></div>
+
+<div id="modal"><div class="box">
+  <h3 id="modalTitle"></h3>
+  <form id="editForm">
+    <div class="msg err" id="editMsg"></div>
+    <p class="hint" id="editHelp" style="color:var(--muted);margin:-6px 0 16px;font-size:13.5px"></p>
+    <div id="fields"></div>
+    <div class="foot">
+      <button type="button" class="btn danger" id="delBtn">ลบรายการนี้</button>
+      <button type="button" class="btn" id="cancelBtn">ยกเลิก</button>
+      <button class="btn accent" id="saveBtn">บันทึก</button>
+    </div>
+  </form>
+</div></div>
+
+
+<!-- =========================================================
+     สคริปต์ของหน้า admin แยกเป็นไฟล์ตามหน้าที่ใน admin/js/ (ไม่มี build step)
+     เป็น classic script ทั้งหมด: ตัวแปร/ฟังก์ชันระดับบนสุดมองเห็นกันข้ามไฟล์
+     จึงต้องโหลดตามลำดับนี้ — config → icons → schema → core → หน้าต่าง ๆ → editor → app
+     (ไม่ใช้ ES module เพราะเปิดจาก file:// แล้ว import จะโดน CORS ปิด)
+
+     ไม่ใช้ supabase-js จาก CDN โดยตั้งใจ: คุยกับ REST API ตรง ๆ ด้วย fetch
+     เว็บนี้ไม่มี build step และไม่มี package manager (ดู CLAUDE.md) การไม่พึ่ง CDN
+     ทำให้หน้านี้ไม่พังเวลา CDN ล่มหรือเปลี่ยนเวอร์ชัน
+
+     สิทธิ์ทั้งหมดคุมที่ฐานข้อมูลด้วย RLS ไม่ได้คุมที่หน้าจอนี้
+     ต่อให้แก้ JavaScript ในเบราว์เซอร์ก็เขียนข้อมูลไม่ได้ถ้าไม่มี token ที่ล็อกอินแล้ว
+     ========================================================= -->
+<script src="admin/js/config.js"></script>
+<script src="admin/js/icons.js"></script>
+<script src="admin/js/schema.js"></script>
+<script src="admin/js/core.js"></script>
+<script src="admin/js/views/shell.js"></script>
+<script src="admin/js/views/dashboard.js"></script>
+<script src="admin/js/views/list.js"></script>
+<script src="admin/js/views/facebook.js"></script>
+<script src="admin/js/views/account.js"></script>
+<script src="admin/js/editor.js"></script>
+<script src="admin/js/app.js"></script>
+</body>
+</html>

@@ -18,23 +18,31 @@
   }
 
   if(navDrawer && drawerBody){
-    /* build the drawer once, from the mega panels already in the markup */
-    document.querySelectorAll('.main-nav > ul > li').forEach(function(item){
-      const top  = item.querySelector(':scope > a');
-      const mega = item.querySelector(':scope > .dropdown');
-      const group = document.createElement('div');
-      group.className = 'drawer-group';
+    /* สร้างลิ้นชักจากเมนูที่อยู่ในหน้า — ต้องสร้างซ้ำได้ ไม่ใช่ครั้งเดียว
+       เพราะ cms.js เขียนเมนูใหม่จากฐานข้อมูลหลังหน้าโหลด ถ้าไม่สร้างใหม่
+       ลิ้นชักจะยังเป็นเมนูชุดเก่าที่อยู่ในไฟล์ ทั้งที่แถบเมนูบนจอเปลี่ยนไปแล้ว */
+    function buildDrawer(){
+      drawerBody.innerHTML = '';
+      document.querySelectorAll('.main-nav > ul > li').forEach(function(item){
+        const top  = item.querySelector(':scope > a');
+        const mega = item.querySelector(':scope > .dropdown');
+        if(!top) return;
+        const group = document.createElement('div');
+        group.className = 'drawer-group';
 
-      const title = document.createElement('h3');
-      const titleLink = document.createElement('a');
-      titleLink.href = top.getAttribute('href');
-      titleLink.textContent = top.textContent.trim();
-      title.appendChild(titleLink);
-      group.appendChild(title);
+        const title = document.createElement('h3');
+        const titleLink = document.createElement('a');
+        titleLink.href = top.getAttribute('href');
+        titleLink.textContent = top.textContent.trim();
+        title.appendChild(titleLink);
+        group.appendChild(title);
 
-      if(mega) group.appendChild(mega.querySelector('.dd-menu').cloneNode(true));
-      drawerBody.appendChild(group);
-    });
+        if(mega) group.appendChild(mega.querySelector('.dd-menu').cloneNode(true));
+        drawerBody.appendChild(group);
+      });
+    }
+    buildDrawer();
+    window.TEFLDrawerRebuild = buildDrawer;   /* cms.js เรียกหลังเขียนเมนูใหม่ */
 
     if(mobileToggle){
       mobileToggle.addEventListener('click', () => setDrawer(!navDrawer.classList.contains('open')));
@@ -69,19 +77,30 @@
   if(searchOverlay && searchInput && searchResults){
     /* index every link inside the menus + every section heading on this page */
     const searchIndex = [];
-    document.querySelectorAll('.main-nav .dd-menu a, .footer-col a').forEach(function(link){
-      const group = link.closest('.dropdown');
-      const col   = link.closest('.footer-col');
-      const owner = group ? group.parentElement.querySelector(':scope > a').textContent.trim()
-                  : col ? col.querySelector('h4').textContent.trim() : 'Menu';
-      const label = link.textContent.trim();
-      if(!searchIndex.some(entry => entry.label === label && entry.href === link.href)){
-        searchIndex.push({label:label, href:link.getAttribute('href'), group:owner, target:link.target});
-      }
-    });
-    document.querySelectorAll('main section[id] h2, .content section[id] h2').forEach(function(heading){
-      searchIndex.push({label:heading.textContent.trim(), href:'#' + heading.closest('section').id, group:'On this page'});
-    });
+
+    /* ต้องสร้างใหม่ได้ ไม่ใช่สร้างครั้งเดียวตอนโหลด
+       เพราะ cms.js เปลี่ยนหัวข้อ section และเนื้อ footer หลังหน้าโหลดเสร็จ
+       ถ้าไม่สร้างใหม่ ช่องค้นหาจะยังคืนหัวข้อเก่าที่ไม่มีอยู่บนหน้าแล้ว */
+    function buildSearchIndex(){
+      searchIndex.length = 0;
+      document.querySelectorAll('.main-nav .dd-menu a, .footer-col a').forEach(function(link){
+        const group = link.closest('.dropdown');
+        const col   = link.closest('.footer-col');
+        const owner = group ? group.parentElement.querySelector(':scope > a').textContent.trim()
+                    : col ? col.querySelector('h4').textContent.trim() : 'Menu';
+        const label = link.textContent.trim();
+        if(!searchIndex.some(entry => entry.label === label && entry.href === link.href)){
+          searchIndex.push({label:label, href:link.getAttribute('href'), group:owner, target:link.target});
+        }
+      });
+      document.querySelectorAll('main section[id] h2, .content section[id] h2').forEach(function(heading){
+        searchIndex.push({label:heading.textContent.trim(), href:'#' + heading.closest('section').id, group:'On this page'});
+      });
+    }
+    buildSearchIndex();
+
+    /* cms.js เรียกอันนี้หลังสลับเนื้อหาเสร็จ — เป็นทางเดียวที่ทั้งสองไฟล์คุยกัน */
+    window.TEFLSearchReindex = buildSearchIndex;
 
     function renderResults(query){
       const q = query.trim().toLowerCase();
@@ -220,6 +239,7 @@
      โครงสร้างที่ต้องมี: .nc-viewport > .nc-track > .nc-card
                         .nc-dots, .nc-arrows [data-nc="prev"|"next"]
      ========================================================= */
+  function initCarousels(){
   document.querySelectorAll('.news-carousel').forEach(function(root){
     const viewport = root.querySelector('.nc-viewport');
     const dotsWrap = root.querySelector('.nc-dots');
@@ -227,14 +247,25 @@
     const btnNext  = root.querySelector('[data-nc="next"]');
     if(!viewport || !dotsWrap || !btnPrev || !btnNext) return;
 
-    const cards = viewport.querySelectorAll('.nc-card');
+    /* cms.js เขียนทับ innerHTML ของ section (data-cms-block) แล้วเรียกฟังก์ชันนี้ซ้ำ
+       เครื่องหมายกันผูกซ้ำต้องติดที่ .nc-viewport ไม่ใช่ที่ section
+       เพราะ section ตัวเดิมอยู่ต่อ (โดนเปลี่ยนแค่ลูกข้างใน) ถ้าติดที่ section ตัวใหม่จะถูกข้ามทั้งบล็อก */
+    if(viewport.dataset.ncReady === '1') return;
+    viewport.dataset.ncReady = '1';
+
+    /* อ่านการ์ดสดทุกครั้ง ห้ามเก็บ NodeList ไว้ในตัวแปร
+       เพราะ cms.js สลับการ์ดทั้งชุดจากฐานข้อมูลหลังหน้าโหลดเสร็จ
+       ถ้าจำของเดิมไว้ จะชี้ไปโหนดที่หลุดจาก DOM แล้ว getBoundingClientRect ได้ 0
+       ผลคือ step() = 0 แล้วปุ่มลูกศรกดไม่ขยับ */
+    function cards(){ return viewport.querySelectorAll('.nc-card'); }
     const label = root.getAttribute('aria-label') || 'Items';
     let pages = 0;
 
     /* ระยะจากการ์ดใบหนึ่งไปอีกใบ (ความกว้างการ์ด + ช่องไฟ) */
     function step(){
-      if(cards.length > 1){
-        return cards[1].getBoundingClientRect().left - cards[0].getBoundingClientRect().left;
+      const list = cards();
+      if(list.length > 1){
+        return list[1].getBoundingClientRect().left - list[0].getBoundingClientRect().left;
       }
       return viewport.clientWidth;
     }
@@ -250,6 +281,8 @@
     }
 
     function buildDots(){
+      /* ชุดเก่าที่ถูก cms.js ถอดออกจากหน้าไปแล้ว ไม่ต้องคำนวณต่อ (listener บน window ยังค้างอยู่) */
+      if(!viewport.isConnected) return;
       const count = Math.max(1, Math.ceil(viewport.scrollWidth / viewport.clientWidth));
       if(count !== pages){
         pages = count;
@@ -286,6 +319,10 @@
     window.addEventListener('load', buildDots);
     buildDots();
   });
+  }
+  initCarousels();
+  /* cms.js เรียกซ้ำหลังเขียนทับ section เพื่อผูกกับมาร์กอัปชุดใหม่ */
+  window.TEFLCarouselInit = initCarousels;
 
   /* ============ KEYBOARD: Esc ปิดเมนู/ค้นหา ============ */
   document.addEventListener('keydown', function(event){
@@ -342,6 +379,28 @@
     player.setAttribute('aria-hidden','true');
     player.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none';
     document.body.appendChild(player);
+
+    /* ค่าจากหน้า admin มาถึงทีหลัง (cms.js ยิง event นี้เมื่อโหลด settings เสร็จ)
+       เพลงเริ่มเล่นด้วยไฟล์ในเครื่องไปก่อน แล้วค่อยสลับถ้าผู้ดูแลตั้งไว้ต่างจากนี้
+       ตอนนั้นยังปิดเสียงอยู่แน่ ๆ (ยังไม่มี gesture) จึงสลับได้โดยผู้ชมไม่รู้สึก */
+    document.addEventListener('tefl:settings', function(ev){
+      const st = ev.detail || {};
+      if(st['music.enabled'] === 'false'){
+        player.pause(); player.remove();
+        const b = document.getElementById('soundToggle'); if(b) b.remove();
+        return;
+      }
+      const src = st['music.src'];
+      if(src && src !== SRC && !player.src.endsWith(src)){
+        const at = player.currentTime;
+        player.src = src;
+        player.addEventListener('loadedmetadata', function once(){
+          player.removeEventListener('loadedmetadata', once);
+          try{ player.currentTime = at; }catch(e){}
+          player.play().catch(function(){});
+        });
+      }
+    });
 
     /* ---- ปุ่มเปิด/ปิด ---- */
     const button = document.createElement('button');
