@@ -869,31 +869,17 @@
   }
   .content .bullets li strong{color:var(--text-dark);}
 
-  /* highlighted note */
+  /* highlighted note — แถบสีแบรนด์ด้านซ้าย ไม่มีกล่อง/ไอคอน (เจ้าของขอ ต.ค. 2026)
+     ตัวหนาเข้มเพื่อให้ยังเด่นจาก <p> ปกติ ทั้งที่ไม่มีพื้นหลังแล้ว */
   .content .note{
-    position:relative;
     margin-top:22px;
-    padding:20px 26px 20px 62px;
-    border:1px solid rgba(232,64,26,.16);
-    border-radius:14px;
-    background:linear-gradient(135deg,#fff6f4 0%,#fffaf6 100%);
-    font-size:16px;
-    line-height:1.95;
-    color:var(--text-muted);
-    text-align:left;      /* กัน .is-centered ดันข้อความในกล่องไปกลาง */
-    box-shadow:0 1px 2px rgba(232,64,26,.05);
-  }
-  /* ไอคอน i ในวงกลมไล่สีชมพู→ส้ม */
-  .content .note::before{
-    content:"";
-    position:absolute;
-    left:22px;top:20px;
-    width:24px;height:24px;
-    border-radius:50%;
-    background:
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round'><path d='M12 11.2v5.4'/><path d='M12 7.4v.1'/></svg>") center / 22px 22px no-repeat,
-      linear-gradient(135deg,var(--brand) 35%,var(--orange) 115%);
-    box-shadow:0 2px 6px rgba(232,64,26,.28);
+    padding:2px 0 2px 24px;
+    border-left:4px solid var(--brand);
+    font-size:22px;
+    font-weight:600;
+    line-height:1.7;      /* ตัวใหญ่แล้ว ระยะบรรทัด 1.9 ห่างเกิน */
+    color:var(--text-dark);
+    text-align:left;      /* กัน .is-centered ดันข้อความไปกลาง */
   }
   .content .note strong{color:var(--brand-dark);font-weight:700;}
   .content .note a:not(.btn-base){
@@ -907,8 +893,7 @@
   }
   .content .note a:not(.btn-base):hover{text-decoration-color:var(--brand-dark);}
   @media (max-width:640px){
-    .content .note{padding:18px 18px 18px 52px;}
-    .content .note::before{left:16px;top:18px;width:22px;height:22px;}
+    .content .note{padding-left:18px;font-size:19px;}
   }
 
   /* ============ FAQ ACCORDION (สไตล์เดียวกับหน้าแรก) ============ */
@@ -1420,7 +1405,7 @@
   }
   .plan-card .p-name{
     font-family:var(--font-display);
-    font-size:22.5px;
+    font-size:clamp(23px,2.1vw,27px);
     font-weight:700;
     line-height:1.3;
     color:var(--text-dark);
@@ -1436,14 +1421,14 @@
   }
   .plan-card .p-credits .num{
     font-family:var(--font-display);
-    font-size:40px;
+    font-size:clamp(42px,3.8vw,50px);
     font-weight:700;
     line-height:1;
     color:var(--brand);
     font-variant-numeric:tabular-nums;
   }
   .plan-card .p-credits .unit{
-    font-size:12.5px;
+    font-size:15px;
     line-height:1.5;
     color:var(--text-muted);
   }
@@ -1481,22 +1466,22 @@
     border-bottom:1px solid var(--border-light);
   }
   .plan-card .p-facts dt{
-    font-size:12px;
+    font-size:13.5px;
     font-weight:700;
-    letter-spacing:1.1px;
+    letter-spacing:1.2px;
     text-transform:uppercase;
     color:var(--text-muted);
     padding-top:3px;
   }
   .plan-card .p-facts dd{
     margin:0;
-    font-size:16.5px;
+    font-size:18.5px;
     font-weight:600;
     line-height:1.6;
     color:var(--text-dark);
   }
   .content .plan-card .p-desc{
-    font-size:16px;
+    font-size:18px;
     line-height:1.8;
     margin:0 0 20px;
   }
@@ -1543,13 +1528,16 @@
     transition:background .2s ease,color .2s ease;
   }
   .plan-tabs .pt-cr{font-weight:400;font-size:14px;color:var(--text-muted);}
+  /* แท็บที่เลือก = ทึบส้มเข้ม ตัวขาว (เดิมพื้นส้มอ่อน — เจ้าของเว็บขอ ต.ค. 2026 ให้ป้าย/แท็บทั้งเว็บใช้ส้มเข้มชุดเดียวกับ .p-label)
+     --brand-dark ไม่ใช่ --brand: ตัวขาวบน #e8401a คอนทราสต์ไม่ถึง 4.5:1 */
   .plan-tabs .pt-tab[aria-selected="true"]{
-    background:var(--brand-soft);
-    border-color:#f4c9bd;
-    color:var(--text-dark);
-    box-shadow:0 4px 14px rgba(207,69,34,.10);
+    background:var(--brand-dark);
+    border-color:var(--brand-dark);
+    color:#fff;
+    box-shadow:0 6px 16px rgba(195,52,20,.24);
   }
-  .plan-tabs .pt-tab[aria-selected="true"] .t-tag{background:var(--brand);color:#fff;}
+  .plan-tabs .pt-tab[aria-selected="true"] .t-tag{background:#fff;color:var(--brand-dark);}
+  .plan-tabs .pt-tab[aria-selected="true"] .pt-cr{color:rgba(255,255,255,.88);}
   .plan-tabs .pt-tab:focus-visible{outline:2px solid var(--brand-dark);outline-offset:2px;}
   .plan-tabs + .pt-panel{margin-top:16px;}
   .pt-panel[hidden]{display:none;}
@@ -1594,7 +1582,7 @@
   /* ============ TABLE BLOCK LABEL (หัวป้ายเหนือตาราง) ============ */
   .table-label{
     display:flex;
-    align-items:baseline;
+    align-items:center;
     gap:12px;
     flex-wrap:wrap;
     margin:34px 0 0;
@@ -1605,14 +1593,15 @@
     font-weight:700;
     color:var(--text-dark);
   }
+  /* ป้าย REQUIRED / GROUP 1 — ส้มเข้มตัวขาว ค่าเดียวกับ .plan-card .p-label */
   .table-label .t-tag{
-    padding:4px 12px;
+    padding:7px 16px;
     border-radius:999px;
-    background:var(--brand-soft);
-    color:var(--brand);
-    font-size:10.5px;
+    background:var(--brand-dark);
+    color:#fff;
+    font-size:13px;
     font-weight:700;
-    letter-spacing:1.2px;
+    letter-spacing:1.6px;
     text-transform:uppercase;
   }
   .table-label + .table-wrap{margin-top:14px;}
@@ -1912,8 +1901,8 @@
     line-height:1.6;
     color:var(--text-dark);
     display:-webkit-box;
-    -webkit-line-clamp:3;
-    line-clamp:3;
+    -webkit-line-clamp:2;
+    line-clamp:2;
     -webkit-box-orient:vertical;
     overflow:hidden;
     transition:color .25s ease;
@@ -2556,9 +2545,19 @@
   .news-more{margin-top:30px;}
   .content .is-centered > .news-more{margin-bottom:0;}
 
-  /* ---------- ปฏิทินกิจกรรมแบบรายการตามเดือน ----------
+  /* ---------- ปฏิทินกิจกรรม — สีผู้จัด ----------
+     แถบสีซ้ายการ์ด จุดในปุ่มกรอง และแถบชื่อในตารางเดือนใช้สีชุดเดียวกัน คนจึงจำได้ว่าสีไหนของใคร
+     --ev-c = สีหลัก (แถบ/จุด) · --ev-ink = สีตัวอักษรบนพื้นอ่อน — เข้มกว่าสีหลักเพราะชมพู/เขียวหัวเป็ดบนพื้นอ่อนคอนทราสต์ไม่พอ
+     TEFL ใช้สีแบรนด์ · EDU เขียวหัวเป็ด (ห่างจากส้มแบรนด์พอให้แยกออก) · CHULA ชมพูจุฬาฯ */
+  :is(.ev-item,.evc-chip,.evc-pill).is-all{--ev-c:#2b2b2b;--ev-ink:#2b2b2b;}
+  :is(.ev-item,.evc-chip,.evc-pill).is-tefl{--ev-c:var(--brand);--ev-ink:var(--brand-dark);}
+  :is(.ev-item,.evc-chip,.evc-pill).is-edu{--ev-c:#1f8f84;--ev-ink:#136b62;}
+  :is(.ev-item,.evc-chip,.evc-pill).is-chula{--ev-c:#de5c8e;--ev-ink:#ad3566;}
+
+  /* ---------- ปฏิทินกิจกรรมแบบรายการตามเดือน (ฉบับไม่มี JS) ----------
      วันที่เป็นแผ่นสี่เหลี่ยมด้านซ้าย ให้กวาดตาไล่วันได้โดยไม่ต้องอ่านทั้งบรรทัด
-     กิจกรรมที่ผ่านไปแล้ว (.is-past) ยังแสดงแต่จางลง ไม่ซ่อน เพราะเป็นบันทึกว่าจัดอะไรไปบ้าง */
+     กิจกรรมที่ผ่านไปแล้ว (.is-past) ยังแสดงแต่จางลง ไม่ซ่อน เพราะเป็นบันทึกว่าจัดอะไรไปบ้าง
+     มี JS → site.js สร้าง .evc ไว้ข้างบนแล้วซ่อนรายการนี้ (.is-enhanced) — การ์ดใน .evc คือโคลนของ .ev-item ชุดนี้ */
   .ev-list{
     margin-top:30px;
     text-align:left;
@@ -2566,6 +2565,7 @@
     margin-left:auto;
     margin-right:auto;
   }
+  .ev-list.is-enhanced{display:none;}
   .ev-month{
     font-family:var(--font-display);
     font-size:13px;
@@ -2579,7 +2579,7 @@
   .ev-month:first-child{margin-top:0;}
   .ev-item{
     display:grid;
-    grid-template-columns:78px 1fr;
+    grid-template-columns:78px minmax(0,1fr) auto;
     gap:22px;
     align-items:start;
     padding:22px 0;
@@ -2611,44 +2611,404 @@
     text-transform:uppercase;
     opacity:.92;
   }
+  .ev-src{
+    display:inline-block;
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    line-height:1;
+    padding:5px 10px 4px;
+    border-radius:999px;
+    color:var(--ev-ink);
+    background:color-mix(in srgb,var(--ev-c) 11%,#fff);
+  }
   .content .ev-body h3{
     font-family:var(--font-body);
     font-size:20px;
     font-weight:600;
     line-height:1.5;
-    margin:2px 0 6px;
+    margin:8px 0 8px;
   }
   .content .ev-body h3 a{
     color:inherit;
     text-decoration:none;
   }
   .content .ev-body h3 a:hover{color:var(--brand);}
+  /* ช่วงวัน / เวลา / สถานที่ บรรทัดละอย่าง มีไอคอนนำหน้า — ไอคอนเป็น mask ใน CSS
+     มาร์กอัปจึงไม่ต้องมี <svg> ซึ่ง cms.js กับ sync-content.py จะต้องเขียนให้ตรงกันอีกสองชุด */
   .content .ev-meta{
-    font-size:15px;
-    line-height:1.7;
-    color:var(--brand-dark);
-    margin-bottom:6px;
+    list-style:none;
+    margin:0 0 6px;
+    padding:0;
   }
+  .content .ev-meta li{
+    position:relative;
+    padding-left:26px;
+    font-size:15.5px;
+    line-height:1.8;
+    color:var(--text-muted);
+  }
+  .content .ev-meta li::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:.45em;
+    width:16px;
+    height:16px;
+    background:#9a9a9a;
+    -webkit-mask:var(--ev-ic) center/contain no-repeat;
+            mask:var(--ev-ic) center/contain no-repeat;
+  }
+  .ev-when{--ev-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'%3E%3Crect x='3' y='4' width='18' height='17' rx='2'/%3E%3Cpath d='M3 9h18M8 2v4M16 2v4'/%3E%3C/svg%3E");}
+  .ev-time{--ev-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E");}
+  .ev-where{--ev-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z'/%3E%3Ccircle cx='12' cy='9.5' r='2.5'/%3E%3C/svg%3E");}
   .content .ev-desc{
     font-size:17px;
     line-height:1.8;
-    margin-bottom:0;
+    margin:4px 0 0;
   }
+  .ev-thumb{
+    width:150px;
+    aspect-ratio:16/9;
+    border-radius:10px;
+    overflow:hidden;
+    background:#f1f1f1;
+  }
+  .ev-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
   .ev-item.is-past{opacity:.55;}
   .ev-item.is-past .ev-date{
     background:#e9e9e9;
     color:var(--text-muted);
     box-shadow:none;
   }
+
+  /* ---------- ปฏิทินกิจกรรมแบบกดได้ (.evc — site.js สร้าง) ----------
+     แถวบน: ปุ่มกรองผู้จัด | ค้นหา + สลับมุมมอง · กรอบล่าง: เลือกเดือน/ก่อน-วันนี้-ถัดไป → แถบ 14 วัน → รายการตามวัน
+     มุมมองเดือน (.is-month) ซ่อนแถบวันแล้วแสดงตาราง 7 คอลัมน์แทน · กำลังค้นหา (.is-searching) ซ่อนแถบวัน
+     เพราะผลค้นหาแสดงทุกวัน แถบวันที่ยังโผล่อยู่จะทำให้เข้าใจว่าผลถูกจำกัดแค่ช่วงนั้น */
+  .evc{
+    margin:30px auto 0;
+    max-width:980px;
+    text-align:left;
+  }
+  /* :where ให้ความเจาะจงเป็นศูนย์ — คลาสของปุ่มแต่ละแบบด้านล่างจึงตั้งสีทับได้โดยไม่ต้องใช้ !important */
+  :where(.evc) button{font-family:var(--font-body);color:inherit;cursor:pointer;}
+  .evc svg{
+    width:18px;height:18px;
+    fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+    flex:none;
+  }
+  .evc-top{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:16px;
+  }
+  .evc-chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .evc-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    height:42px;
+    padding:0 18px;
+    border:1px solid var(--border-light);
+    border-radius:999px;
+    background:#fff;
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:.5px;
+    transition:background .2s,border-color .2s,color .2s;
+  }
+  .evc-chip:hover{border-color:var(--ev-c);}
+  .evc-chip[aria-pressed="true"]{background:#000;border-color:#000;color:#fff;}
+  .evc-dot{width:8px;height:8px;border-radius:50%;background:var(--ev-c);}
+  .evc-chip.is-all[aria-pressed="true"] .evc-dot{background:#fff;}
+  .evc-tools{display:flex;align-items:center;gap:10px;}
+  .evc-search{
+    position:relative;
+    display:flex;
+    align-items:center;
+  }
+  .evc-search svg{position:absolute;left:15px;color:#9a9a9a;pointer-events:none;}
+  .evc-search input{
+    width:240px;
+    height:44px;
+    padding:0 16px 0 42px;
+    border:1px solid var(--border-light);
+    border-radius:999px;
+    background:#fff;
+    font:inherit;
+    font-size:15px;
+    color:var(--text-dark);
+  }
+  .evc-search input:focus{outline:2px solid var(--brand);outline-offset:1px;border-color:transparent;}
+  .evc-views{
+    display:flex;
+    padding:4px;
+    border:1px solid var(--border-light);
+    border-radius:999px;
+    background:#fff;
+  }
+  .evc-views button{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    height:36px;
+    padding:0 16px;
+    border:0;
+    border-radius:999px;
+    background:transparent;
+    font-size:15px;
+    font-weight:600;
+  }
+  .evc-views button[aria-pressed="true"]{background:var(--brand);color:#fff;}
+
+  .evc-panel{
+    border:1px solid var(--border-light);
+    border-radius:20px;
+    background:#fff;
+    overflow:hidden;
+  }
+  .evc-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:16px 20px;
+  }
+  .evc-month select{
+    -webkit-appearance:none;
+            appearance:none;
+    height:44px;
+    padding:0 42px 0 16px;
+    border:1px solid var(--border-light);
+    border-radius:12px;
+    background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 12px center/20px;
+    font-family:var(--font-body);
+    font-size:16px;
+    font-weight:700;
+    color:var(--text-dark);
+    cursor:pointer;
+  }
+  .evc-nav{display:flex;gap:8px;}
+  .evc-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:48px;
+    height:44px;
+    padding:0 14px;
+    border:1px solid var(--border-light);
+    border-radius:12px;
+    background:#fff;
+    font-size:15px;
+    font-weight:700;
+  }
+  .evc-btn:hover,.evc-shift:hover{border-color:var(--text-dark);}
+
+  .evc-strip{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 16px;
+    background:#f7f7f7;
+    border-top:1px solid var(--border-light);
+    border-bottom:1px solid var(--border-light);
+  }
+  .evc.is-month .evc-strip,
+  .evc.is-searching .evc-strip{display:none;}
+  .evc-shift{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:40px;height:40px;
+    flex:none;
+    border:1px solid #e3e3e3;
+    border-radius:50%;
+    background:#fff;
+  }
+  .evc-days{
+    flex:1;
+    min-width:0;
+    display:grid;
+    grid-template-columns:repeat(14,minmax(0,1fr));
+    gap:6px;
+  }
+  .evc-dayb{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    height:76px;
+    border:1px solid #e3e3e3;
+    border-radius:999px;
+    background:#fff;
+    color:#a8a8a8;
+    transition:background .2s,border-color .2s;
+  }
+  .evc-dayb:hover{border-color:var(--text-dark);}
+  .evc-dow{font-size:12.5px;}
+  .evc-dayb .evc-num{font-size:19px;font-weight:600;line-height:1.1;}
+  /* วันที่มีกิจกรรม = ตัวเข้ม + จุดใต้เลข · วันว่าง = จาง เหมือนต้นแบบ ไล่ตาหาวันที่มีอะไรได้ทันที */
+  .evc-dayb.has-ev{color:var(--text-dark);}
+  .evc-dayb.has-ev::after{
+    content:"";
+    position:absolute;
+    bottom:9px;
+    width:5px;height:5px;
+    border-radius:50%;
+    background:var(--brand);
+  }
+  .evc-dayb.is-today{border-color:var(--brand);}
+  .evc-dayb.is-sel{background:#000;border-color:#000;color:#fff;}
+  .evc-dayb.is-sel::after{background:#fff;}
+
+  .evc-body{padding:4px 36px 32px;}
+  .evc.is-month .evc-body{padding:0;}
+  .content .evc-day-h{
+    display:flex;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:4px 14px;
+    margin:28px 0 0;
+    padding-bottom:14px;
+    border-bottom:2px solid var(--text-dark);
+    font-family:var(--font-display);
+    font-size:28px;
+    font-weight:700;
+    line-height:1.2;
+    color:var(--text-dark);
+  }
+  .content .evc-day-h span{
+    font-family:var(--font-body);
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--text-muted);
+  }
+  .content .evc-day.is-today .evc-day-h,
+  .content .evc-day.is-today .evc-day-h span{color:var(--brand);border-color:var(--brand);}
+  /* การ์ดในปฏิทิน: หัววันบอกวันที่แล้ว แผ่นวันที่จึงซ่อน ใช้แถบสีผู้จัดด้านซ้ายแทน */
+  .evc .ev-item{
+    position:relative;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:24px;
+    padding:24px 0 24px 26px;
+  }
+  .evc .ev-item::before{
+    content:"";
+    position:absolute;
+    left:0;top:24px;bottom:24px;
+    width:4px;
+    border-radius:4px;
+    background:var(--ev-c);
+  }
+  .evc .ev-date{display:none;}
+  .evc .evc-day:last-child .ev-item:last-child{border-bottom:0;}
+  .evc-empty{padding:44px 12px 14px;text-align:center;}
+  .content .evc-empty p{font-size:17px;margin-bottom:18px;}
+
+  /* มุมมองเดือน — ช่องวันเป็นปุ่ม กดแล้วไปมุมมองรายการที่วันนั้น */
+  .evc-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));}
+  .evc-head span{
+    padding:12px 10px 10px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    border-top:1px solid var(--border-light);
+  }
+  .evc-cell{
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:4px;
+    min-width:0;
+    min-height:112px;
+    padding:8px;
+    border:0;
+    border-top:1px solid var(--border-light);
+    border-left:1px solid var(--border-light);
+    background:#fff;
+    text-align:left;
+    transition:background .2s;
+  }
+  .evc-row .evc-cell:first-child{border-left:0;}
+  .evc-cell:hover{background:var(--brand-soft);}
+  .evc-cell.is-out{background:#fafafa;color:#bdbdbd;}
+  .evc-cell .evc-num{
+    display:grid;
+    place-items:center;
+    width:28px;height:28px;
+    border-radius:50%;
+    font-size:14px;
+    font-weight:700;
+  }
+  .evc-cell.is-today .evc-num{background:var(--brand);color:#fff;}
+  .evc-pill{
+    display:block;
+    padding:3px 7px;
+    border-left:3px solid var(--ev-c);
+    border-radius:5px;
+    background:color-mix(in srgb,var(--ev-c) 10%,#fff);
+    color:var(--ev-ink);
+    font-size:12.5px;
+    font-weight:600;
+    line-height:1.4;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .evc-more{font-size:12px;color:var(--text-muted);padding-left:4px;}
+
   @media (max-width:900px){
     .news-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;}
+    .evc-top{flex-direction:column;align-items:stretch;}
+    .evc-tools{flex-wrap:wrap;}
+    .evc-search{flex:1;}
+    .evc-search input{width:100%;}
+    /* 14 วันไม่พอดีจอ — เลื่อนแนวนอนแทน ปุ่ม ← → ยังเลื่อนทีละสัปดาห์ได้ */
+    .evc-days{
+      display:flex;
+      overflow-x:auto;
+      scroll-snap-type:x proximity;
+      scrollbar-width:none;
+    }
+    .evc-days::-webkit-scrollbar{display:none;}
+    .evc-dayb{flex:0 0 54px;height:68px;scroll-snap-align:start;}
+    .evc-body{padding:0 20px 24px;}
+    .content .evc-day-h{font-size:23px;}
+    .evc-cell{min-height:84px;padding:6px;}
   }
   @media (max-width:560px){
     .news-grid{grid-template-columns:1fr;}
-    .ev-item{grid-template-columns:62px 1fr;gap:16px;padding:18px 0;}
+    .ev-item{grid-template-columns:62px minmax(0,1fr);gap:16px;padding:18px 0;}
     .ev-date{width:62px;padding:10px 4px 8px;border-radius:12px;}
     .ev-d{font-size:26px;}
     .ev-m{font-size:10.5px;letter-spacing:1.5px;}
+    /* จอแคบ ภาพย่อไปอยู่ใต้ข้อความ ไม่บีบหัวข้อให้เหลือคอลัมน์แคบ */
+    .ev-thumb{grid-column:2;width:100%;max-width:240px;}
+    .evc .ev-item{grid-template-columns:minmax(0,1fr);gap:12px;padding:20px 0 20px 18px;}
+    .evc .ev-thumb{grid-column:1;}
+    .evc-bar{padding:12px;}
+    .evc-month select{font-size:15px;padding-left:12px;}
+    .evc-btn{min-width:42px;padding:0 10px;}
+    .evc-views button span{display:none;}
+    .evc-views button{padding:0 12px;}
+    .evc-body{padding:0 16px 20px;}
+    /* ตารางเดือนในจอแคบ — ชื่อกิจกรรมไม่พอที่ เหลือเป็นจุดสี */
+    .evc-cell{min-height:58px;padding:4px;flex-direction:row;flex-wrap:wrap;align-content:flex-start;justify-content:center;gap:3px;}
+    .evc-cell .evc-num{flex:0 0 100%;width:auto;height:24px;font-size:13px;}
+    .evc-cell.is-today .evc-num{flex-basis:24px;margin:0 calc(50% - 12px);}
+    .evc-pill{width:7px;height:7px;padding:0;border:0;border-radius:50%;background:var(--ev-c);font-size:0;}
+    .evc-more{display:none;}
+    .evc-head span{padding:10px 4px 8px;font-size:10.5px;letter-spacing:.5px;text-align:center;}
   }
 
   /* =========================================================
@@ -3428,25 +3788,27 @@
     background:var(--bg);
     text-align:left;
   }
+  /* ป้ายเหมือน .plan-card .p-label ทุกค่า (ส้มเข้ม + ตัวขาว — เหตุผลคอนทราสต์ดูที่กฎนั้น) แก้ที่นั่นแล้วแก้ตรงนี้ด้วย */
   .fee-card .fee-tag{
     align-self:flex-start;
-    padding:5px 12px;
+    padding:7px 16px;
     border-radius:999px;
-    background:var(--brand-soft);
-    color:var(--brand);
-    font-size:10.5px;
+    background:var(--brand-dark);
+    color:#fff;
+    font-size:13px;
     font-weight:700;
-    letter-spacing:1.2px;
+    letter-spacing:1.6px;
     text-transform:uppercase;
     margin-bottom:10px;
   }
+  /* ระยะป้าย→ชื่อ = ของการ์ดแผน (.p-name margin-top 24px + ป้าย margin-bottom 10px) ให้สองชุดเรียงตรงกัน */
   .content .fee-card .fee-name{
     font-family:var(--font-display);
     font-size:18px;
     font-weight:700;
     line-height:1.4;
     color:var(--text-dark);
-    margin:0;
+    margin:24px 0 0;
   }
   /* หน่วยอยู่บรรทัดของตัวเองเสมอ — ถ้าให้ต่อท้ายตัวเลข เลข 6 หลักจะดันหน่วยตกบรรทัดแต่ 5 หลักไม่ตก การ์ดจะไม่เท่ากัน */
   .fee-card .fee-total{margin-top:auto;padding-top:18px;display:flex;flex-direction:column;align-items:flex-start;gap:5px;}
@@ -3469,3 +3831,965 @@
     .fee-card .fee-total .num{font-size:25px;}
     .fee-card .fee-parts > div{font-size:12px;}
   }
+
+  /* ---- เปิดทั้งหน้า (body.is-page-view): การ์ดค่าเล่าเรียนย่อแบบเดียวกับการ์ด Plan A / Plan B ----
+     เหลือป้าย + ชื่อกลุ่ม + ไอคอนธนบัตรซ้ายล่าง + ปุ่มลูกศรขวาล่าง; ยอดเงินซ่อนไว้ ไปดูเต็มที่ #tuition-and-fees
+     กดการ์ด = site.js พาไป #tuition-and-fees (การ์ดเป็น <article> จาก DB ไม่ใช่ลิงก์)
+     ตัวเลข/สีต้องตามกฎการ์ดแผนด้านบน (.is-page-view #study-plan .plan-card …) — แก้ที่นั่นแล้วแก้ตรงนี้ด้วย */
+  .is-page-view #tuition-and-fees .fee-card{
+    position:relative;
+    padding:22px 20px 76px;
+    cursor:pointer;
+    transition:transform .2s ease,box-shadow .2s ease,background-color .2s ease,border-color .2s ease;
+  }
+  .is-page-view #tuition-and-fees .fee-card .fee-total,
+  .is-page-view #tuition-and-fees .fee-card .fee-parts{display:none;}
+  .is-page-view #tuition-and-fees .fee-card::before,
+  .is-page-view #tuition-and-fees .fee-card::after{content:"";position:absolute;bottom:20px;}
+  .is-page-view #tuition-and-fees .fee-card::before{
+    left:20px;
+    width:30px;height:30px;
+    margin-bottom:4px;
+    background:var(--brand);
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='6' width='20' height='12' rx='2'/%3E%3Ccircle cx='12' cy='12' r='2.5'/%3E%3Cpath d='M6 12h.01M18 12h.01'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='6' width='20' height='12' rx='2'/%3E%3Ccircle cx='12' cy='12' r='2.5'/%3E%3Cpath d='M6 12h.01M18 12h.01'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .is-page-view #tuition-and-fees .fee-card::after{
+    right:20px;
+    width:38px;height:38px;
+    border-radius:50%;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38' fill='none' stroke='%232b2b2b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 19h10M19.5 14.5 24 19l-4.5 4.5'/%3E%3C/svg%3E") center / 38px no-repeat,
+      #f2f3f4;
+    transition:background-color .2s ease;
+  }
+  .is-page-view #tuition-and-fees .fee-card:hover,
+  .is-page-view #tuition-and-fees .fee-card:active{
+    background:var(--brand);
+    border-color:var(--brand);
+    box-shadow:0 12px 28px rgba(232,64,26,.22);
+    transform:translateY(-3px);
+  }
+  .is-page-view #tuition-and-fees .fee-card:hover .fee-name,
+  .is-page-view #tuition-and-fees .fee-card:active .fee-name{color:#fff;}
+  .is-page-view #tuition-and-fees .fee-card:hover .fee-tag,
+  .is-page-view #tuition-and-fees .fee-card:active .fee-tag{background:rgba(255,255,255,.22);color:#fff;}
+  .is-page-view #tuition-and-fees .fee-card:hover::before,
+  .is-page-view #tuition-and-fees .fee-card:active::before{background:#fff;}
+  .is-page-view #tuition-and-fees .fee-card:hover::after,
+  .is-page-view #tuition-and-fees .fee-card:active::after{background-color:#fff;}
+  @media (max-width:520px){
+    .is-page-view #tuition-and-fees .fee-card{padding:18px 16px 68px;}
+    .is-page-view #tuition-and-fees .fee-card::before{left:16px;bottom:16px;}
+    .is-page-view #tuition-and-fees .fee-card::after{right:16px;bottom:16px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .is-page-view #tuition-and-fees .fee-card{transition:none;}
+  }
+
+  /* ---- Tuition and Fees แบบเต็ม (เปิดผ่าน #tuition-and-fees หรือไม่มี JS) — ปรับใหม่ ต.ค. 2026 ----
+     ใช้ body:not(.is-page-view) เพราะการ์ดชุดเดียวกันตอนเปิดทั้งหน้าต้องย่อเป็นการ์ดเล็ก (กฎด้านบน)
+     - รุ่นปัจจุบัน (AY2020 onward) เด่น: การ์ดใหญ่ 2 คอลัมน์ ยอดรวมตัวใหญ่ + แถบสัดส่วน University/Faculty
+     - รุ่นเก่า (.is-legacy ป้ายขึ้นต้น "before") ย่อและจางลง — คนอ่านส่วนใหญ่คือผู้สมัครใหม่
+     - แถบ: ส่วนเข้ม = University (ความกว้างจาก cms.js/sync), พื้นที่เหลือ = Faculty; จุดสีหน้า dt ตรงกับสีในแถบ */
+  body:not(.is-page-view) #tuition-and-fees .fee-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    justify-content:stretch;
+    gap:20px;
+  }
+  body:not(.is-page-view) #tuition-and-fees .fee-card{
+    min-height:0;
+    padding:28px 28px 24px;
+    border-radius:20px;
+    box-shadow:0 4px 16px rgba(0,0,0,.05);
+  }
+  body:not(.is-page-view) #tuition-and-fees .fee-name{font-size:22px;margin-top:16px;}
+  body:not(.is-page-view) #tuition-and-fees .fee-total{flex-direction:row;align-items:baseline;gap:10px;padding-top:14px;}
+  body:not(.is-page-view) #tuition-and-fees .fee-total .num{font-size:46px;}
+  body:not(.is-page-view) #tuition-and-fees .fee-total .unit{font-size:16px;}
+  .fee-bar{
+    height:10px;
+    margin-top:20px;
+    border-radius:999px;
+    background:#f7c3ad;
+    overflow:hidden;
+  }
+  .fee-bar > span{display:block;height:100%;background:var(--brand-dark);border-radius:999px 0 0 999px;}
+  body:not(.is-page-view) #tuition-and-fees .fee-parts{margin-top:14px;padding-top:0;border-top:0;}
+  /* ตัวหนังสือแยกส่วนต้องอ่านง่ายพอ ๆ กับเนื้อหาหลัก (เจ้าของเว็บแจ้ง ต.ค. 2026 ว่า 15px เล็กไป) */
+  body:not(.is-page-view) #tuition-and-fees .fee-parts > div{font-size:18px;line-height:1.9;}
+  #tuition-and-fees .fee-parts dt{display:inline-flex;align-items:center;gap:8px;}
+  body:not(.is-page-view) #tuition-and-fees .fee-parts dt::before{
+    content:"";width:12px;height:12px;border-radius:50%;flex-shrink:0;
+    background:var(--brand-dark);
+  }
+  body:not(.is-page-view) #tuition-and-fees .fee-parts > div + div dt::before{background:#f7c3ad;}
+
+  /* รุ่นเก่า — แถวที่สอง ย่อลง พื้นเทา ไม่มีเงา ตัวเลขสีเข้มแทนส้ม (ไม่ให้แย่งความสนใจจากรุ่นปัจจุบัน) */
+  body:not(.is-page-view) #tuition-and-fees .fee-card.is-legacy{
+    padding:22px 28px 20px;
+    background:#f7f7f8;
+    border-color:#ececee;
+    box-shadow:none;
+  }
+  body:not(.is-page-view) #tuition-and-fees .is-legacy .fee-tag{background:#6b6b70;}
+  body:not(.is-page-view) #tuition-and-fees .is-legacy .fee-name{font-size:18px;margin-top:12px;}
+  body:not(.is-page-view) #tuition-and-fees .is-legacy .fee-total .num{font-size:30px;color:var(--text-dark);}
+  body:not(.is-page-view) #tuition-and-fees .is-legacy .fee-bar{height:6px;margin-top:14px;background:#d9d9de;}
+  body:not(.is-page-view) #tuition-and-fees .is-legacy .fee-bar > span{background:#6b6b70;}
+  body:not(.is-page-view) #tuition-and-fees .is-legacy .fee-parts dt::before{background:#6b6b70;}
+  body:not(.is-page-view) #tuition-and-fees .is-legacy .fee-parts > div + div dt::before{background:#d9d9de;}
+  body:not(.is-page-view) #tuition-and-fees .is-legacy .fee-parts > div{font-size:16.5px;}
+  @media (max-width:640px){
+    body:not(.is-page-view) #tuition-and-fees .fee-grid{grid-template-columns:1fr;gap:14px;}
+    body:not(.is-page-view) #tuition-and-fees .fee-card{padding:22px 20px 20px;}
+    body:not(.is-page-view) #tuition-and-fees .fee-total .num{font-size:38px;}
+    body:not(.is-page-view) #tuition-and-fees .fee-card.is-legacy{padding:18px 20px 16px;}
+    body:not(.is-page-view) #tuition-and-fees .is-legacy .fee-total .num{font-size:26px;}
+    body:not(.is-page-view) #tuition-and-fees .fee-parts > div{font-size:16.5px;}
+    body:not(.is-page-view) #tuition-and-fees .is-legacy .fee-parts > div{font-size:15.5px;}
+  }
+  /* เปิดทั้งหน้า: การ์ดย่อไม่มีแถบ */
+  .is-page-view #tuition-and-fees .fee-bar{display:none;}
+
+  /* ============ APPLICATION STEPS — การ์ดย่อตอนเปิดทั้งหน้า แบบเดียวกับ Admission Requirements (admission.html) ============
+     เจ้าของเว็บขอ ต.ค. 2026 (แทนการ์ดรูปแบบ Curriculum Info เดิม): "Step N" + ชื่อขั้นตอน + ไอคอนของขั้นตอนซ้ายล่าง + ปุ่มลูกศรขวาล่าง
+     กดการ์ด = site.js พาไป #application-steps ซึ่งเห็นการ์ด .tile-card เต็ม (ป้าย คำอธิบาย ไอคอน เลขลำดับ) ตามเดิม
+     มาร์กอัปยังเป็น .tile-card จากบล็อก admission/application-steps ใน DB — ปรับด้วย CSS ล้วน ไม่ต้องแก้ DB
+     ไอคอนใช้ SVG ในการ์ดเอง (.t-ic) จึงแก้ใน /admin ได้; "Step N" นับด้วย CSS counter ตามลำดับการ์ด
+     ตัวเลข/สีต้องตามการ์ด ADMISSION REQUIREMENTS ด้านล่าง — แก้ที่นั่นแล้วแก้ตรงนี้ด้วย */
+  /* การ์ดกว้างเท่า Requirements (190–210px) — 5 ใบ × 210 + gap = 1114px กว้างกว่า .page-wrap 980px
+     จึงยื่นออกนอกคอลัมน์แบบเดียวกับ .plan-grid ไม่งั้นใบที่ 5 ตกแถวหรือการ์ดแคบกว่าส่วนอื่น
+     จอแคบกว่า 1114px ตัดลงแถวเอง (4+1, 3+2) ขนาดการ์ดยังเท่าเดิม — ใช้ flex-wrap ไม่ใช่ grid
+     เพราะ grid วางใบที่ตกแถวชิดซ้าย flex จัดใบที่เหลือไว้กลางได้ */
+  .is-page-view #application-steps .tile-grid.is-5up{
+    --as-w:min(1114px,100vw - 2 * clamp(16px,2.4vw,24px));
+    display:flex;
+    flex-wrap:wrap;
+    width:var(--as-w);
+    margin:28px 0 0 calc(50% - var(--as-w) / 2);
+    justify-content:center;
+    gap:16px;
+    counter-reset:app-step;
+  }
+  .is-page-view #application-steps .tile-card{
+    position:relative;
+    min-height:var(--mini-tile-h);
+    padding:22px 20px 76px;
+    border:1px solid #e3e6e8;
+    border-radius:16px;
+    background:var(--bg);
+    box-shadow:none;
+    cursor:pointer;
+    flex:0 1 210px;
+    min-width:190px;
+    counter-increment:app-step;
+    transition:transform .2s ease,box-shadow .2s ease,background-color .2s ease,border-color .2s ease;
+  }
+  .is-page-view #application-steps .tile-card .t-label,
+  .is-page-view #application-steps .tile-card .t-meta,
+  .is-page-view #application-steps .tile-card .t-step{display:none;}
+  .is-page-view #application-steps .tile-card .t-name{
+    font-size:18px;
+    line-height:1.4;
+  }
+  .is-page-view #application-steps .tile-card .t-name::before{
+    content:"Step " counter(app-step);
+    display:block;
+    margin-bottom:4px;
+    font-family:var(--font-body);
+    font-size:13px;
+    font-weight:500;
+    color:var(--text-muted);
+    transition:color .2s ease;
+  }
+  .is-page-view #application-steps .tile-card .t-foot{
+    position:absolute;
+    left:20px;bottom:24px;
+    padding:0;
+  }
+  .is-page-view #application-steps .tile-card .t-ic{color:var(--brand);}
+  /* เส้น 1.4 ใน viewBox 36 ย่อเหลือ 30px แล้วบางกว่าไอคอน Lucide ของ Requirements — หนาขึ้นให้เท่ากันเมื่อวางคู่กัน */
+  .is-page-view #application-steps .tile-card .t-ic svg{width:30px;height:30px;stroke-width:2.2;}
+  .is-page-view #application-steps .tile-card::after{
+    content:"";
+    position:absolute;
+    right:20px;bottom:20px;
+    width:38px;height:38px;
+    border-radius:50%;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38' fill='none' stroke='%232b2b2b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 19h10M19.5 14.5 24 19l-4.5 4.5'/%3E%3C/svg%3E") center / 38px no-repeat,
+      #f2f3f4;
+    transition:background-color .2s ease;
+  }
+  .is-page-view #application-steps .tile-card:hover,
+  .is-page-view #application-steps .tile-card:active{
+    background:var(--brand);
+    border-color:var(--brand);
+    box-shadow:0 12px 28px rgba(232,64,26,.22);
+    transform:translateY(-3px);
+  }
+  .is-page-view #application-steps .tile-card:hover .t-name::before,
+  .is-page-view #application-steps .tile-card:active .t-name::before{color:rgba(255,255,255,.85);}
+  .is-page-view #application-steps .tile-card:hover .t-ic,
+  .is-page-view #application-steps .tile-card:active .t-ic{color:#fff;}
+  .is-page-view #application-steps .tile-card:hover::after,
+  .is-page-view #application-steps .tile-card:active::after{background-color:#fff;}
+  @media (max-width:520px){
+    .is-page-view #application-steps .tile-grid.is-5up{display:grid;width:auto;margin-left:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+    .is-page-view #application-steps .tile-card{min-width:0;padding:18px 16px 68px;}
+    .is-page-view #application-steps .tile-card .t-name{font-size:16px;}
+    .is-page-view #application-steps .tile-card .t-foot{left:16px;bottom:20px;}
+    .is-page-view #application-steps .tile-card::after{right:16px;bottom:16px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .is-page-view #application-steps .tile-card{transition:none;}
+  }
+
+  /* ============ APPLICATION STEPS — หน้าย่อย: กล่องละ 1 ขั้นตอน รูปซ้าย + แผงสีอ่อนขวา (admission.html #application-steps) ============
+     เจ้าของเว็บขอ ต.ค. 2026 ให้ฟีลเหมือนกล่อง "ทำไมต้องเรียนที่จุฬาฯ" — ขั้นตอนละกล่อง เรียงลงมา 5 กล่อง
+     แผง: ชื่อขั้นตอนใหญ่ · "Step N · ป้าย" ตัวเล็กสีเทา · เส้นคั่น · คำอธิบาย
+     ใช้ .is-section-view — ไม่มี JS ไม่ได้ช่องว่างหน้า <br> (site.js tagStepCards) จึงให้เห็นการ์ด .tile-card เต็มแบบพื้นฐานแทน
+     มาร์กอัปเดิมของ .tile-card จากบล็อก DB — ไอคอน/เลขลำดับซ่อน; รูปอยู่ที่ ::before ผูกกับลำดับการ์ด (nth-child)
+     สลับ/เพิ่มขั้นตอนใน /admin แล้วรูปจะเลื่อนตาม — แก้ลำดับที่นี่ด้วย; ขั้นที่เกินได้รูปเริ่มต้น */
+  .is-section-view #application-steps .tile-grid.is-5up{
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+    max-width:980px;
+    margin:28px auto 0;
+    counter-reset:app-step;
+  }
+  .is-section-view #application-steps .tile-card{
+    --card-img:url(img/hero-campus.jpg);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-height:300px;
+    padding:clamp(28px,4vw,48px) clamp(24px,4vw,52px) clamp(28px,4vw,48px) calc(50% + clamp(24px,4vw,52px));
+    border:0;
+    border-radius:20px;
+    overflow:hidden;
+    background:#fbebe6;
+    box-shadow:none;
+    counter-increment:app-step;
+    transform:none;
+    transition:none;
+  }
+  .is-section-view #application-steps .tile-card:nth-child(1){--card-img:url(img/goals/g09-lg.jpg);}
+  .is-section-view #application-steps .tile-card:nth-child(2){--card-img:url(img/forms-proposal.jpg);}
+  /* รูปเลือกให้ตรงกับขั้นตอน (เจ้าของเว็บขอ ต.ค. 2026): สมัครออนไลน์ = นั่งทำบนแล็ปท็อป · เอกสาร = เซ็นเอกสาร
+     ค่าสมัคร = บัตรกับแล็ปท็อป (step-fee.jpg จาก Unsplash — unsplash.com/photos/ShB9pI4mpRg, Unsplash License ไม่ต้องให้เครดิต)
+     Statement = เขียนโน้ตข้างแล็ปท็อป · จดหมายแนะนำ = อาจารย์คุยกับนักศึกษา (ผู้เขียนจดหมายคืออาจารย์) */
+  .is-section-view #application-steps .tile-card:nth-child(3){--card-img:url(img/step-fee.jpg);}
+  .is-section-view #application-steps .tile-card:nth-child(4){--card-img:url(img/forms-plan.jpg);}
+  .is-section-view #application-steps .tile-card:nth-child(5){--card-img:url(img/goals/g20-lg.jpg);}
+  .is-section-view #application-steps .tile-card::before{
+    content:"";
+    position:absolute;
+    inset:0 50% 0 0;
+    background:var(--card-img) center / cover no-repeat;
+  }
+  /* กล่องไม่ใช่ลิงก์ — ปิด hover ชมพูทั้งใบของ .tile-card */
+  .is-section-view #application-steps .tile-card:hover,
+  .is-section-view #application-steps .tile-card:active,
+  .is-section-view #application-steps .tile-card:focus-visible{background:#fbebe6;box-shadow:none;transform:none;}
+  .is-section-view #application-steps .tile-card .t-foot{display:none;}
+  .is-section-view #application-steps .tile-card .t-name{
+    order:1;
+    font-size:clamp(22px,2.4vw,28px);
+    line-height:1.3;
+    color:var(--text-dark);
+  }
+  /* ชื่อในบล็อกตัดบรรทัดด้วย <br> ไว้สำหรับการ์ดแคบ — ในกล่องให้อยู่บรรทัดเดียว
+     ซ่อน br ได้เพราะ site.js เติมช่องว่างหน้า br ไว้แล้ว (ข้อความใน DB ไม่มี ซ่อนเฉย ๆ คำจะติดกัน "OnlineTwice") */
+  .is-section-view #application-steps .tile-card .t-name br{display:none;}
+  .is-section-view #application-steps .tile-card .t-label{
+    order:2;
+    margin:10px 0 0;
+    font-size:15px;
+    font-weight:500;
+    letter-spacing:0;
+    text-transform:none;
+    color:var(--text-muted);
+  }
+  .is-section-view #application-steps .tile-card .t-label::before{content:"Step " counter(app-step) " · ";}
+  .is-section-view .content #application-steps .tile-card .t-meta{
+    order:3;
+    margin:22px 0 0;
+    padding-top:20px;
+    border-top:1px solid rgba(43,43,43,.14);
+    font-size:18px;
+    line-height:1.75;
+    color:var(--text-dark);
+  }
+  .is-section-view #application-steps .tile-card:hover .t-name{color:var(--text-dark);}
+  .is-section-view #application-steps .tile-card:hover .t-label{color:var(--text-muted);}
+  .is-section-view .content #application-steps .tile-card:hover .t-meta{color:var(--text-dark);}
+  @media (max-width:760px){
+    /* จอแคบ: รูปขึ้นบนเป็นแถบ แผงข้อความอยู่ล่าง */
+    .is-section-view #application-steps .tile-card{min-height:0;padding:calc(52vw + 24px) 22px 28px;}
+    .is-section-view #application-steps .tile-card::before{inset:0 0 auto 0;height:52vw;}
+  }
+
+  /* ============ ADMISSION REQUIREMENTS / DEADLINE — การ์ดย่อตอนเปิดทั้งหน้า (admission.html) ============
+     เจ้าของเว็บขอ ต.ค. 2026 ให้เหมือนหน้า Academics ตอนเปิดทั้งหน้า (การ์ดย่อแบบ Tuition and Fees)
+     แถวตารางแต่ละแถวกลายเป็นการ์ด: ชื่อ (คอลัมน์แรก) + ไอคอนซ้ายล่าง + ปุ่มลูกศรขวาล่าง; ค่า (คะแนน / วันที่) ซ่อนไว้
+     กดการ์ด = site.js พาไป #admission-requirements / #admission-deadline ซึ่งเห็นตารางเต็มตามเดิม
+     ทำด้วย CSS ล้วนบนตารางเดิม — ตารางมาจากบล็อก DB ถ้าเพิ่มมาร์กอัปการ์ดต้องแก้ทั้ง DB และไฟล์
+     ไม่มี JS ไม่มี .is-page-view จึงเห็นตารางเต็มเสมอ
+     หน้าย่อยทั้งสองส่วนก็ใช้การ์ดชุดนี้ (เจ้าของเว็บขอ ต.ค. 2026 ให้เหมือนหน้ารวม แต่ใหญ่กว่า — บล็อกหน้าย่อยด้านล่าง)
+     ค่าในคอลัมน์ที่สอง (คะแนน / วันที่) แสดงใต้ชื่อพร้อมป้าย ยกเว้น Deadline ตอนเปิดทั้งหน้าที่ซ่อนวันที่
+     ตัวเลข/สีต้องตามการ์ดย่อ Tuition and Fees (.is-page-view #tuition-and-fees .fee-card) — แก้ที่นั่นแล้วแก้ตรงนี้ด้วย */
+  /* เปิดทั้งหน้า = เห็นแค่หัวข้อกับการ์ด — ย่อหน้าคำอธิบายและหมายเหตุ (Document guidelines, รหัสหลักสูตร/GPA ฯลฯ)
+     ไปอยู่ในหน้าย่อยของแต่ละส่วนเท่านั้น (เจ้าของเว็บขอ ต.ค. 2026) · เลือก p ลูกตรงของ section จึงไม่โดนข้อความในการ์ด
+     ยกเว้น Admission Procedures — ไม่มีการ์ด ย่อหน้าเดียวคือเนื้อหาทั้งหมด ซ่อนแล้วเหลือหัวข้อลอย ๆ (เจ้าของเว็บขอให้แสดง ต.ค. 2026) */
+  .is-page-view :is(#application-steps,#admission-requirements,#admission-deadline) > p{display:none;}
+  :is(#admission-deadline,#admission-requirements) .table-wrap{
+    margin-top:28px;
+    overflow:visible;
+    border:0;
+    border-radius:0;
+    background:none;
+    box-shadow:none;
+  }
+  :is(#admission-deadline,#admission-requirements) .data-table{display:block;min-width:0;}
+  :is(#admission-deadline,#admission-requirements) .data-table thead{display:none;}
+  :is(#admission-deadline,#admission-requirements) .data-table tbody{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,210px));
+    justify-content:center;
+    gap:16px;
+  }
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr{
+    --mt-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 11 3 3L22 4'/%3E%3Cpath d='M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'/%3E%3C/svg%3E");
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    min-height:var(--mini-tile-h);
+    padding:22px 20px 76px;
+    border:1px solid #e3e6e8;
+    border-radius:16px;
+    background:var(--bg);
+    cursor:pointer;
+    transition:transform .2s ease,box-shadow .2s ease,background-color .2s ease,border-color .2s ease;
+  }
+  /* Deadline = นาฬิกา (ไอคอนเดียวกับหน้ารวม explore.html) */
+  #admission-deadline .data-table tbody tr{
+    --mt-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E");
+  }
+  /* ไอคอนรายการ (Lucide — lucide.dev, ISC) ผูกกับลำดับแถวในตาราง (nth-child) เพราะแถวมาจากบล็อก DB ใส่คลาสไม่ได้
+     ไม่มี .is-page-view นำหน้า — การ์ดคะแนนในหน้าย่อย Requirements ใช้ไอคอนชุดเดียวกัน (กฎถัดจากบล็อกนี้)
+     สลับ/เพิ่มแถวใน /admin แล้วไอคอนจะเลื่อนตาม — แก้ลำดับที่นี่ด้วย; แถวที่เกินจากนี้ได้ไอคอนเริ่มต้นด้านบน (เช็ก / นาฬิกา) */
+  /* CU-TEP — สอบของจุฬาฯ = landmark */
+  #admission-requirements .data-table tbody tr:nth-child(1){--mt-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 18v-7'/%3E%3Cpath d='M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z'/%3E%3Cpath d='M14 18v-7'/%3E%3Cpath d='M18 18v-7'/%3E%3Cpath d='M3 22h18'/%3E%3Cpath d='M6 18v-7'/%3E%3C/svg%3E");}
+  /* TOEFL iBT — สอบบนคอมพิวเตอร์ = monitor-check */
+  #admission-requirements .data-table tbody tr:nth-child(2){--mt-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 10 2 2 4-4'/%3E%3Crect width='20' height='14' x='2' y='3' rx='2'/%3E%3Cpath d='M12 17v4'/%3E%3Cpath d='M8 21h8'/%3E%3C/svg%3E");}
+  /* TOEFL ITP / PBT — สอบบนกระดาษ = file-pen */
+  #admission-requirements .data-table tbody tr:nth-child(3){--mt-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34'/%3E%3Cpath d='M14 2v5a1 1 0 0 0 1 1h5'/%3E%3Cpath d='M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z'/%3E%3C/svg%3E");}
+  /* IELTS — สอบสากล = globe */
+  #admission-requirements .data-table tbody tr:nth-child(4){--mt-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20'/%3E%3Cpath d='M2 12h20'/%3E%3C/svg%3E");}
+  /* Applications open = file-pen-line */
+  #admission-deadline .data-table tbody tr:nth-child(1){--mt-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.364 13.634a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506l4.013-4.009a1 1 0 0 0-3.004-3.004z'/%3E%3Cpath d='M14.487 7.858A1 1 0 0 1 14 7V2'/%3E%3Cpath d='M20 19.645V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l2.516 2.516'/%3E%3Cpath d='M8 18h1'/%3E%3C/svg%3E");}
+  /* Notification of interview candidates = bell-ring */
+  #admission-deadline .data-table tbody tr:nth-child(2){--mt-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.268 21a2 2 0 0 0 3.464 0'/%3E%3Cpath d='M22 8c0-2.3-.8-4.3-2-6'/%3E%3Cpath d='M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326'/%3E%3Cpath d='M4 2C2.8 3.7 2 5.7 2 8'/%3E%3C/svg%3E");}
+  /* Interview date = messages-square */
+  #admission-deadline .data-table tbody tr:nth-child(3){--mt-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 10a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 14.286V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z'/%3E%3Cpath d='M20 9a2 2 0 0 1 2 2v10.286a.71.71 0 0 1-1.212.502l-2.202-2.202A2 2 0 0 0 17.172 19H10a2 2 0 0 1-2-2v-1'/%3E%3C/svg%3E");}
+  /* Admission notification = mail-check */
+  #admission-deadline .data-table tbody tr:nth-child(4){--mt-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8'/%3E%3Cpath d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'/%3E%3Cpath d='m16 19 2 2 4-4'/%3E%3C/svg%3E");}
+  /* Orientation = users */
+  #admission-deadline .data-table tbody tr:nth-child(5){--mt-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'/%3E%3Cpath d='M16 3.128a4 4 0 0 1 0 7.744'/%3E%3Cpath d='M22 21v-2a4 4 0 0 0-3-3.87'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3C/svg%3E");}
+  /* First day of classes = school */
+  #admission-deadline .data-table tbody tr:nth-child(6){--mt-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 21v-3a2 2 0 0 0-4 0v3'/%3E%3Cpath d='M18 4.933V21'/%3E%3Cpath d='m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6'/%3E%3Cpath d='m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11'/%3E%3Cpath d='M6 4.933V21'/%3E%3Ccircle cx='12' cy='9' r='2'/%3E%3C/svg%3E");}
+  :is(#admission-deadline,#admission-requirements) .data-table td{
+    display:block;
+    padding:0;
+    border:0;
+    font-family:var(--font-display);
+    font-size:18px;
+    font-weight:700;
+    line-height:1.4;
+    color:var(--text-dark);
+  }
+  /* Requirements แสดงคะแนนขั้นต่ำใต้ชื่อการสอบ (เจ้าของเว็บขอ ต.ค. 2026) — คะแนนคือสิ่งที่ผู้สมัครมาหา
+     ซ่อนไว้แล้วการ์ดเหลือแค่ชื่อ ต้องกดเข้าไปอีกชั้นเพื่อดูเลขเดียว · Deadline ยังซ่อนวันที่ตามเดิม */
+  .content :is(#admission-deadline,#admission-requirements) .data-table td + td{
+    display:block;
+    margin-top:6px;
+    font-size:26px;
+    line-height:1.2;
+    color:var(--brand);
+  }
+  .content :is(#admission-deadline,#admission-requirements) .data-table td + td::before{
+    content:"Minimum score";
+    display:block;
+    margin-bottom:2px;
+    font-family:var(--font-body);
+    font-size:13px;
+    font-weight:500;
+    color:var(--text-muted);
+  }
+  .content :is(#admission-deadline,#admission-requirements) .data-table tbody tr:hover td + td::before,
+  .content :is(#admission-deadline,#admission-requirements) .data-table tbody tr:active td + td::before{color:rgba(255,255,255,.85);}
+  /* Deadline: ป้าย "Date" แทน "Minimum score" · เปิดทั้งหน้าซ่อนวันที่ (การ์ดย่อเหลือแค่ชื่อ) — หน้าย่อยแสดง
+     กฎซ่อนต้องอยู่หลังกฎแสดงด้านบน (specificity เท่ากัน ชนะด้วยลำดับ) */
+  .content #admission-deadline .data-table td + td::before{content:"Date";}
+  .content #admission-deadline .data-table td + td{white-space:normal;}
+  .is-page-view #admission-deadline .data-table td + td{display:none;}
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr::before,
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr::after{content:"";position:absolute;bottom:20px;}
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr::before{
+    left:20px;
+    width:30px;height:30px;
+    margin-bottom:4px;
+    background:var(--brand);
+    -webkit-mask:var(--mt-icon) center / contain no-repeat;
+    mask:var(--mt-icon) center / contain no-repeat;
+  }
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr::after{
+    right:20px;
+    width:38px;height:38px;
+    border-radius:50%;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38' fill='none' stroke='%232b2b2b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 19h10M19.5 14.5 24 19l-4.5 4.5'/%3E%3C/svg%3E") center / 38px no-repeat,
+      #f2f3f4;
+    transition:background-color .2s ease;
+  }
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr:hover,
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr:active{
+    background:var(--brand);
+    border-color:var(--brand);
+    box-shadow:0 12px 28px rgba(232,64,26,.22);
+    transform:translateY(-3px);
+  }
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr:hover td,
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr:active td{color:#fff;}
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr:hover::before,
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr:active::before{background:#fff;}
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr:hover::after,
+  :is(#admission-deadline,#admission-requirements) .data-table tbody tr:active::after{background-color:#fff;}
+  @media (max-width:520px){
+    :is(#admission-deadline,#admission-requirements) .data-table tbody{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+    :is(#admission-deadline,#admission-requirements) .data-table tbody tr{padding:18px 16px 68px;}
+    :is(#admission-deadline,#admission-requirements) .data-table td{font-size:16px;}
+    .content :is(#admission-deadline,#admission-requirements) .data-table td + td{font-size:22px;}
+    :is(#admission-deadline,#admission-requirements) .data-table tbody tr::before{left:16px;bottom:16px;}
+    :is(#admission-deadline,#admission-requirements) .data-table tbody tr::after{right:16px;bottom:16px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    :is(#admission-deadline,#admission-requirements) .data-table tbody tr{transition:none;}
+  }
+
+  /* ============ ADMISSION REQUIREMENTS / DEADLINE — หน้าย่อย (admission.html#admission-requirements / #admission-deadline) ============
+     การ์ดหน้าตาเดียวกับหน้ารวม (กฎ ADMISSION REQUIREMENTS / DEADLINE ด้านบน) ต่างแค่:
+     ไม่มีปุ่มลูกศรและไม่ใช่เคอร์เซอร์มือ — ในหน้าย่อยการ์ดไม่ได้พาไปไหน (site.js พาไปเฉพาะตอน is-page-view)
+     แต่ยังเป็นส้มเมื่อชี้/แตะตามที่เจ้าของเว็บขอ */
+  body:not(.is-page-view) :is(#admission-deadline,#admission-requirements) > p:not(.note) strong{color:var(--brand-dark);}
+  body:not(.is-page-view) :is(#admission-deadline,#admission-requirements) > .note{margin-top:36px;}
+  body:not(.is-page-view) :is(#admission-deadline,#admission-requirements) .data-table tbody tr{cursor:default;}
+  body:not(.is-page-view) :is(#admission-deadline,#admission-requirements) .data-table tbody tr::after{display:none;}
+  /* ขนาดใหญ่แบบการ์ดคะแนนเดิม (เจ้าของเว็บขอ ต.ค. 2026) — หน้าตาเดียวกับหน้ารวม แต่ 4 ใบเต็มความกว้างเนื้อหา ตัวใหญ่ขึ้น
+     นำหน้าด้วย body:not(.is-page-view) .content ให้ชนะกฎรวมด้านบน (ซึ่งเป็น .content #admission-requirements …) */
+  body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .table-wrap{margin-top:32px;}
+  body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .data-table tbody{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    justify-content:stretch;
+    gap:18px;
+  }
+  body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .data-table tbody tr{
+    min-height:280px;
+    padding:30px 26px 92px;
+    border-radius:20px;
+  }
+  body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .data-table td{font-size:22px;}
+  body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .data-table td + td{margin-top:14px;font-size:42px;line-height:1.1;}
+  body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .data-table td + td::before{margin-bottom:6px;font-size:14px;}
+  body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .data-table tbody tr::before{left:26px;bottom:26px;width:36px;height:36px;}
+  @media (max-width:880px){
+    body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .data-table tbody{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+  @media (max-width:520px){
+    body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .data-table tbody{gap:12px;}
+    body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .data-table tbody tr{min-height:230px;padding:22px 16px 72px;}
+    body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .data-table td{font-size:18px;}
+    body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .data-table td + td{font-size:32px;}
+    body:not(.is-page-view) .content :is(#admission-deadline,#admission-requirements) .data-table tbody tr::before{left:16px;bottom:18px;width:30px;height:30px;}
+  }
+  /* Deadline หน้าย่อย — 6 ใบจัด 3 + 3 (4 คอลัมน์จะเหลือแถวล่าง 2 ใบโหว่ง) และวันที่ยาวกว่าคะแนน จึงตัวเล็กลง */
+  body:not(.is-page-view) .content #admission-deadline .data-table tbody{grid-template-columns:repeat(3,minmax(0,1fr));}
+  body:not(.is-page-view) .content #admission-deadline .data-table td + td{font-size:30px;line-height:1.2;}
+  @media (max-width:880px){
+    body:not(.is-page-view) .content #admission-deadline .data-table tbody{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+  @media (max-width:520px){
+    body:not(.is-page-view) .content #admission-deadline .data-table td + td{font-size:22px;}
+  }
+
+  /* ============ RESEARCH — การ์ดย่อตอนเปิดทั้งหน้า (research.html) ============
+     เจ้าของเว็บขอ ต.ค. 2026 ให้ทำเหมือน Admission: เปิดทั้งหน้าเห็นแค่หัวข้อ + การ์ดย่อ (หน้าตาเดียวกับหน้ารวม)
+     ย่อหน้าคำอธิบาย/หมายเหตุไปอยู่ในหน้าย่อยของแต่ละส่วน; กดการ์ด = site.js พาไปหน้าย่อยของส่วนนั้น
+     ยกเว้น Overview (ส่วนนำ ไม่มีการ์ด) และ OJED — ย่อหน้าคือเนื้อหาทั้งหมด ซ่อนแล้วเหลือหัวข้อลอย ๆ (เหตุผลเดียวกับ Admission Procedures)
+     CSS ล้วน มาร์กอัปมาจากบล็อก research/* ใน DB · ตัวเลข/สีต้องตามการ์ด ADMISSION REQUIREMENTS — แก้ที่นั่นแล้วแก้ตรงนี้ด้วย */
+  .is-page-view :is(#research-guidelines,#tefl-research-thesis) > p{display:none;}
+
+  /* Guidelines — .tile-card (ลิงก์ไปหน้า Forms & Links) ย่อเหลือ "Step N" + ชื่อ + ไอคอนในการ์ด + ลูกศร
+     เปิดทั้งหน้ากดแล้วไป #research-guidelines ก่อน (site.js) — ลิงก์ไปหน้า Forms ใช้ได้ในหน้าย่อยตามเดิม */
+  .is-page-view #research-guidelines .tile-grid{
+    grid-template-columns:repeat(auto-fit,minmax(190px,210px));
+    justify-content:center;
+    gap:16px;
+    margin-top:28px;
+  }
+  .is-page-view #research-guidelines .tile-card{
+    position:relative;
+    min-height:var(--mini-tile-h);
+    padding:22px 20px 76px;
+    border:1px solid #e3e6e8;
+    border-radius:16px;
+    background:var(--bg);
+    box-shadow:none;
+    transition:transform .2s ease,box-shadow .2s ease,background-color .2s ease,border-color .2s ease;
+  }
+  .is-page-view #research-guidelines .tile-card .t-meta{display:none;}
+  .is-page-view #research-guidelines .tile-card .t-label{
+    margin-bottom:4px;
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:0;
+    text-transform:none;
+    color:var(--text-muted);
+  }
+  .is-page-view #research-guidelines .tile-card .t-name{font-size:18px;line-height:1.4;}
+  .is-page-view #research-guidelines .tile-card .t-foot{
+    position:absolute;
+    left:20px;right:20px;bottom:20px;
+    padding:0;
+    align-items:center;
+  }
+  .is-page-view #research-guidelines .tile-card .t-ic{color:var(--brand);}
+  /* เส้น 1.4 ใน viewBox 36 ย่อเหลือ 30px แล้วบางกว่าไอคอน Lucide — หนาขึ้นให้เท่ากัน (เหมือน Application Steps) */
+  .is-page-view #research-guidelines .tile-card .t-ic svg{width:30px;height:30px;stroke-width:2.2;}
+  .is-page-view #research-guidelines .tile-card .t-arrow{width:38px;height:38px;background:#f2f3f4;color:#2b2b2b;}
+  .is-page-view #research-guidelines .tile-card .t-arrow svg{width:16px;height:16px;}
+  .is-page-view #research-guidelines .tile-card:hover,
+  .is-page-view #research-guidelines .tile-card:active,
+  .is-page-view #research-guidelines .tile-card:focus-visible{
+    background:var(--brand);
+    border-color:var(--brand);
+    box-shadow:0 12px 28px rgba(232,64,26,.22);
+    transform:translateY(-3px);
+  }
+  .is-page-view #research-guidelines .tile-card:hover .t-label,
+  .is-page-view #research-guidelines .tile-card:active .t-label,
+  .is-page-view #research-guidelines .tile-card:focus-visible .t-label{color:rgba(255,255,255,.85);}
+  .is-page-view #research-guidelines .tile-card:hover .t-ic,
+  .is-page-view #research-guidelines .tile-card:active .t-ic,
+  .is-page-view #research-guidelines .tile-card:focus-visible .t-ic{color:#fff;}
+  .is-page-view #research-guidelines .tile-card:hover .t-arrow,
+  .is-page-view #research-guidelines .tile-card:active .t-arrow,
+  .is-page-view #research-guidelines .tile-card:focus-visible .t-arrow{background:#fff;color:#2b2b2b;}
+
+  /* Thesis — แถวตาราง (ปี / ผู้เขียน / หัวข้อ) กลายเป็นการ์ด: ปีเป็นป้ายเล็ก + ชื่อผู้เขียน + ไอคอนหนังสือ + ลูกศร; หัวข้อซ่อน (ดูในหน้าย่อย) */
+  .is-page-view #tefl-research-thesis .table-wrap{
+    margin-top:28px;
+    overflow:visible;
+    border:0;
+    border-radius:0;
+    background:none;
+    box-shadow:none;
+  }
+  .is-page-view #tefl-research-thesis .data-table{display:block;min-width:0;}
+  .is-page-view #tefl-research-thesis .data-table thead{display:none;}
+  .is-page-view #tefl-research-thesis .data-table tbody{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,210px));
+    justify-content:center;
+    gap:16px;
+  }
+  .is-page-view #tefl-research-thesis .data-table tbody tr{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    min-height:var(--mini-tile-h);
+    padding:22px 20px 76px;
+    border:1px solid #e3e6e8;
+    border-radius:16px;
+    background:var(--bg);
+    cursor:pointer;
+    transition:transform .2s ease,box-shadow .2s ease,background-color .2s ease,border-color .2s ease;
+  }
+  .is-page-view #tefl-research-thesis .data-table td{
+    display:block;
+    padding:0;
+    border:0;
+    font-family:var(--font-display);
+    font-size:18px;
+    font-weight:700;
+    line-height:1.4;
+    color:var(--text-dark);
+    white-space:normal;
+  }
+  .is-page-view #tefl-research-thesis .data-table td:first-child{
+    margin-bottom:4px;
+    font-family:var(--font-body);
+    font-size:13px;
+    font-weight:500;
+    color:var(--text-muted);
+  }
+  .is-page-view #tefl-research-thesis .data-table td:nth-child(3){display:none;}
+  .is-page-view #tefl-research-thesis .data-table tbody tr::before,
+  .is-page-view #tefl-research-thesis .data-table tbody tr::after{content:"";position:absolute;bottom:20px;}
+  .is-page-view #tefl-research-thesis .data-table tbody tr::before{
+    left:20px;
+    width:30px;height:30px;
+    margin-bottom:4px;
+    background:var(--brand);
+    /* Lucide book-open-text (lucide.dev, ISC) */
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v16'/%3E%3Cpath d='M16 13h2'/%3E%3Cpath d='M16 9h2'/%3E%3Cpath d='M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z'/%3E%3Cpath d='M6 13h2'/%3E%3Cpath d='M6 9h2'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v16'/%3E%3Cpath d='M16 13h2'/%3E%3Cpath d='M16 9h2'/%3E%3Cpath d='M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z'/%3E%3Cpath d='M6 13h2'/%3E%3Cpath d='M6 9h2'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .is-page-view #tefl-research-thesis .data-table tbody tr::after{
+    right:20px;
+    width:38px;height:38px;
+    border-radius:50%;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38' fill='none' stroke='%232b2b2b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 19h10M19.5 14.5 24 19l-4.5 4.5'/%3E%3C/svg%3E") center / 38px no-repeat,
+      #f2f3f4;
+    transition:background-color .2s ease;
+  }
+  .is-page-view #tefl-research-thesis .data-table tbody tr:hover,
+  .is-page-view #tefl-research-thesis .data-table tbody tr:active{
+    background:var(--brand);
+    border-color:var(--brand);
+    box-shadow:0 12px 28px rgba(232,64,26,.22);
+    transform:translateY(-3px);
+  }
+  .is-page-view #tefl-research-thesis .data-table tbody tr:hover td,
+  .is-page-view #tefl-research-thesis .data-table tbody tr:active td{color:#fff;}
+  .is-page-view #tefl-research-thesis .data-table tbody tr:hover td:first-child,
+  .is-page-view #tefl-research-thesis .data-table tbody tr:active td:first-child{color:rgba(255,255,255,.85);}
+  .is-page-view #tefl-research-thesis .data-table tbody tr:hover::before,
+  .is-page-view #tefl-research-thesis .data-table tbody tr:active::before{background:#fff;}
+  .is-page-view #tefl-research-thesis .data-table tbody tr:hover::after,
+  .is-page-view #tefl-research-thesis .data-table tbody tr:active::after{background-color:#fff;}
+  @media (max-width:520px){
+    .is-page-view :is(#research-guidelines .tile-grid,#tefl-research-thesis .data-table tbody){grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+    .is-page-view #research-guidelines .tile-card,
+    .is-page-view #tefl-research-thesis .data-table tbody tr{padding:18px 16px 68px;}
+    .is-page-view #research-guidelines .tile-card .t-name,
+    .is-page-view #tefl-research-thesis .data-table td{font-size:16px;}
+    .is-page-view #research-guidelines .tile-card .t-foot{left:16px;right:16px;bottom:16px;}
+    .is-page-view #tefl-research-thesis .data-table tbody tr::before{left:16px;bottom:16px;}
+    .is-page-view #tefl-research-thesis .data-table tbody tr::after{right:16px;bottom:16px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .is-page-view #research-guidelines .tile-card,
+    .is-page-view #tefl-research-thesis .data-table tbody tr{transition:none;}
+  }
+
+  /* ============ READ MORE — ย่อหน้าตัดเหลือ 2 บรรทัดตอนเปิดทั้งหน้า (research.html Overview / OJED, forms-and-links.html ส่วนที่มีแต่ย่อหน้า) ============
+     เจ้าของเว็บขอ ต.ค. 2026: ส่วนที่มีแต่ย่อหน้าให้สั้นลง + ปุ่ม Read More (แบบเดียวกับหน้า Home) ไปหน้าย่อยที่เห็นข้อความเต็ม
+     ปุ่ม .read-more-wrap สร้างโดย site.js (addReadMore) — รายชื่อ section อยู่ที่ READ_MORE ใน site.js ต้องตรงกับ selector ที่นี่
+     หน้าย่อย (is-section-view) และไม่มี JS เห็นข้อความเต็มเสมอ ไม่มีปุ่ม */
+  .read-more-wrap{display:none;}
+  .is-page-view :is(#research-overview,#tefl-research-ojed,#recent-activities,#announcements,#calendar,
+    #request-forms,#thesis-forms,#research-collaboration-letters,#graduation-request,#useful-links,
+    #faqs-applicants,#faqs-students) .read-more-wrap{display:block;margin-top:24px;text-align:center;}
+  .is-page-view :is(#research-overview,#tefl-research-ojed,#request-forms,#research-collaboration-letters,#graduation-request) > p{
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    line-clamp:2;
+    overflow:hidden;
+  }
+  /* Overview มี 2 ย่อหน้า — เปิดทั้งหน้าเห็นแค่ย่อหน้าแรก 2 บรรทัด */
+  .is-page-view :is(#research-overview,#tefl-research-ojed,#request-forms,#research-collaboration-letters,#graduation-request) > p ~ p{display:none;}
+
+  /* ============ RESEARCH GUIDELINES — หน้าย่อย: การ์ดรูป (research.html#research-guidelines) ============
+     เจ้าของเว็บขอ ต.ค. 2026 ให้เหมือนการ์ดรูปตัวอย่าง: รูปเต็มใบ, ชื่อ + คำอธิบายสีขาวด้านบนบนแถบเบลอไล่จาง,
+     ปุ่มวงกลมขาว "+" มุมขวาล่าง · ป้าย Step N และไอคอนซ่อน (ลำดับการ์ดบอกขั้นตอนอยู่แล้ว)
+     มาร์กอัปยังเป็น .tile-card (ลิงก์ไป Forms & Links) จากบล็อก research/research-guidelines — CSS ล้วน
+     body:not(.is-page-view) เพราะตอนเปิดทั้งหน้าการ์ดชุดเดียวกันย่อเป็นการ์ดเล็ก (บล็อก RESEARCH ด้านบน)
+     รูปผูกกับลำดับการ์ด (nth-child) — สลับลำดับในบล็อกแล้วรูปจะสลับตาม
+     โครงชั้นรูป (::before คม + ::after เบลอมี mask) แบบเดียวกับ PHOTO CARD BAND แต่กลับด้าน: เบลอ/เฉดมืดอยู่บน เพราะข้อความอยู่บน */
+  body:not(.is-page-view) #research-guidelines .tile-grid{
+    /* แถวละ 4 (เจ้าของเว็บขอ ต.ค. 2026) — การ์ดแคบ จึงเป็นทรงตั้ง 3/4 แบบรูปตัวอย่าง ตัวอักษร/ระยะเล็กลง */
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:clamp(14px,1.6vw,22px);
+    /* กว้างกว่าคอลัมน์เนื้อหา 980px (เจ้าของเว็บขอให้การ์ดใหญ่ขึ้น) — ยื่นออกเท่ากันสองข้างแบบ .plan-grid / Application Steps
+       --rg-w ไม่เกินจอลบขอบ 16–24px จึงไม่เกิดสกรอลล์แนวนอน */
+    --rg-w:min(1240px,100vw - 2 * clamp(16px,2.4vw,24px));
+    width:var(--rg-w);
+    margin:clamp(24px,2.6vw,36px) 0 0 calc(50% - var(--rg-w) / 2);
+    /* เงาอยู่ที่กริด เพราะ clip-path บนการ์ดตัด box-shadow ทิ้ง */
+    filter:drop-shadow(0 14px 28px rgba(0,0,0,.14));
+  }
+  body:not(.is-page-view) #research-guidelines .tile-card{
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    aspect-ratio:3/4;
+    min-height:0;
+    padding:clamp(20px,2.2vw,30px);
+    border:0;
+    border-radius:clamp(18px,2vw,26px);
+    clip-path:inset(0 round clamp(18px,2vw,26px));
+    background:#1d1d1f;
+    box-shadow:none;
+    color:#fff;
+  }
+  body:not(.is-page-view) #research-guidelines .tile-card::before,
+  body:not(.is-page-view) #research-guidelines .tile-card::after{
+    content:"";
+    position:absolute;inset:0;z-index:-1;
+    pointer-events:none;
+    background-image:linear-gradient(180deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.55) 38%,rgba(0,0,0,.18) 62%,rgba(0,0,0,0) 78%),var(--card-img);
+    background-size:cover;
+    background-position:center;
+    transition:transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+  body:not(.is-page-view) #research-guidelines .tile-card::after{
+    filter:blur(12px);
+    /* เบลอลงมาถึงใต้คำอธิบาย (3 บรรทัด) — รูปพื้นสว่าง (โต๊ะขาว) ตัวขาวจะจมถ้าเบลอสั้นกว่านี้ */
+    -webkit-mask-image:linear-gradient(180deg,#000 40%,transparent 66%);
+    mask-image:linear-gradient(180deg,#000 40%,transparent 66%);
+  }
+  body:not(.is-page-view) #research-guidelines > .note{margin-top:36px;}
+  body:not(.is-page-view) #research-guidelines .tile-card:nth-child(1){--card-img:url(img/forms-proposal.jpg);}
+  body:not(.is-page-view) #research-guidelines .tile-card:nth-child(2){--card-img:url(img/forms-committee.jpg);}
+  body:not(.is-page-view) #research-guidelines .tile-card:nth-child(3){--card-img:url(img/forms-plan.jpg);}
+  body:not(.is-page-view) #research-guidelines .tile-card:nth-child(4){--card-img:url(img/goals/g22-lg.jpg);}
+  body:not(.is-page-view) #research-guidelines .tile-card .t-label,
+  body:not(.is-page-view) #research-guidelines .tile-card .t-ic{display:none;}
+  body:not(.is-page-view) #research-guidelines .tile-card .t-name{
+    font-size:clamp(20px,2vw,26px);
+    line-height:1.25;
+    color:#fff;
+    text-shadow:0 2px 18px rgba(0,0,0,.3);
+  }
+  body:not(.is-page-view) .content #research-guidelines .tile-card .t-meta{
+    margin-top:12px;
+    font-size:clamp(14px,1.2vw,15.5px);
+    line-height:1.65;
+    color:rgba(255,255,255,.9);
+    text-shadow:0 1px 10px rgba(0,0,0,.3);
+  }
+  /* ปุ่มวงกลมขาว "+" — ใช้ .t-arrow เดิม ซ่อนลูกศรแล้ววาดเครื่องหมายบวกเป็นพื้นหลัง */
+  body:not(.is-page-view) #research-guidelines .tile-card .t-foot{
+    position:absolute;
+    right:clamp(16px,1.8vw,22px);bottom:clamp(16px,1.8vw,22px);
+    padding:0;
+  }
+  body:not(.is-page-view) #research-guidelines .tile-card .t-arrow{
+    width:50px;height:50px;
+    background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d1d1f' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 6v12M6 12h12'/%3E%3C/svg%3E") center / 22px no-repeat;
+    box-shadow:0 4px 14px rgba(0,0,0,.18);
+    transition:transform .25s ease;
+  }
+  body:not(.is-page-view) #research-guidelines .tile-card .t-arrow svg{display:none;}
+  /* hover: ซูมรูป + หมุนปุ่ม แทนพื้นส้มของ .tile-card */
+  body:not(.is-page-view) #research-guidelines .tile-card:hover,
+  body:not(.is-page-view) #research-guidelines .tile-card:active,
+  body:not(.is-page-view) #research-guidelines .tile-card:focus-visible{background:#1d1d1f;box-shadow:none;transform:none;}
+  body:not(.is-page-view) #research-guidelines .tile-card:hover::before,
+  body:not(.is-page-view) #research-guidelines .tile-card:hover::after{transform:scale(1.05);}
+  body:not(.is-page-view) #research-guidelines .tile-card:hover .t-arrow,
+  body:not(.is-page-view) #research-guidelines .tile-card:focus-visible .t-arrow{background-color:#fff;transform:rotate(90deg);}
+  body:not(.is-page-view) #research-guidelines .tile-card:focus-visible{outline:3px solid var(--brand);outline-offset:4px;}
+  @media (max-width:880px){
+    body:not(.is-page-view) #research-guidelines .tile-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    body:not(.is-page-view) #research-guidelines .tile-card .t-name{font-size:21px;}
+    body:not(.is-page-view) .content #research-guidelines .tile-card .t-meta{font-size:14.5px;}
+  }
+  @media (max-width:460px){
+    body:not(.is-page-view) #research-guidelines .tile-grid{grid-template-columns:1fr;}
+    body:not(.is-page-view) #research-guidelines .tile-card{aspect-ratio:4/3;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    body:not(.is-page-view) #research-guidelines .tile-card::before,
+    body:not(.is-page-view) #research-guidelines .tile-card::after,
+    body:not(.is-page-view) #research-guidelines .tile-card .t-arrow{transition:none;}
+  }
+
+  /* ============ TEFL RESEARCH [THESIS] — หน้าย่อย: การ์ดแบบ Guest Lecturers (research.html#tefl-research-thesis) ============
+     เจ้าของเว็บขอ ต.ค. 2026: โครงแบบการ์ด Guest Lecturers (.lecturer-card ใน about.html) — ป้ายปีมุมซ้ายบน, ชื่อผู้เขียน + หัวข้อชิดล่าง, hover ยกขึ้น
+     แต่พื้นขาวล้วน สัมผัส/hover เป็นส้มทึบ (แบบการ์ดย่อตอนเปิดทั้งหน้า) และใหญ่กว่า Guest Lecturers: แถวละ 3 ตัวอักษรใหญ่ขึ้น
+     6 แถวในบล็อกจึงลง 3 + 3 พอดี — แถวละ 4 จะเหลือแถวล่าง 2 ใบโหว่ง
+     ไม่มีรูป — ใส่รูปนักศึกษาจริงใต้ชื่อผู้เขียนจะเข้าใจผิดว่าเป็นเจ้าของวิทยานิพนธ์ จึงใช้ไอคอนหนังสือแทน
+     ไม่มีปุ่มลูกศร — แถวไม่ใช่ลิงก์ (ไม่มี URL รายเล่ม) ลูกศรจะหลอกว่ากดได้
+     CSS ล้วน มาร์กอัปยังเป็นตารางจากบล็อก research/tefl-research-thesis — ไม่มี JS ก็เห็นการ์ดชุดนี้ */
+  body:not(.is-page-view) #tefl-research-thesis .table-wrap{
+    margin-top:30px;
+    overflow:visible;
+    border:0;
+    border-radius:0;
+    background:none;
+    box-shadow:none;
+  }
+  body:not(.is-page-view) #tefl-research-thesis .data-table{display:block;min-width:0;}
+  body:not(.is-page-view) #tefl-research-thesis .data-table thead{display:none;}
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:22px;
+  }
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    aspect-ratio:4/5;
+    padding:22px 22px 24px;
+    border:1px solid #e3e6e8;
+    border-radius:16px;
+    background:#fff;
+    box-shadow:0 4px 16px rgba(0,0,0,.05);
+    transition:transform .25s ease,box-shadow .25s ease,background-color .25s ease,border-color .25s ease;
+  }
+  /* ไอคอนหนังสือ Lucide book-open-text (lucide.dev, ISC) — อันเดียวกับการ์ดย่อตอนเปิดทั้งหน้า */
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr::before{
+    content:"";
+    position:absolute;
+    top:66px;
+    left:22px;
+    width:52px;height:52px;
+    background:var(--brand);
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v16'/%3E%3Cpath d='M16 13h2'/%3E%3Cpath d='M16 9h2'/%3E%3Cpath d='M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z'/%3E%3Cpath d='M6 13h2'/%3E%3Cpath d='M6 9h2'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v16'/%3E%3Cpath d='M16 13h2'/%3E%3Cpath d='M16 9h2'/%3E%3Cpath d='M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z'/%3E%3Cpath d='M6 13h2'/%3E%3Cpath d='M6 9h2'/%3E%3C/svg%3E") center / contain no-repeat;
+    transition:background-color .25s ease;
+  }
+  body:not(.is-page-view) #tefl-research-thesis .data-table td{
+    display:block;
+    padding:0;
+    border:0;
+    white-space:normal;
+  }
+  /* ปี = ป้ายส้มแบบ "Most Recent" */
+  body:not(.is-page-view) #tefl-research-thesis .data-table td:first-child{
+    position:absolute;
+    top:18px;
+    left:18px;
+    padding:5px 12px;
+    border-radius:999px;
+    background:var(--brand);
+    font-size:13px;
+    font-weight:700;
+    line-height:1.4;
+    letter-spacing:.8px;
+    color:#fff;
+    box-shadow:0 3px 10px rgba(232,64,26,.3);
+    font-variant-numeric:tabular-nums;
+    transition:background-color .25s ease,color .25s ease;
+  }
+  /* ผู้เขียน */
+  body:not(.is-page-view) #tefl-research-thesis .data-table td:nth-child(2){
+    margin-bottom:8px;
+    font-family:var(--font-display);
+    font-size:26px;
+    font-weight:700;
+    line-height:1.28;
+    color:var(--text-dark);
+    transition:color .25s ease;
+  }
+  /* หัวข้อ — ฟอนต์เนื้อความ (Chula Charas) ตัวเล็กกว่าขนาดจริง จึงต้อง 18px ให้ใกล้ย่อหน้า 20px ด้านบน */
+  body:not(.is-page-view) #tefl-research-thesis .data-table td:nth-child(3){
+    font-size:18px;
+    line-height:1.5;
+    color:var(--text-muted);
+    transition:color .25s ease;
+  }
+  /* สัมผัส/hover: ส้มทึบ ตัวอักษรขาว — ป้ายปีกลับสีเป็นขาวตัวส้ม */
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr:hover,
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr:active{
+    background:var(--brand);
+    border-color:var(--brand);
+    transform:translateY(-5px);
+    box-shadow:0 18px 34px rgba(232,64,26,.24);
+  }
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr:hover::before,
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr:active::before{background:#fff;}
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr:hover td:first-child,
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr:active td:first-child{background:#fff;color:var(--brand);box-shadow:none;}
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr:hover td,
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr:active td{color:#fff;}
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr:hover td:nth-child(3),
+  body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr:active td:nth-child(3){color:rgba(255,255,255,.9);}
+  @media (max-width:900px){
+    body:not(.is-page-view) #tefl-research-thesis .data-table tbody{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;}
+  }
+  @media (max-width:640px){
+    body:not(.is-page-view) #tefl-research-thesis .data-table tbody{gap:14px;}
+    body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr{aspect-ratio:3/4;padding:16px 16px 18px;}
+    body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr::before{top:54px;left:16px;width:40px;height:40px;}
+    body:not(.is-page-view) #tefl-research-thesis .data-table td:first-child{top:14px;left:14px;font-size:12px;padding:4px 10px;}
+    body:not(.is-page-view) #tefl-research-thesis .data-table td:nth-child(2){font-size:20px;margin-bottom:6px;}
+    body:not(.is-page-view) #tefl-research-thesis .data-table td:nth-child(3){font-size:15.5px;line-height:1.45;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr,
+    body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr::before,
+    body:not(.is-page-view) #tefl-research-thesis .data-table td{transition:none;}
+    body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr:hover,
+    body:not(.is-page-view) #tefl-research-thesis .data-table tbody tr:active{transform:none;}
+  }
+
+  /* ============ ACTIVITIES — ตอนเปิดทั้งหน้า (activities.html) ============
+     เจ้าของเว็บขอ ต.ค. 2026: ไม่มีข้อความอธิบายใต้หัวข้อ, การ์ดแค่ 4 ใบ + ปุ่ม Read More (READ MORE ด้านบน / addReadMore ใน site.js)
+     ไปหน้าย่อยที่เห็นครบ, ปฏิทินเหลือ 4 กิจกรรมที่กำลังจะมาถึง (site.js tagUpcomingEvents ติด .is-upcoming)
+     หน้าย่อยและไม่มี JS เห็นครบเหมือนเดิม (ไม่มี .is-page-view) */
+  /* ย่อหน้าทุกแบบ — คำอธิบาย, หมายเหตุใต้สไลด์, ปุ่ม Follow on Facebook (p.news-more) — ปุ่ม Read More แทน */
+  .is-page-view :is(#activities-list,#recent-activities,#announcements,#calendar) > p{display:none;}
+  .is-page-view #activities-list{margin-bottom:0;}
+
+  /* กิจกรรม — สไลด์กลายเป็นกริด 4 ใบนิ่ง ๆ (ไม่มีอะไรให้เลื่อนแล้ว จึงซ่อนจุด/ลูกศร และไม่ยื่นเลยขอบขวา) */
+  .is-page-view #recent-activities .nc-viewport{margin-right:0;overflow:visible;}
+  .is-page-view #recent-activities .nc-track{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:20px;
+    width:auto;
+  }
+  .is-page-view #recent-activities .nc-track .nc-card{flex:none;width:auto;}
+  .is-page-view #recent-activities .nc-controls{display:none;}
+  .is-page-view :is(#recent-activities .nc-track,#announcements .news-grid) > .nc-card:nth-child(n+5){display:none;}
+  /* ประกาศ — กริดเดิม 3 คอลัมน์ที่ ≤1100px จะเหลือใบที่ 4 ลอยแถวเดียว บังคับ 4 คอลัมน์ให้ตรงกับกิจกรรม */
+  .is-page-view #announcements .news-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
+  @media (max-width:760px){
+    .is-page-view :is(#recent-activities .nc-track,#announcements .news-grid){grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+  }
+  /* รูปทรงการ์ดกิจกรรมในกริด = การ์ดประกาศ (padding/หัวข้อ เล็กลงเพราะ 4 ใบในเนื้อหา 980px) */
+  .is-page-view #recent-activities .nc-body{padding:18px 18px 20px;}
+  .is-page-view .content #recent-activities .nc-body h3{font-size:18px;}
+
+  /* ปฏิทิน — ซ่อนปฏิทินแบบกดได้ แสดงรายการเดิมเฉพาะ .is-upcoming ไม่มีหัวเดือน (4 ใบอ่านวันที่จากแผ่นวันได้อยู่แล้ว) */
+  .is-page-view #calendar .evc{display:none;}
+  .is-page-view #calendar .ev-list.is-enhanced{display:block;}
+  .is-page-view #calendar .ev-month,
+  .is-page-view #calendar .ev-item:not(.is-upcoming){display:none;}
+  .is-page-view #calendar .ev-item.is-upcoming{opacity:1;}
+  .ev-none{display:none;}
+  .is-page-view #calendar .ev-none{
+    display:block;
+    padding:28px 0;
+    text-align:center;
+    color:var(--text-muted);
+  }
+
+  /* ============ FORMS & LINKS — ตอนเปิดทั้งหน้า (forms-and-links.html) ============
+     เจ้าของเว็บขอ ต.ค. 2026 ให้เหมือน Activities: ส่วนที่มีการ์ดไม่มีย่อหน้าอธิบาย เหลือ 4 ใบ + Read More ไปหน้าย่อยที่เห็นครบ
+     ส่วนที่มีแต่ย่อหน้า (Request Forms / Collaboration Letters / Graduation Request) ตัด 2 บรรทัด — กฎอยู่ในบล็อก READ MORE
+     ปุ่มสร้างโดย site.js (READ_MORE) · หน้าย่อยและไม่มี JS เห็นครบเหมือนเดิม */
+  .is-page-view :is(#thesis-forms,#useful-links) > p{display:none;}
+  .is-page-view :is(#thesis-forms,#useful-links) .tile-grid > .tile-card:nth-child(n+5){display:none;}
+  /* Useful Links ปกติ 5 ใบต่อแถว — เหลือ 4 ใบจะโหว่งช่องท้าย บังคับ 4 คอลัมน์ให้ตรงกับ Forms */
+  .is-page-view #useful-links .tile-grid.is-5up{grid-template-columns:repeat(4,minmax(0,1fr));}
+  @media (max-width:760px){
+    .is-page-view :is(#thesis-forms,#useful-links) .tile-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+
+  /* ============ FAQS — ตอนเปิดทั้งหน้า (faqs.html) ============
+     เจ้าของเว็บขอ ต.ค. 2026 ให้เหมือน Activities / Forms & Links: ไม่มีย่อหน้าใต้หัวข้อ, แต่ละหมวดเหลือ 4 คำถามแรก
+     + Read More (site.js READ_MORE) ไปหน้าย่อยของหมวดนั้นที่เห็นครบ — หน้านี้ไม่มีเมนูย่อย ทุก section จึงเป็นหน้าย่อยของตัวเอง */
+  .is-page-view :is(#faqs-applicants,#faqs-students) > p{display:none;}
+  .is-page-view :is(#faqs-applicants,#faqs-students) .faq-list > .faq-item:nth-child(n+5){display:none;}

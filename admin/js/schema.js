@@ -118,19 +118,25 @@ const SCHEMA = {
   facebook: { label:'Facebook', menu:'ข้อมูล', noAdd:true, view:()=>facebookView() },
   events: {
     label:'ปฏิทินกิจกรรม', title:'ปฏิทินกิจกรรม (Event Calendar)', menu:'ข้อมูล',
-    where:'หน้า Activities ส่วน Event Calendar เรียงตามวันที่เริ่มเสมอ', link:'activities.html#calendar',
+    where:'หน้า Activities ส่วน Event Calendar เรียงตามวันที่เริ่มเสมอ · ผู้ชมกรองตามผู้จัด (TEFL / EDU / CHULA) ได้', link:'activities.html#calendar',
+    thumb:'image',
     /* เรียงตามวันบนเว็บอยู่แล้ว ปุ่มเลื่อนลำดับจึงไม่มีความหมาย */
     noOrder:true, order:'starts_on.desc',
     listT:r=>r.title,
-    listS:r=>[dmy(r.starts_on) + (r.ends_on && r.ends_on !== r.starts_on ? ' – ' + dmy(r.ends_on) : ''), r.time_text, r.location].filter(Boolean).join(' · '),
+    listS:r=>[({tefl:'TEFL',edu:'EDU',chula:'CHULA'})[r.source] || 'TEFL',
+              dmy(r.starts_on) + (r.ends_on && r.ends_on !== r.starts_on ? ' – ' + dmy(r.ends_on) : ''), r.time_text, r.location].filter(Boolean).join(' · '),
     groupBy:r=>((r.ends_on || r.starts_on) >= today() ? 'กำลังจะมาถึง' : 'ผ่านไปแล้ว (ยังแสดงบนเว็บแบบจาง)'),
     fields:[
+      /* ค่าต้องตรงกับ check constraint ของ events.source และ EV_SOURCES ใน cms.js / sync-content.py */
+      {k:'source', t:'select', label:'ผู้จัด', req:true,
+       opts:[['tefl','TEFL — หลักสูตร'],['edu','EDU — คณะครุศาสตร์'],['chula','CHULA — จุฬาลงกรณ์มหาวิทยาลัย']]},
       {k:'title', t:'text', label:'ชื่อกิจกรรม', req:true},
       {k:'starts_on', t:'date', label:'วันที่เริ่ม', req:true},
       {k:'ends_on', t:'date', label:'วันที่สิ้นสุด', hint:'เว้นว่างถ้าเป็นกิจกรรมวันเดียว'},
       {k:'time_text', t:'text', label:'เวลา', hint:'พิมพ์อิสระ เช่น 9:00 AM – 4:00 PM หรือ Every Wednesday'},
       {k:'location', t:'text', label:'สถานที่'},
       {k:'description', t:'area', label:'รายละเอียดสั้น ๆ'},
+      {k:'image', t:'image', label:'ภาพประกอบ', hint:'ภาพเล็กด้านขวาของรายการ (แนวนอน 16:9) เว้นว่างได้'},
       {k:'url', t:'text', label:'ลิงก์รายละเอียด', hint:'เช่น โพสต์ Facebook หรือแบบฟอร์มลงทะเบียน (เว้นว่างได้)'}
     ]
   },

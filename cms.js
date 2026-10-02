@@ -143,33 +143,40 @@
   /* ---------- ปฏิทินกิจกรรม (activities.html#calendar) ----------
      คืนทั้งก้อน ไม่ใช่ทีละแถว เพราะต้องแทรกหัวเดือนเมื่อเดือนเปลี่ยน
      เรียงตามวันเริ่มเสมอ (ไม่ใช่ sort_order) — ปฏิทินที่ไม่เรียงตามวันคืออ่านไม่รู้เรื่อง
-     กิจกรรมที่จบไปแล้วยังแสดงแต่ใส่ .is-past ให้จาง ไม่ซ่อน */
+     กิจกรรมที่จบไปแล้วยังแสดงแต่ใส่ .is-past ให้จาง ไม่ซ่อน
+     รายการนี้คือฉบับไม่มี JS — site.js (EVENT CALENDAR) อ่าน data-start / data-end / data-src
+     แล้วสร้างปฏิทินแบบกดได้ทับไว้ข้างบน โดยโคลนการ์ดเหล่านี้ไปใช้ จึงต้องมีแอตทริบิวต์ครบทุกใบ */
   const MONTHS = ['January','February','March','April','May','June','July',
                   'August','September','October','November','December'];
+  /* ผู้จัด — ต้องตรงกับ check constraint ของคอลัมน์ events.source และ EV_SOURCES ใน sync-content.py */
+  const EV_SOURCES = { tefl: 'TEFL', edu: 'EDU', chula: 'CHULA' };
   function evDate(iso){ const d = iso.split('-'); return { y: +d[0], m: +d[1] - 1, d: +d[2] }; }
+  function evDay(p){ return p.d + ' ' + MONTHS[p.m].slice(0, 3) + ' ' + p.y; }
   function renderEvents(rows){
-    const today = new Date().toISOString().slice(0, 10);
+    /* วันนี้ตามเวลาเครื่องผู้ชม ไม่ใช่ UTC — toISOString() จะได้ "เมื่อวาน" ก่อน 7 โมงเช้าในไทย */
+    const now = new Date();
+    const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
     const list = rows.slice().sort(function(a, b){ return a.starts_on < b.starts_on ? -1 : a.starts_on > b.starts_on ? 1 : 0; });
     let out = '', month = '';
     list.forEach(function(e){
       const s = evDate(e.starts_on);
       const key = MONTHS[s.m] + ' ' + s.y;
       if(key !== month){ out += '<div class="ev-month">' + key + '</div>'; month = key; }
-      const meta = [];
-      if(e.ends_on && e.ends_on !== e.starts_on){
-        const t = evDate(e.ends_on);
-        meta.push(MONTHS[s.m].slice(0, 3) + ' ' + s.d + ' – ' + MONTHS[t.m].slice(0, 3) + ' ' + t.d);
-      }
-      if(e.time_text) meta.push(esc(e.time_text));
-      if(e.location) meta.push(esc(e.location));
-      const past = (e.ends_on || e.starts_on) < today ? ' is-past' : '';
+      const end = e.ends_on && e.ends_on > e.starts_on ? e.ends_on : e.starts_on;
+      const src = EV_SOURCES[e.source] ? e.source : 'tefl';
+      let meta = '<li class="ev-when">' + evDay(s) + (end !== e.starts_on ? ' – ' + evDay(evDate(end)) : '') + '</li>';
+      if(e.time_text) meta += '<li class="ev-time">' + esc(e.time_text) + '</li>';
+      if(e.location) meta += '<li class="ev-where">' + esc(e.location) + '</li>';
+      const past = end < today ? ' is-past' : '';
       const title = e.url ? '<a href="' + esc(e.url) + '" target="_blank" rel="noopener">' + esc(e.title) + '</a>' : esc(e.title);
-      out += '<article class="ev-item' + past + '">' +
+      out += '<article class="ev-item is-' + src + past + '" data-start="' + e.starts_on + '" data-end="' + end + '" data-src="' + src + '">' +
         '<div class="ev-date"><span class="ev-d">' + s.d + '</span><span class="ev-m">' + MONTHS[s.m].slice(0, 3) + '</span></div>' +
-        '<div class="ev-body"><h3>' + title + '</h3>' +
-        (meta.length ? '<p class="ev-meta">' + meta.join(' · ') + '</p>' : '') +
+        '<div class="ev-body"><span class="ev-src">' + EV_SOURCES[src] + '</span><h3>' + title + '</h3>' +
+        '<ul class="ev-meta">' + meta + '</ul>' +
         (e.description ? '<p class="ev-desc">' + esc(e.description) + '</p>' : '') +
-        '</div></article>';
+        '</div>' +
+        (e.image ? '<div class="ev-thumb"><img src="' + img(e.image) + '" alt="" loading="lazy"></div>' : '') +
+        '</article>';
     });
     return out;
   }
@@ -198,15 +205,25 @@
   }
 
   /* การ์ดค่าเล่าเรียน (เดิมเป็นแถวตาราง) — ต้องตรงกับ fee_card ใน sync-content.py ทุกตัวอักษร
-     "Thai students (AY2020 onward)" แยกเป็นชื่อ + ป้ายจากวงเล็บท้าย; ยอดรวมตัด " THB" ออกไปเป็นหน่วยข้างตัวเลข */
+     "Thai students (AY2020 onward)" แยกเป็นชื่อ + ป้ายจากวงเล็บท้าย; ป้ายขึ้นต้นด้วย "before" = รุ่นเก่า (.is-legacy ย่อ/จางลง)
+     ยอดรวมตัด " THB" ออกไปเป็นหน่วยข้างตัวเลข
+     แถบสัดส่วน University/Faculty คำนวณจากตัวเลขในข้อความ — ปัดแบบ floor(x + .5) ไม่ใช้ Math.round/round()
+     เพราะ round() ของ Python ปัดครึ่งเข้าหาเลขคู่ สองฝั่งจะได้ % ต่างกัน; อ่านตัวเลขไม่ได้ = ไม่มีแถบ */
+  function feeNum(v){ const d = String(v == null ? '' : v).replace(/[^0-9]/g, ''); return d ? parseInt(d, 10) : 0; }
   function feeCard(t){
     const m = /^(.*?)\s*\(([^()]*)\)$/.exec(t.student_group || '');
     const name = m ? m[1] : (t.student_group || '');
+    const legacy = !!m && /^before\b/i.test(m[2]);
     const total = String(t.total_per_semester || '').replace(/\s*THB$/, '');
-    return '<article class="fee-card">' +
+    const uni = feeNum(t.part_university), fac = feeNum(t.part_faculty);
+    const bar = uni + fac > 0
+      ? '<div class="fee-bar" aria-hidden="true"><span style="width:' + Math.floor(uni * 100 / (uni + fac) + 0.5) + '%"></span></div>'
+      : '';
+    return '<article class="fee-card' + (legacy ? ' is-legacy' : '') + '">' +
       (m ? '<span class="fee-tag">' + esc(m[2]) + '</span>' : '') +
       '<h3 class="fee-name">' + esc(name) + '</h3>' +
       '<div class="fee-total"><span class="num">' + esc(total) + '</span><span class="unit">THB / semester</span></div>' +
+      bar +
       '<dl class="fee-parts"><div><dt>University</dt><dd>' + esc(t.part_university) + '</dd></div>' +
       '<div><dt>Faculty</dt><dd>' + esc(t.part_faculty) + '</dd></div></dl></article>';
   }
@@ -356,6 +373,8 @@
     jobs.push(get('events').then(function(rows){
       const box = document.querySelector('[data-cms="events"]');
       if(box && rows.length) box.innerHTML = renderEvents(rows);
+      /* ปฏิทินแบบกดได้โคลนการ์ดชุดเก่าไว้ตอนโหลด — การ์ดเพิ่งถูกเขียนใหม่ ต้องสร้างใหม่ทั้งชุด */
+      if(typeof window.TEFLEventCalInit === 'function') window.TEFLEventCalInit();
     }));
   }
 

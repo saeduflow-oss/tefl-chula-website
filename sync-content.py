@@ -131,11 +131,15 @@ def news_card(n):
 MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
           'August', 'September', 'October', 'November', 'December']
 
+# ผู้จัด — ต้องตรงกับ check constraint ของคอลัมน์ events.source และ EV_SOURCES ใน cms.js
+EV_SOURCES = {'tefl': 'TEFL', 'edu': 'EDU', 'chula': 'CHULA'}
+
 
 def render_events(rows):
     """ปฏิทินกิจกรรม — ต้องตรงกับ renderEvents() ใน cms.js
     คืนเป็นรายการบรรทัด (หัวเดือน + การ์ด) เรียงตามวันเริ่ม ไม่ใช่ sort_order
     .is-past คำนวณจาก "วันนี้" ตอนรัน ไฟล์จึงอาจต่างจากที่เบราว์เซอร์คำนวณเล็กน้อยเมื่อเวลาผ่านไป
+    data-start / data-end / data-src คือข้อมูลที่ site.js ใช้สร้างปฏิทินแบบกดได้ — ห้ามตัดทิ้ง
     """
     from datetime import date
     today = date.today().isoformat()
@@ -144,6 +148,10 @@ def render_events(rows):
         y, m, d = iso.split('-')
         return int(y), int(m) - 1, int(d)
 
+    def day(iso):
+        y, m, d = ymd(iso)
+        return f'{d} {MONTHS[m][:3]} {y}'
+
     out, month = [], ''
     for e in sorted(rows, key=lambda r: r['starts_on']):
         y, m, d = ymd(e['starts_on'])
@@ -151,22 +159,25 @@ def render_events(rows):
         if key != month:
             out.append(f'<div class="ev-month">{key}</div>')
             month = key
-        meta = []
-        if e.get('ends_on') and e['ends_on'] != e['starts_on']:
-            _, tm, td = ymd(e['ends_on'])
-            meta.append(f'{MONTHS[m][:3]} {d} \u2013 {MONTHS[tm][:3]} {td}')
+        end = e['ends_on'] if e.get('ends_on') and e['ends_on'] > e['starts_on'] else e['starts_on']
+        src = e.get('source') if e.get('source') in EV_SOURCES else 'tefl'
+        when = day(e['starts_on']) + (f' \u2013 {day(end)}' if end != e['starts_on'] else '')
+        meta = f'<li class="ev-when">{when}</li>'
         if e.get('time_text'):
-            meta.append(esc(e['time_text']))
+            meta += f'<li class="ev-time">{esc(e["time_text"])}</li>'
         if e.get('location'):
-            meta.append(esc(e['location']))
-        past = ' is-past' if (e.get('ends_on') or e['starts_on']) < today else ''
+            meta += f'<li class="ev-where">{esc(e["location"])}</li>'
+        past = ' is-past' if end < today else ''
         title = (f'<a href="{esc(e["url"])}" target="_blank" rel="noopener">{esc(e["title"])}</a>'
                  if e.get('url') else esc(e['title']))
-        meta_h = f'<p class="ev-meta">{" \u00b7 ".join(meta)}</p>' if meta else ''
         desc = f'<p class="ev-desc">{esc(e["description"])}</p>' if e.get('description') else ''
-        out.append(f'<article class="ev-item{past}"><div class="ev-date"><span class="ev-d">{d}</span>'
+        thumb = (f'<div class="ev-thumb"><img src="{esc(e["image"])}" alt="" loading="lazy"></div>'
+                 if e.get('image') else '')
+        out.append(f'<article class="ev-item is-{src}{past}" data-start="{e["starts_on"]}" data-end="{end}" data-src="{src}">'
+                   f'<div class="ev-date"><span class="ev-d">{d}</span>'
                    f'<span class="ev-m">{MONTHS[m][:3]}</span></div>'
-                   f'<div class="ev-body"><h3>{title}</h3>{meta_h}{desc}</div></article>')
+                   f'<div class="ev-body"><span class="ev-src">{EV_SOURCES[src]}</span><h3>{title}</h3>'
+                   f'<ul class="ev-meta">{meta}</ul>{desc}</div>{thumb}</article>')
     return out
 
 
@@ -265,17 +276,28 @@ def apply_settings(html, st):
     return html
 
 
+def fee_num(v):
+    d = re.sub(r'[^0-9]', '', str('' if v is None else v))
+    return int(d) if d else 0
+
+
 def fee_card(t):
-    """การ์ดค่าเล่าเรียน — ต้องตรงกับ feeCard ใน cms.js ทุกตัวอักษร"""
+    """การ์ดค่าเล่าเรียน — ต้องตรงกับ feeCard ใน cms.js ทุกตัวอักษร
+    % ของแถบปัดแบบ floor(x + .5) เหมือนฝั่ง JS (round() ของ Python ปัดครึ่งเข้าหาเลขคู่ ผลจะต่างกัน)"""
     g = t['student_group'] or ''
     m = re.match(r'^(.*?)\s*\(([^()]*)\)$', g)
     name = m.group(1) if m else g
+    legacy = bool(m) and re.match(r'^before\b', m.group(2), re.I) is not None
     total = re.sub(r'\s*THB$', '', str(t['total_per_semester'] or ''))
-    return ('<article class="fee-card">'
+    uni, fac = fee_num(t['part_university']), fee_num(t['part_faculty'])
+    bar = (f'<div class="fee-bar" aria-hidden="true"><span style="width:{int(uni * 100 / (uni + fac) + 0.5)}%"></span></div>'
+           if uni + fac > 0 else '')
+    return (f'<article class="fee-card{" is-legacy" if legacy else ""}">'
             + (f'<span class="fee-tag">{esc(m.group(2))}</span>' if m else '')
             + f'<h3 class="fee-name">{esc(name)}</h3>'
             f'<div class="fee-total"><span class="num">{esc(total)}</span><span class="unit">THB / semester</span></div>'
-            f'<dl class="fee-parts"><div><dt>University</dt><dd>{esc(t["part_university"])}</dd></div>'
+            + bar
+            + f'<dl class="fee-parts"><div><dt>University</dt><dd>{esc(t["part_university"])}</dd></div>'
             f'<div><dt>Faculty</dt><dd>{esc(t["part_faculty"])}</dd></div></dl></article>')
 
 

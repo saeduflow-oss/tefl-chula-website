@@ -655,6 +655,28 @@
     });
   }
 
+  /* การ์ด Application Steps (admission.html) — หน้าย่อยเป็นกล่องละขั้นตอน (APPLICATION STEPS ใน site.css)
+     ใส่ด้วยสคริปต์ทุกครั้งที่ filterSections ทำงาน เพราะการ์ดมาจากบล็อก admission/application-steps ใน DB
+     และ cms.js เขียนทับทั้งก้อน (ของที่ใส่ไว้หาย) — ทำซ้ำได้ ไม่ซ้อนกัน:
+     · ช่องว่างหน้า <br> ในชื่อ — ในกล่องซ่อน br ให้ชื่ออยู่บรรทัดเดียว ไม่มีช่องว่างคำจะติดกัน ("OnlineTwice")
+     · role/tabindex — การ์ดย่อตอนเปิดทั้งหน้าเป็น <div> ที่กดแล้วพาไปหน้าย่อย ต้องกดด้วยคีย์บอร์ดได้
+       (หน้าย่อยการ์ดเป็นกล่องข้อความเฉย ๆ จึงถอดออก) */
+  function tagStepCards(){
+    document.querySelectorAll('#application-steps .tile-card').forEach(function(card){
+      card.querySelectorAll('.t-name br').forEach(function(br){
+        const prev = br.previousSibling;
+        if(!(prev && prev.nodeType === 3 && /\s$/.test(prev.nodeValue))) br.before(' ');
+      });
+      if(document.body.classList.contains('is-section-view')){
+        card.removeAttribute('role');
+        card.removeAttribute('tabindex');
+      } else {
+        card.setAttribute('role', 'button');
+        card.tabIndex = 0;
+      }
+    });
+  }
+
   /* hash ที่ชี้ element ข้างใน section (เช่น #plan-a) — คืน element นั้น ถ้าชี้ section เองคืน null */
   function innerTarget(sections, id){
     const el = id && document.getElementById(id);
@@ -662,10 +684,30 @@
     return sections.find(function(s){ return s.contains(el); }) ? el : null;
   }
 
+  /* Read More — ส่วนที่มีแต่ย่อหน้า (research.html Overview / OJED) ตอนเปิดทั้งหน้า CSS ตัดเหลือ 2 บรรทัด (READ MORE ใน site.css)
+     ปุ่มเป็นลิงก์ #id ของ section → ตัวกรอง section เปิดหน้าย่อยที่เห็นข้อความเต็ม (เจ้าของเว็บขอ ต.ค. 2026)
+     หน้าตา/ขนาดเดียวกับปุ่ม Read More หน้า Home (.btn-base.is-outline + ลูกศร) — แก้ที่ index.html แล้วแก้ตรงนี้ด้วย
+     ใส่ด้วยสคริปต์เพราะ section มาจากบล็อก DB ที่ cms.js เขียนทับ จึงเรียกจาก filterSections (cms.js เรียกซ้ำหลัง render)
+     และตรวจหาปุ่มในลูกทุกครั้ง ไม่ติด marker ที่ section */
+  /* activities.html — การ์ดกิจกรรม / ประกาศ / ปฏิทิน ตอนเปิดทั้งหน้าเหลือ 4 รายการ ปุ่มพาไปหน้าย่อยที่เห็นครบ (ACTIVITIES ใน site.css) */
+  /* forms-and-links.html — แบบเดียวกัน: ส่วนที่มีแต่ย่อหน้าตัด 2 บรรทัด, ส่วนที่มีการ์ดเหลือ 4 ใบ (FORMS & LINKS ใน site.css) */
+  const READ_MORE = '#research-overview, #tefl-research-ojed, #recent-activities, #announcements, #calendar, ' +
+    '#request-forms, #thesis-forms, #research-collaboration-letters, #graduation-request, #useful-links, ' +
+    '#faqs-applicants, #faqs-students';   /* faqs.html — 4 คำถามแรก (FAQS ใน site.css) */
+  function addReadMore(){
+    document.querySelectorAll(READ_MORE).forEach(function(section){
+      if(section.querySelector(':scope > .read-more-wrap')) return;
+      section.insertAdjacentHTML('beforeend',
+        '<div class="read-more-wrap"><a href="#' + section.id + '" class="btn-base is-outline read-more">Read More' +
+        '<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a></div>');
+    });
+  }
+
   function filterSections(fromHashChange){
     const content = document.querySelector('.page-wrap .content');
     if(!content) return;
     tagPlanCards();
+    addReadMore();
     const sections = Array.from(content.querySelectorAll(':scope > section[id]'));
     let id = '';
     try { id = decodeURIComponent(location.hash.slice(1)); } catch(e){}
@@ -681,6 +723,8 @@
     /* เปิดทั้งหน้า — CSS ใช้ย่อบางส่วนให้สั้น (เช่นการ์ด Study Plan เหลือแค่ป้ายกับชื่อแผน)
        เป็นคลาสแยก ไม่ใช้ :not(.is-section-view) เพราะไม่มี JS ต้องเห็นเนื้อหาเต็ม (การ์ดย่อแล้วกดเปิดแผ่นไม่ได้) */
     document.body.classList.toggle('is-page-view', !group);
+    /* หลังใส่คลาสมุมมอง — tagStepCards ดูว่าเป็นหน้าย่อยหรือไม่ */
+    tagStepCards();
     updateCrumb(group && group.label);
     renderSectionTabs(content, groups, group);
 
@@ -704,12 +748,6 @@
         inner.classList.remove('is-target');
         void inner.offsetWidth;
         inner.classList.add('is-target');
-      }
-      /* เมนู Plan A / Plan B เปิดแผ่นรายละเอียดเลย — จำ hash ไว้ ไม่ให้เปิดซ้ำตอน cms.js render ใหม่
-         (ไม่งั้นผู้ใช้ปิดไปแล้วแผ่นจะเด้งกลับขึ้นมา) */
-      if(inner.classList.contains('plan-card') && (fromHashChange === true || sheetHash !== location.hash)){
-        sheetHash = location.hash;
-        openSheet(inner);
       }
     }
   }
@@ -783,7 +821,7 @@
      ผูก event ไว้ที่ document แล้วหาแท็บสด ๆ ทุกครั้ง ไม่เก็บ element ไว้
      เพราะ cms.js เขียนทับ innerHTML ของ section ทั้งก้อน ถ้าผูกกับปุ่มตรง ๆ แท็บจะกดไม่ติดหลัง render
      (กับดักเดียวกับ hero/carousel ใน CLAUDE.md) — แบบนี้จึงไม่ต้องมี rebind hook ใน cms.js
-     ลิงก์ที่มี data-tab-open (ปุ่ม "See Plan B courses" ใน Study Plan) เปิดแท็บนั้นก่อน
+     ลิงก์ที่มี data-tab-open (การ์ดย่อของ List of Courses) เปิดแท็บนั้นก่อน
      แล้วปล่อยให้ hash พาไปที่ #list-of-courses ตามปกติ */
   function selectTab(tab, focus){
     const list = tab.closest('[role="tablist"]');
@@ -806,6 +844,23 @@
       if(target) selectTab(target);
     }
   });
+  /* การ์ดค่าเล่าเรียนตอนเปิดทั้งหน้า (ย่อเหลือชื่อ + ลูกศร) — กดแล้วไปดูยอดเต็มที่ #tuition-and-fees
+     การ์ดเป็น <article> จากบล็อก DB ไม่ใช่ลิงก์ จึงต้องพาไปด้วยสคริปต์; ผูกที่ document เพราะ cms.js เขียนการ์ดใหม่ */
+  document.addEventListener('click', function(event){
+    if(!document.body.classList.contains('is-page-view')) return;
+    if(event.target.closest('#tuition-and-fees .fee-card')) location.hash = 'tuition-and-fees';
+    /* admission.html — แถวตารางที่ CSS ย่อเป็นการ์ด (ADMISSION REQUIREMENTS / DEADLINE ใน site.css)
+       และการ์ด Application Steps ที่ CSS ย่อแบบเดียวกัน (APPLICATION STEPS ใน site.css) */
+    const row = event.target.closest('#admission-requirements tbody tr, #admission-deadline tbody tr, #application-steps .tile-card');
+    if(row) location.hash = row.closest('section').id;
+    /* research.html — การ์ดย่อ (RESEARCH ใน site.css): แถวตาราง Thesis และการ์ด Guidelines
+       การ์ด Guidelines เป็นลิงก์ไปหน้า Forms & Links — เปิดทั้งหน้ากดแล้วไปหน้าย่อยก่อน (เหมือนการ์ดย่ออื่น) ลิงก์ใช้ได้ในหน้าย่อย */
+    const card = event.target.closest('#tefl-research-thesis tbody tr, #research-guidelines .tile-card');
+    if(card && !event.metaKey && !event.ctrlKey && !event.shiftKey){
+      event.preventDefault();
+      location.hash = card.closest('section').id;
+    }
+  });
   /* ลูกศรซ้าย/ขวา Home/End ย้ายระหว่างแท็บ ตามแบบแผน ARIA tabs (Tab ปกติข้ามไปที่ตารางเลย) */
   document.addEventListener('keydown', function(event){
     const tab = event.target.closest && event.target.closest('.plan-tabs [role="tab"]');
@@ -818,136 +873,315 @@
     selectTab(tabs[(next + tabs.length) % tabs.length], true);
   });
 
-  /* ============ PLAN SHEET — กดการ์ดแผนใน Study Plan แล้วรายละเอียดเลื่อนขึ้นจากล่าง (academics.html) ============
-     แทนที่การกระโดดไป List of Courses: แผ่นล่าง (bottom sheet) แสดงรายละเอียดแผน + ตารางวิชาบังคับของแผนนั้น
-     เนื้อหาโคลนสด ๆ จากการ์ดและตารางในหน้าทุกครั้งที่เปิด ไม่ได้เก็บไว้ในโค้ด
-     — การ์ดมาจากบล็อก academics/study-plan ตารางมาจาก collection courses ใน DB แก้ใน /admin แล้วแผ่นนี้ตามเอง
-     ตารางหาจาก data-tab-open ของลิงก์ "See Plan X courses" ในการ์ด (ชี้ id ของ tabpanel ใน List of Courses)
-     ผูก event ที่ document และหา element สดทุกครั้ง เพราะ cms.js เขียนทับ section ทั้งก้อน (ดู CLAUDE.md)
-     ตัวแผ่นเองต่อท้าย <body> ไม่ได้อยู่ในบล็อกไหน จึงไม่โดนเขียนทับ — สร้างครั้งเดียวตอนเปิดครั้งแรก
-     ไม่มี JS = ลิงก์ยังพาไป #list-of-courses ตามเดิม */
-  /* var ไม่ใช่ let — filterSections ด้านบนเรียก openSheet ตอนโหลดหน้า ก่อนบรรทัดนี้จะทำงาน
-     ถ้าเป็น let จะติด TDZ (ReferenceError) แล้วตัวกรอง section พังทั้งหน้า */
-  var sheet = null;
-  var sheetReturn = null;
-  var sheetHash = '';
-
-  function buildSheet(){
-    sheet = document.createElement('div');
-    sheet.className = 'plan-sheet';
-    sheet.hidden = true;
-    sheet.innerHTML =
-      '<div class="ps-backdrop" data-sheet-close></div>' +
-      '<div class="ps-panel" role="dialog" aria-modal="true" aria-labelledby="planSheetTitle">' +
-        '<div class="ps-grab" aria-hidden="true"><span></span></div>' +
-        '<button type="button" class="ps-close" data-sheet-close aria-label="Close">' +
-          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>' +
-        '<div class="ps-body"></div>' +
-      '</div>';
-    document.body.appendChild(sheet);
-    sheet.addEventListener('click', function(event){
-      if(event.target.closest('[data-sheet-close]')) closeSheet();
-    });
-    /* ลากที่จับ (หรือหัวแผ่น) ลงเพื่อปิด แบบแผ่นล่างบนมือถือ — ลากเกิน 90px ปิด ไม่ถึงเด้งกลับ */
-    const panel = sheet.querySelector('.ps-panel');
-    let startY = null, dy = 0;
-    panel.addEventListener('pointerdown', function(event){
-      if(!event.target.closest('.ps-grab')) return;
-      startY = event.clientY; dy = 0;
-      panel.setPointerCapture(event.pointerId);
-      panel.style.transition = 'none';
-    });
-    panel.addEventListener('pointermove', function(event){
-      if(startY === null) return;
-      dy = Math.max(0, event.clientY - startY);
-      /* คง -50% แนวนอนไว้ — แผ่นจัดกลางด้วย left:50% + translate (ดู PLAN SHEET ใน site.css) */
-      panel.style.transform = 'translate(-50%,' + dy + 'px)';
-    });
-    const release = function(){
-      if(startY === null) return;
-      startY = null;
-      panel.style.transition = '';
-      panel.style.transform = '';
-      if(dy > 90) closeSheet();
-    };
-    panel.addEventListener('pointerup', release);
-    panel.addEventListener('pointercancel', release);
-  }
-
-  function openSheet(card){
-    if(!sheet) buildSheet();
-    const pick = function(sel){ const el = card.querySelector(sel); return el ? el.cloneNode(true) : null; };
-    const link = card.querySelector('[data-tab-open]');
-    const panelEl = link && document.getElementById(link.getAttribute('data-tab-open'));
-    const table = panelEl && panelEl.querySelector('table');
-    const body = sheet.querySelector('.ps-body');
-    body.innerHTML = '';
-
-    const head = document.createElement('div');
-    head.className = 'ps-head';
-    const name = card.querySelector('.p-name');
-    const title = document.createElement('h2');
-    title.id = 'planSheetTitle';
-    title.textContent = name ? name.textContent.trim() : '';
-    const label = pick('.p-label');
-    if(label){ label.className = 'ps-tag'; head.appendChild(label); }
-    head.appendChild(title);
-    const credits = pick('.p-credits');
-    if(credits){
-      credits.className = 'ps-credits';
-      /* บนการ์ดหน่วยตัดเป็นสองบรรทัดด้วย <br> — ในแผ่นอยู่บรรทัดเดียว เปลี่ยนเป็นช่องว่าง (ซ่อน br เฉย ๆ คำจะติดกัน) */
-      credits.querySelectorAll('br').forEach(function(br){ br.replaceWith(' '); });
-      head.appendChild(credits);
-    }
-    body.appendChild(head);
-
-    const desc = pick('.p-desc');
-    if(desc){ desc.className = 'ps-desc'; body.appendChild(desc); }
-    const facts = pick('.p-facts');
-    if(facts){ facts.className = 'ps-facts'; body.appendChild(facts); }
-    if(table){
-      const h = document.createElement('h3');
-      h.className = 'ps-sub';
-      h.textContent = 'Required courses';
-      const wrap = document.createElement('div');
-      wrap.className = 'table-wrap';
-      wrap.appendChild(table.cloneNode(true));
-      body.appendChild(h);
-      body.appendChild(wrap);
-    }
-
-    sheetReturn = document.activeElement;
-    sheet.hidden = false;
-    document.documentElement.classList.add('sheet-open');
-    /* อ่าน offsetWidth บังคับให้เบราว์เซอร์คำนวณสถานะปิดก่อน แล้วค่อยใส่ .is-open ไม่งั้นไม่เห็นแผ่นเลื่อนขึ้น
-       (ไม่ใช้ requestAnimationFrame — แท็บพื้นหลัง/headless ไม่ยิง rAF แผ่นจะค้างเป็นจอใส ๆ บังหน้าทั้งหน้า) */
-    void sheet.offsetWidth;
-    sheet.classList.add('is-open');
-    sheet.querySelector('.ps-panel').scrollTop = 0;
-    sheet.querySelector('.ps-close').focus({ preventScroll:true });
-  }
-
-  function closeSheet(){
-    if(!sheet || sheet.hidden) return;
-    sheet.classList.remove('is-open');
-    document.documentElement.classList.remove('sheet-open');
-    setTimeout(function(){ if(!sheet.classList.contains('is-open')) sheet.hidden = true; }, 320);
-    if(sheetReturn && sheetReturn.focus) sheetReturn.focus({ preventScroll:true });
-  }
-
-  /* ทั้งการ์ดกดได้ (ไม่ใช่แค่ลิงก์ล่างการ์ด) — แต่ถ้ากำลังลากเลือกข้อความอยู่ ไม่เปิด */
+  /* ============ STUDY PLAN — กดการ์ดย่อแล้วไปหน้าย่อยของแผนนั้น (academics.html) ============
+     เปิดทั้งหน้า การ์ด Plan A / Plan B ถูกย่อ (ดู STUDY PLAN ใน site.css) — กดทั้งใบ = ไป #plan-a / #plan-b
+     ตัวกรอง section แสดงกลุ่ม Study Plan เลื่อนไปที่การ์ดแล้วกระพริบกรอบ และการ์ดในหน้าย่อยแสดงรายละเอียดเต็ม
+     หน้าย่อย (is-section-view) การ์ดไม่ใช่ลิงก์ — กดแล้วไม่ทำอะไร เลือกข้อความได้ตามปกติ
+     ผูกที่ document เพราะ cms.js เขียนทับ section ทั้งก้อน (ดู CLAUDE.md) · id มาจาก tagPlanCards */
   document.addEventListener('click', function(event){
+    if(!document.body.classList.contains('is-page-view')) return;
     const card = event.target.closest('#study-plan .plan-card');
-    if(!card || event.metaKey || event.ctrlKey || event.shiftKey) return;
-    const sel = window.getSelection && String(window.getSelection());
-    if(sel && !event.target.closest('a')) return;
+    if(!card || !card.id || event.metaKey || event.ctrlKey || event.shiftKey) return;
     event.preventDefault();
-    event.stopPropagation();
-    openSheet(card);
-  }, true);
-  document.addEventListener('keydown', function(event){
-    if(event.key === 'Escape') closeSheet();
+    location.hash = card.id;
   });
+
+  /* ============ APPLICATION STEPS — Enter/Space บนการ์ดย่อ = ไปหน้าย่อย (admission.html) ============
+     การ์ดเป็น <div role="button"> (tagStepCards) — คลิกจัดการในตัวจัดการค่าเล่าเรียน/แถวตารางด้านบน
+     ผูกที่ document เพราะ cms.js เขียนทับ section ทั้งก้อน (ดู CLAUDE.md) */
+  document.addEventListener('keydown', function(event){
+    if(event.key !== 'Enter' && event.key !== ' ') return;
+    if(!document.body.classList.contains('is-page-view')) return;
+    const card = event.target.closest && event.target.closest('#application-steps .tile-card');
+    if(!card) return;
+    event.preventDefault();
+    location.hash = 'application-steps';
+  });
+
+  /* ============ EVENT CALENDAR — ปฏิทินกิจกรรมแบบกดได้ (activities.html#calendar) ============
+     ข้อมูลมาจากรายการ .ev-item ใน .ev-list[data-cms="events"] (cms.js / sync-content.py เขียนไว้)
+     ไม่ได้ fetch เอง — รายการนั้นคือฉบับไม่มี JS อยู่แล้ว ใช้เป็นแหล่งข้อมูลเดียวกันจึงไม่มีทางไม่ตรงกัน
+     สร้าง .evc ไว้หน้ารายการแล้วซ่อนรายการเดิม (.is-enhanced) การ์ดในปฏิทินคือ "โคลน" ของการ์ดเดิม
+     หน้าตาการ์ดจึงมีที่เดียวคือ site.css
+
+     มุมมอง "รายการ" — แถบวัน 14 วัน แสดงกิจกรรมตั้งแต่วันที่เลือกถึงท้ายแถบ จัดกลุ่มตามวัน
+       กิจกรรมหลายวันแสดงครั้งเดียว ใต้วันแรกที่อยู่ในช่วง ไม่ซ้ำทุกวัน (ค่ายสองสัปดาห์จะท่วมรายการ)
+     มุมมอง "เดือน" — ตาราง 7 คอลัมน์ กดวันไหนก็สลับไปมุมมองรายการที่วันนั้น
+     ปุ่มกรองผู้จัด (TEFL / EDU / CHULA) และช่องค้นหาใช้กับทั้งสองมุมมอง
+
+     cms.js เขียนการ์ดใหม่หลังโหลด → เรียก TEFLEventCalInit อีกรอบ ซึ่งลบ .evc เก่าแล้วสร้างใหม่ทั้งก้อน
+     (บล็อก activities/calendar เขียนทับ section ก็ลบ .evc ไปด้วย ไม่มี listener ค้าง เพราะผูกไว้ที่ .evc เอง) */
+  const EVC_SRC = [['all', 'All', 'All organisers'], ['tefl', 'TEFL', 'TEFL Program'],
+                   ['edu', 'EDU', 'Faculty of Education'], ['chula', 'CHULA', 'Chulalongkorn University']];
+  const EVC_MONTHS = ['January','February','March','April','May','June','July',
+                      'August','September','October','November','December'];
+  const EVC_DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const EVC_DOW_LONG = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const EVC_STRIP = 14;
+  const EVC_ICON = {
+    list:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/></svg>',
+    month:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M7.5 13h2M11 13h2M14.5 13h2M7.5 17h2M11 17h2"/></svg>',
+    search:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+    prev:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg>',
+    next:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>'
+  };
+
+  /* วันที่เก็บเป็นสตริง yyyy-mm-dd ตลอด เทียบกันด้วย < > ได้ตรง ๆ และไม่โดนเขตเวลาเลื่อนวัน */
+  function evcIso(d){
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function evcDate(iso){ const p = iso.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function evcAdd(iso, n){ const d = evcDate(iso); d.setDate(d.getDate() + n); return evcIso(d); }
+  function evcLabel(iso){ const d = evcDate(iso); return d.getDate() + ' ' + EVC_MONTHS[d.getMonth()].slice(0, 3) + ' ' + d.getFullYear(); }
+  function evcEsc(s){ return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+  /* เปิดทั้งหน้า (activities.html) ปฏิทินเหลือแค่ 4 กิจกรรมที่กำลังจะมาถึง (เจ้าของเว็บขอ ต.ค. 2026)
+     ติด .is-upcoming ให้การ์ดในรายการเดิม (ฉบับไม่มี JS) แล้ว CSS แสดงรายการนั้นแทนปฏิทินแบบกดได้เฉพาะตอน is-page-view
+     "กำลังจะมาถึง" = วันจบ ≥ วันนี้ จึงรวมกิจกรรมที่กำลังจัดอยู่ด้วย · รายการเรียงตามวันเริ่มอยู่แล้ว (cms.js / sync) เอา 4 ใบแรกได้เลย
+     ไม่มีกิจกรรมข้างหน้า → ใส่ข้อความแจ้ง (รายการถูกเขียนใหม่ทุกครั้งที่ cms.js render ข้อความเก่าจึงหายไปเอง) */
+  const EV_UPCOMING = 4;
+  function tagUpcomingEvents(list){
+    const today = evcIso(new Date());
+    let left = EV_UPCOMING;
+    list.querySelectorAll('.ev-item[data-start]').forEach(function(node){
+      const on = left > 0 && (node.dataset.end || node.dataset.start) >= today;
+      node.classList.toggle('is-upcoming', on);
+      if(on) left--;
+    });
+    const none = list.querySelector('.ev-none');
+    if(left === EV_UPCOMING && !none) list.insertAdjacentHTML('beforeend', '<p class="ev-none">No upcoming events at the moment.</p>');
+    if(left < EV_UPCOMING && none) none.remove();
+  }
+
+  function initEventCal(){
+    const list = document.querySelector('.ev-list[data-cms="events"]');
+    if(!list) return;
+    tagUpcomingEvents(list);
+    const old = list.parentNode.querySelector('.evc');
+    if(old) old.remove();
+    const events = Array.prototype.map.call(list.querySelectorAll('.ev-item[data-start]'), function(node){
+      return { node:node, start:node.dataset.start, end:node.dataset.end || node.dataset.start,
+               src:node.dataset.src || 'tefl', text:node.textContent.toLowerCase() };
+    });
+    /* รายการเก่าที่ยังไม่มี data-start (ไฟล์ที่ sync ก่อนมีฟีเจอร์นี้) — ปล่อยฉบับไม่มี JS ไว้ตามเดิม */
+    if(!events.length){ list.classList.remove('is-enhanced'); return; }
+
+    const today = evcIso(new Date());
+    const st = { view:'list', src:'all', q:'', sel:today, from:today };
+
+    const root = document.createElement('div');
+    root.className = 'evc';
+    root.innerHTML =
+      '<div class="evc-top">' +
+        '<div class="evc-chips" role="group" aria-label="Filter by organiser">' +
+          EVC_SRC.map(function(s){
+            return '<button type="button" class="evc-chip is-' + s[0] + '" data-src="' + s[0] + '" title="' + s[2] + '">' +
+              '<span class="evc-dot" aria-hidden="true"></span>' + s[1] + '</button>';
+          }).join('') +
+        '</div>' +
+        '<div class="evc-tools">' +
+          '<label class="evc-search"><span class="sr-only">Search events</span>' + EVC_ICON.search +
+            '<input type="search" placeholder="Search events" autocomplete="off"></label>' +
+          '<div class="evc-views" role="group" aria-label="View">' +
+            '<button type="button" data-view="list">' + EVC_ICON.list + '<span>List</span></button>' +
+            '<button type="button" data-view="month">' + EVC_ICON.month + '<span>Month</span></button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="evc-panel">' +
+        '<div class="evc-bar">' +
+          '<label class="evc-month"><span class="sr-only">Month</span><select></select></label>' +
+          '<div class="evc-nav">' +
+            '<button type="button" class="evc-btn" data-step="-1" aria-label="Previous month">' + EVC_ICON.prev + '</button>' +
+            '<button type="button" class="evc-btn evc-today" data-today>Today</button>' +
+            '<button type="button" class="evc-btn" data-step="1" aria-label="Next month">' + EVC_ICON.next + '</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="evc-strip">' +
+          '<button type="button" class="evc-shift" data-shift="-7" aria-label="Previous week">' + EVC_ICON.prev + '</button>' +
+          '<div class="evc-days"></div>' +
+          '<button type="button" class="evc-shift" data-shift="7" aria-label="Next week">' + EVC_ICON.next + '</button>' +
+        '</div>' +
+        '<p class="evc-status sr-only" aria-live="polite"></p>' +
+        '<div class="evc-body"></div>' +
+      '</div>';
+
+    const sel = root.querySelector('select');
+    const days = root.querySelector('.evc-days');
+    const body = root.querySelector('.evc-body');
+    const status = root.querySelector('.evc-status');
+
+    /* ตัวเลือกเดือน: ครอบทุกเดือนที่มีกิจกรรม และอย่างน้อย 6 เดือนก่อน–12 เดือนหลังวันนี้ */
+    const firstIso = events.reduce(function(a, e){ return e.start < a ? e.start : a; }, evcAdd(today, -183));
+    const lastIso = events.reduce(function(a, e){ return e.end > a ? e.end : a; }, evcAdd(today, 365));
+    function monthKey(iso){ return iso.slice(0, 7); }
+    function fillMonths(){
+      let opts = '', d = evcDate(firstIso.slice(0, 8) + '01');
+      const stop = monthKey(lastIso);
+      while(monthKey(evcIso(d)) <= stop){
+        opts += '<option value="' + monthKey(evcIso(d)) + '">' + EVC_MONTHS[d.getMonth()] + ' ' + d.getFullYear() + '</option>';
+        d.setMonth(d.getMonth() + 1);
+      }
+      sel.innerHTML = opts;
+    }
+    fillMonths();
+
+    function visible(){
+      return events.filter(function(e){
+        return (st.src === 'all' || e.src === st.src) && (!st.q || e.text.indexOf(st.q) !== -1);
+      });
+    }
+    function on(e, iso){ return e.start <= iso && e.end >= iso; }
+
+    /* ไปที่เดือน: ถ้าเป็นเดือนนี้ให้เลือกวันนี้ ไม่งั้นวันที่ 1 */
+    function goMonth(key){
+      const iso = key === monthKey(today) ? today : key + '-01';
+      st.sel = st.from = iso;
+      render();
+    }
+
+    function card(e){
+      const c = e.node.cloneNode(true);
+      c.removeAttribute('id');
+      return c.outerHTML;
+    }
+    function dayGroup(iso, cards){
+      return '<div class="evc-day' + (iso === today ? ' is-today' : '') + '">' +
+        '<p class="evc-day-h"><time datetime="' + iso + '">' + evcLabel(iso) + '</time>' +
+        '<span>' + (iso === today ? 'Today' : EVC_DOW_LONG[evcDate(iso).getDay()]) + '</span></p>' +
+        cards + '</div>';
+    }
+
+    function renderStrip(vis){
+      let out = '';
+      for(let i = 0; i < EVC_STRIP; i++){
+        const iso = evcAdd(st.from, i);
+        const d = evcDate(iso);
+        const has = vis.some(function(e){ return on(e, iso); });
+        out += '<button type="button" class="evc-dayb' + (has ? ' has-ev' : '') + (iso === today ? ' is-today' : '') +
+          (iso === st.sel ? ' is-sel' : '') + '" data-day="' + iso + '" aria-pressed="' + (iso === st.sel) + '"' +
+          ' aria-label="' + EVC_DOW_LONG[d.getDay()] + ' ' + evcLabel(iso) + (has ? ', has events' : '') + '">' +
+          '<span class="evc-dow">' + EVC_DOW[d.getDay()] + '</span><span class="evc-num">' + d.getDate() + '</span></button>';
+      }
+      days.innerHTML = out;
+    }
+
+    function renderList(vis){
+      /* ค้นหาอยู่ = ไม่สนแถบวัน แสดงทุกผลลัพธ์ตามวันเริ่ม */
+      if(st.q){
+        if(!vis.length) return empty('No events match “' + st.q + '”.', null);
+        let out = '', cur = '', buf = '';
+        vis.forEach(function(e){
+          if(e.start !== cur){ if(buf) out += dayGroup(cur, buf); cur = e.start; buf = ''; }
+          buf += card(e);
+        });
+        status.textContent = vis.length + (vis.length === 1 ? ' event found' : ' events found');
+        return out + dayGroup(cur, buf);
+      }
+      const stop = evcAdd(st.from, EVC_STRIP - 1);
+      const shown = new Set();
+      let out = '', count = 0;
+      for(let iso = st.sel; iso <= stop; iso = evcAdd(iso, 1)){
+        const todays = vis.filter(function(e){ return !shown.has(e) && on(e, iso); });
+        if(!todays.length) continue;
+        todays.forEach(function(e){ shown.add(e); });
+        count += todays.length;
+        out += dayGroup(iso, todays.map(card).join(''));
+      }
+      if(count){
+        status.textContent = count + (count === 1 ? ' event' : ' events') + ' from ' + evcLabel(st.sel) + ' to ' + evcLabel(stop);
+        return out;
+      }
+      /* ช่วงนี้ว่าง — ชี้ไปกิจกรรมถัดไป หรือถ้าไม่มีแล้ว ชี้ไปกิจกรรมล่าสุดที่ผ่านมา */
+      const next = vis.filter(function(e){ return e.start > stop; })[0];
+      const prev = vis.filter(function(e){ return e.end < st.sel; }).pop();
+      const jump = next ? ['Next event: ' + evcLabel(next.start), next.start]
+                 : prev ? ['Latest event: ' + evcLabel(prev.start), prev.start] : null;
+      return empty('No events between ' + evcLabel(st.sel) + ' and ' + evcLabel(stop) + '.', jump);
+    }
+    function empty(msg, jump){
+      status.textContent = msg;
+      return '<div class="evc-empty"><p>' + evcEsc(msg) + '</p>' +
+        (jump ? '<button type="button" class="btn-base is-outline" data-jump="' + jump[1] + '">' + jump[0] + '</button>' : '') +
+        '</div>';
+    }
+
+    function renderMonth(vis){
+      const key = monthKey(st.sel);
+      const first = evcDate(key + '-01');
+      const start = evcAdd(key + '-01', -first.getDay());
+      const name = sel.options[sel.selectedIndex].text;
+      let out = '<div class="evc-grid"><div class="evc-row evc-head" aria-hidden="true">' +
+        EVC_DOW.map(function(d){ return '<span>' + d + '</span>'; }).join('') + '</div>';
+      for(let w = 0; w < 6; w++){
+        const weekStart = evcAdd(start, w * 7);
+        if(w > 3 && monthKey(weekStart) !== key) break;   /* ไม่ต้องมีแถวสุดท้ายที่เป็นเดือนหน้าทั้งแถว */
+        out += '<div class="evc-row">';
+        for(let i = 0; i < 7; i++){
+          const iso = evcAdd(weekStart, i);
+          const todays = vis.filter(function(e){ return on(e, iso); });
+          out += '<button type="button" class="evc-cell' + (monthKey(iso) !== key ? ' is-out' : '') +
+            (iso === today ? ' is-today' : '') + (todays.length ? ' has-ev' : '') + '" data-pick="' + iso + '"' +
+            ' aria-label="' + evcLabel(iso) + (todays.length ? ', ' + todays.length + (todays.length === 1 ? ' event' : ' events') : '') + '">' +
+            '<span class="evc-num">' + evcDate(iso).getDate() + '</span>' +
+            todays.slice(0, 2).map(function(e){
+              return '<span class="evc-pill is-' + e.src + '">' + evcEsc(e.node.querySelector('h3').textContent) + '</span>';
+            }).join('') +
+            (todays.length > 2 ? '<span class="evc-more">+' + (todays.length - 2) + ' more</span>' : '') +
+            '</button>';
+        }
+        out += '</div>';
+      }
+      const monthEnd = evcAdd(monthKey(evcAdd(key + '-28', 7)) + '-01', -1);
+      const total = vis.filter(function(e){ return e.start <= monthEnd && e.end >= key + '-01'; }).length;
+      status.textContent = total + (total === 1 ? ' event' : ' events') + ' in ' + name;
+      return out + '</div>';
+    }
+
+    function render(){
+      const vis = visible();
+      sel.value = monthKey(st.sel);
+      root.classList.toggle('is-month', st.view === 'month');
+      root.classList.toggle('is-searching', !!st.q);
+      root.querySelectorAll('[data-view]').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.view === st.view); });
+      root.querySelectorAll('[data-src]').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.src === st.src); });
+      if(st.view === 'list') renderStrip(vis);
+      body.innerHTML = st.view === 'month' ? renderMonth(vis) : renderList(vis);
+    }
+
+    root.addEventListener('click', function(event){
+      const b = event.target.closest('button');
+      if(!b || !root.contains(b)) return;
+      if(b.dataset.src){ st.src = b.dataset.src; }
+      else if(b.dataset.view){ st.view = b.dataset.view; }
+      else if(b.dataset.step){
+        const d = evcDate(monthKey(st.sel) + '-01');
+        d.setMonth(d.getMonth() + +b.dataset.step);
+        return goMonth(monthKey(evcIso(d)));
+      }
+      else if(b.hasAttribute('data-today')){ st.sel = st.from = today; }
+      else if(b.dataset.shift){
+        st.from = evcAdd(st.from, +b.dataset.shift);
+        if(st.sel < st.from || st.sel > evcAdd(st.from, EVC_STRIP - 1)) st.sel = st.from;
+      }
+      else if(b.dataset.day){ st.sel = b.dataset.day; }
+      else if(b.dataset.pick){ st.view = 'list'; st.sel = st.from = b.dataset.pick; }
+      else if(b.dataset.jump){ st.q = ''; root.querySelector('input').value = ''; st.sel = st.from = b.dataset.jump; }
+      else return;
+      render();
+    });
+    sel.addEventListener('change', function(){ goMonth(sel.value); });
+    root.querySelector('input').addEventListener('input', function(event){
+      st.q = event.target.value.trim().toLowerCase();
+      render();
+    });
+
+    list.parentNode.insertBefore(root, list);
+    list.classList.add('is-enhanced');
+    render();
+  }
+  initEventCal();
+  window.TEFLEventCalInit = initEventCal;   /* cms.js เรียกหลังเขียนการ์ดกิจกรรมใหม่ */
 
   /* ============ KEYBOARD: Esc ปิดเมนู/ค้นหา ============ */
   document.addEventListener('keydown', function(event){

@@ -242,31 +242,45 @@
   .discover{
     padding:clamp(40px,4.2vw,58px) 24px clamp(44px,4.6vw,62px);
     background:#fff;
+    overflow-x:hidden;              /* แถบการ์ดยื่นเลยขอบขวาไปถึงขอบจอ — กันไม่ให้ทั้งหน้าเลื่อนแนวนอนตาม */
   }
   .discover .inner{
-    max-width:1180px;
+    max-width:1132px;               /* = ความกว้างเนื้อหาของ Latest News (.nc-inner 1180 ลบ padding 24×2)
+                                       การ์ดสองส่วนจึงกว้างเท่ากันและขอบซ้ายตรงกัน */
     margin:0 auto;
+    container-type:inline-size;     /* ให้การ์ดคิดความกว้างจาก cqw ของกล่องนี้ (แบบเดียวกับ .photo-cards .nc-inner) */
   }
   /* หัวข้อใช้คอมโพเนนต์ .section-head ร่วมกับส่วนอื่น */
   .discover .section-head{margin-bottom:clamp(20px,2.4vw,30px);}
 
+  /* แถบเลื่อนแนวนอน การ์ดขนาดเท่าการ์ด Latest News (.photo-cards ใน site.css) ทุกจุดตัด
+     การ์ดมี 5 ใบ แต่ขนาดนี้วางได้แถวละ 4 — ผู้ดูแลเลือกให้เลื่อนดูใบที่ 5 แทนการตัดขึ้นแถวใหม่ (ต.ค. 2026)
+     แก้ขนาดการ์ดข่าวเมื่อไร ต้องแก้ --c-cols/ช่องไฟ/aspect-ratio ตรงนี้ให้ตรงกันด้วย */
   .course-index{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:clamp(14px,1.6vw,22px);
+    --c-cols:4;
+    display:flex;
+    gap:24px;
+    margin-right:calc(50% - 50vw);  /* ยื่นถึงขอบขวาจอ ให้เห็นใบถัดไปโผล่มา = บอกว่าเลื่อนได้ */
+    padding:10px 24px 28px 0;       /* เผื่อที่ให้การ์ดยกตัว + เงาตอน hover ไม่โดนตัด (overflow-x:auto ตัดแนวตั้งด้วย) */
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    overscroll-behavior-x:contain;
+    scrollbar-width:none;
   }
+  .course-index::-webkit-scrollbar{display:none;}
   .course-cta{
     display:flex;
     justify-content:center;
-    margin-top:clamp(18px,2.2vw,26px);
+    margin-top:0;                   /* ช่องว่างมาจาก padding ล่างของ .course-index แล้ว */
   }
   /* การ์ดรูปแนวตั้ง: รูปเต็มใบ + ม่านมืดไล่จากบน ตัวอักษรขาวอยู่บน ปุ่ม + อยู่มุมล่างขวา */
   .course-card{
     position:relative;
     display:block;
-    aspect-ratio:4/5;               /* ทรงสูงพอดี ๆ: รูปแนวนอน 3:2 เห็นราว 53% ของความกว้าง
-                                       3:4 สูงไปจนคนในรูปดูถูกซูมเข้า, 1:1 เตี้ยไป — ผู้ดูแลเลือกตรงกลาง */
-    border-radius:18px;
+    flex:0 0 calc((100cqw - (var(--c-cols) - 1) * 24px) / var(--c-cols));
+    scroll-snap-align:start;
+    aspect-ratio:3/4;               /* เท่าการ์ด Latest News — ผู้ดูแลขอให้สองส่วนนี้ขนาดเดียวกัน */
+    border-radius:22px;
     overflow:hidden;
     background:#2b2b30;             /* กันขาวแวบตอนรูปยังโหลดไม่เสร็จ */
     box-shadow:0 6px 18px rgba(43,43,43,.14);
@@ -343,16 +357,15 @@
     .course-card:hover .c-photo{transform:none;}
   }
 
+  /* จุดตัดเดียวกับ .photo-cards ใน site.css */
   @media (max-width:1024px){
-    .course-index{grid-template-columns:repeat(3,1fr);}
+    .course-index{--c-cols:3;}
   }
-  @media (max-width:760px){
-    .course-index{grid-template-columns:repeat(2,1fr);}
+  @media (max-width:768px){
+    .course-index{--c-cols:2;}
   }
-  @media (max-width:460px){
-    .course-index{grid-template-columns:1fr;}
-    .course-card{aspect-ratio:16/10;}
-    .course-card .c-body{padding:18px 16px 0;max-width:74%;}
+  @media (max-width:560px){
+    .course-card{flex:0 0 72vw;}
   }
 
   /* ============ PROGRAM BLOCKS ============ */
@@ -662,7 +675,12 @@
   .intro-about,
   .faq{display:none;}
 
-  /* LATEST NEWS — การ์ดรูปเต็มใบ ย้ายไป site.css แล้ว (บล็อก PHOTO CARDS) ใช้ร่วมกับ activities.html */
+  /* LATEST NEWS — การ์ดรูปเต็มใบ ย้ายไป site.css แล้ว (บล็อก PHOTO CARDS) ใช้ร่วมกับ activities.html
+     เฉพาะหน้าแรก: ขนาดตัวอักษรให้เท่าการ์ด Courses (.course-card h5 / p) ที่อยู่ติดกัน
+     ทำที่นี่แทน site.css เพื่อไม่ให้การ์ดใน activities.html เปลี่ยนตาม */
+  #news.photo-cards .nc-body h3{font-size:clamp(19px,1.62vw,23.5px);line-height:1.3;}
+  #news.photo-cards .nc-date,
+  #news.photo-cards .nc-tag{font-size:14.5px;}
 </style>
 </head>
 <body>

@@ -71,12 +71,12 @@ Four features exist only after `site.js` runs — none of them are in the HTML:
   toggle button are created and appended to `<body>`, so every page that loads `site.js` gets them
   without editing that page.
 
-- **Plan sheet** (`academics.html`) — the bottom sheet opened by the Plan A / Plan B cards in Study Plan
-  (and the Plan A / Plan B menu items). Its content is cloned from the card and the matching course
-  tabpanel on every open, so it follows whatever `cms.js` rendered.
 - **Nav overview** (`explore.html`) — one group per top-level menu with a dropdown, one title-only tile
   per second-level item, rebuilt from `.main-nav` on load and again by `cms.js` after `renderNav()`
   (`window.TEFLNavOverview`). The tiles in the file are only the no-JS copy.
+- **Event calendar** (`activities.html#calendar`) — filter chips (TEFL / EDU / CHULA), search, a 14-day strip
+  with a by-day list, and a month grid, built from the `.ev-item[data-start]` cards cms.js renders and cloned
+  from them; the `.ev-list` itself becomes the hidden no-JS copy (`window.TEFLEventCalInit`).
 - **Section tabs** — the text strip under the banner on subpages with a submenu (not About, which opts
   out with `data-section-tabs="off"`), rebuilt by the section filter.
 
@@ -187,7 +187,7 @@ So after `renderBlocks()`, `cms.js` calls, in this order:
 - `window.TEFLPhotoStripInit()` — rebuilds the Goals photo strip (auto-scroll, swipe/drag, tap-to-view lightbox) from the section's `data-photo-strip` (`site.js`)
 - `renderNav()` → `window.TEFLDrawerRebuild()` — the mobile drawer is cloned from the nav at load,
   so a new nav needs a new drawer
-- collections fill, then a `resize` event — recomputes carousel dots and arrow states
+- collections fill (the events fill calls `window.TEFLEventCalInit()` — the calendar clones the cards), then a `resize` event — recomputes carousel dots and arrow states
 - `applySettings()` — must run **after** blocks, because its targets (footer social links,
   phone) live inside the `site/footer-*` blocks and would be overwritten otherwise
 - `window.TEFLSearchReindex()` — rebuilds the search index from the new nav, headings and footer
