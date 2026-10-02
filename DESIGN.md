@@ -443,12 +443,6 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
   · รูปผูกกับลำดับการ์ดด้วย `nth-child` → ตัวแปร `--card-img` (สลับลำดับการ์ดในบล็อกแล้วรูปจะสลับตาม) ไฟล์อยู่ `img/goals/`:
     Goals `card-teachers` (PRWEB-067) `card-research` (161) · Five Things `know-enrollment` (009) `know-grading` (150)
     `know-thesis` (034) `know-publication` (110) `know-exam` (162) — ห้ามใช้รูปที่อยู่ในแถบรูปเลื่อนซ้ำ
-- **Plan sheet (`.plan-sheet`) — academics.html #study-plan** กดการ์ด Plan A / Plan B (ทั้งใบ) หรือเมนู Plan A / Plan B
-  → แผ่นล่างเลื่อนขึ้นจากขอบล่างแทนการกระโดดไป List of Courses (ไม่มี JS ลิงก์ยังไป `#list-of-courses` ตามเดิม)
-  · พื้น `#faf7f3` มุมบนโค้ง 26px (≤560px 22px) กว้างสุด 760px สูงสุด 86vh เลื่อนในแผ่น · ที่จับ 46×5px ติดบน (ลากลง >90px ปิด) · ปุ่ม × กลม
-  · ป้าย Plan เป็นแคปซูล `#fde3da` ตัวส้มเข้ม · หัวข้อ `--font-display` · หน่วยกิต · คำอธิบาย · แถว facts · ตาราง "Required courses"
-  · **เนื้อหาโคลนสดจากการ์ดและ tabpanel ของ List of Courses ทุกครั้งที่เปิด** (หา tabpanel จาก `data-tab-open` ของลิงก์ในการ์ด) — แก้ใน /admin แล้วแผ่นตามเอง
-  · ปิดได้ด้วย ×, คลิกพื้นหลัง, Esc, ลากลง · ล็อกสกรอลหน้าด้วย `html.sheet-open`
 - **`.photo-strip` + `.ps-viewer`** — แถบรูปสองแถวใต้แถบส้ม Goals and Objectives **แสดงเฉพาะตอนเปิดผ่านเมนูย่อย (`about.html#goals`, `body.is-section-view`) — กด About เฉย ๆ ไม่เห็น** (เต็มความกว้างจอ, การ์ด 3:4 มุม 18px,
   กว้าง `clamp(150px,15vw,230px)`) แถวบนเลื่อนซ้าย 28px/s แถวล่างเลื่อนขวา 24px/s · **ปัดด้วยนิ้ว/ล้อเมาส์/คลิกลากได้**
   (หยุดเลื่อนเอง 2.5 วินาทีหลังผู้ใช้แตะ, เมาส์ชี้แล้วหยุด, reduced-motion = ไม่เลื่อนเองแต่ยังปัดได้)
@@ -510,8 +504,9 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
 ## 5.2.1 คอมโพเนนต์เฉพาะ `academics.html` (Study Plan + List of Courses)
 
 - **`.plan-grid` / `.plan-card`** (Study Plan) — การ์ดเทียบแผนวางคู่กัน: `.p-label` · `.p-name` · `.p-credits` (ตัวเลขใหญ่)
-  · `.p-facts` (`<dl>` แถวเปรียบเทียบ) · `.p-desc` · `.p-link` (ดันลงก้นการ์ดด้วย `margin-top:auto`)
-  - การ์ดไม่ใช่ลิงก์ทั้งใบ จึง**ไม่มี** hover ยกการ์ด — ลิงก์อยู่ที่ `.p-link` อย่างเดียว
+  · `.p-facts` (`<dl>` แถวเปรียบเทียบ) · `.p-desc`
+  - **หน้าย่อย (`#study-plan`, `#plan-a`, `#plan-b`) แสดงรายละเอียดเต็ม** — ไม่มีแผ่นหรือลิงก์ "ดูเพิ่ม" (เจ้าของเว็บขอ ต.ค. 2026)
+    การ์ดในหน้าย่อยไม่ใช่ลิงก์ จึงไม่มี hover · ป้าย `.p-label` พื้น `--brand-dark` ตัวขาว 13px
   - ทุกการ์ดต้องมีแถว `.p-facts` ชุดเดียวกันเรียงเหมือนกัน แผนที่ไม่มีข้อนั้นใส่ `&mdash;` ห้ามตัดแถวทิ้ง
   - ใส่เฉพาะข้อเท็จจริงจากหน้าพอร์ทัลของหลักสูตร (Plan A / Plan B) — ชื่อแผนใช้ตามพอร์ทัล "Thesis and Coursework" /
     "Coursework and Comprehensive Exam" · แถวปัจจุบัน: Final work · Publication · Comprehensive exam
@@ -522,19 +517,23 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
   (`role="tab"`, `aria-selected`, `aria-controls`, ลูกศรซ้าย/ขวา Home/End) แผงที่ไม่ได้เลือกติด `hidden`
   - ตารางทุกแผนอยู่ใน HTML ครบ และ `<tbody data-cms="courses" data-group>` ยังเหมือนเดิม — cms.js/sync-content.py ไม่ต้องแก้
   - ตัวสลับใน `site.js` delegate บน `document` จึงรอดการเขียนทับ innerHTML ของบล็อกโดยไม่ต้องมี rebind hook
-  - ลิงก์ที่มี `data-tab-open="<id ของแผง>"` (ปุ่ม "See Plan B courses") เปิดแท็บนั้นก่อนแล้วค่อยไปที่ `#list-of-courses`
+  - ลิงก์ที่มี `data-tab-open="<id ของแผง>"` (การ์ดย่อ `.course-tiles`) เปิดแท็บนั้นก่อนแล้วค่อยไปที่ `#list-of-courses`
 
 - **เปิดทั้งหน้า (`body.is-page-view`)** การ์ด Plan A / Plan B เหลือแค่ป้าย + ชื่อแผน และซ่อนหมายเหตุหลักสูตร B.E. 2566 (`#study-plan > .note`)
-  ตามที่เจ้าของเว็บขอ ต.ค. 2026 — รายละเอียดเต็มดูได้จากการกดการ์ด (แผ่นโคลนเนื้อหาครบ) หรือเปิดผ่าน `#study-plan`
+  ตามที่เจ้าของเว็บขอ ต.ค. 2026 — **กดการ์ดย่อ = ไปหน้าย่อย `#plan-a` / `#plan-b`** (site.js) ที่แสดงรายละเอียดเต็ม
   `is-page-view` ใส่โดยตัวกรอง section เท่านั้น ไม่มี JS = การ์ดเต็มเหมือนเดิม
   ตอนย่อการ์ดหน้าตาเหมือน `.ov-tile` ของหน้ารวม: กว้าง 190–210px จัดกลาง, ไอคอนแบรนด์ซ้ายล่าง (Plan A หมวกบัณฑิต,
   Plan B คลิปบอร์ดเช็ก) + ปุ่มลูกศรกลมเทาขวาล่าง — ทั้งสองเป็น `::before`/`::after` (mask SVG) ไม่เพิ่มมาร์กอัปในบล็อก DB
 
 - **List of Courses (B.E. 2568, ต.ค. 2026)** แท็บ Plan A Academic Track / Plan B Professional Track แต่ละแท็บ (`.pt-panel`)
   มี `h3.course-head` วิชาบังคับ → ตาราง Required (12 credits) → `h3.course-head` วิชาเลือก → ตาราง Group 1 และ Group 2
-  ตารางแรกในแท็บต้องเป็นวิชาบังคับเสมอ — แผ่นรายละเอียดของ Study Plan หยิบ `table` ตัวแรกไปแสดงเป็น "Required courses"
   กลุ่มใน DB (`courses.group_name`): `Plan A — Academic Track — 12 credits`, `Plan A — Electives — Group 1|2`, และชุดเดียวกันของ Plan B
   เปิดทั้งหน้า (`is-page-view`) ซ่อนแท็บ/ตาราง เหลือการ์ด `.course-tiles` (หน้าตา `.ov-tile`) สองใบ กดแล้วไป `#list-of-courses` พร้อมเปิดแท็บนั้น
+  การ์ดย่อของ Study Plan และ List of Courses สูงเท่ากันด้วย `--mini-tile-h` (215px, ≤520px = 198px) — ปรับตัวเดียวได้ทั้งสองชุด
+
+- **Tuition and Fees = การ์ด `.fee-card` แทนตาราง (ต.ค. 2026)** ใน `.fee-grid[data-cms="tuition"]` กว้างเท่าการ์ดย่อ (190–210px จัดกลาง)
+  ป้าย = ข้อความในวงเล็บท้าย `student_group` ("AY2020 onward"), ชื่อ = ส่วนหน้าวงเล็บ, ยอดรวมตัวเลขส้มใหญ่ + หน่วยบรรทัดล่าง,
+  แยก University / Faculty ใต้เส้น — ไม่มีลิงก์จึงไม่มีลูกศรและไม่เปลี่ยนสีตอนชี้; หมายเหตุใต้การ์ดซ่อนตอนเปิดทั้งหน้า (`is-page-view`); `feeCard` (cms.js) กับ `fee_card` (sync) ต้องตรงกันทุกตัวอักษร
 
 ## 5.3 คอมโพเนนต์เฉพาะ `research.html`
 
@@ -560,6 +559,8 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
   กลุ่มคู่พื้น `#f4f6f6` เต็มจอ; เมนูที่ไม่มีดรอปดาวน์ (FAQs, Contact) ไม่ขึ้น
 - การ์ด (`.ov-tile`) = เมนูย่อยชั้นที่ 2 — **ชื่ออย่างเดียว** + ไอคอนเส้นสีแบรนด์ (`.ov-icon`) + ปุ่มลูกศรกลมเทา
   grid `auto-fill minmax(170px,1fr)` (สูงสุด ~6 ใบต่อแถวที่ 1180px) → 2 คอลัมน์ ≤640px (ซ่อนเส้นยาว)
+- ชี้/แตะ/โฟกัส (`:hover`, `:active`, `:focus-visible`): ทั้งใบเป็น `--brand` ชื่อกับไอคอนขาว ปุ่มลูกศรเป็นวงกลมขาวลูกศรเข้ม
+  ยกขึ้น 3px — ใช้กับการ์ด Study Plan / List of Courses ตอนย่อด้วย (`:active` มีไว้ให้จอสัมผัสเห็นตอนแตะ)
 - ไอคอนเลือกจากคำในชื่อเมนู (`OV_RULES` ใน site.js) ลำดับสำคัญ ตัวแรกที่ตรงชนะ ไม่ตรงคำไหน = ไอคอนเอกสาร
   เพิ่มเมนูใหม่ใน `/admin` แล้วอยากได้ไอคอนเฉพาะ ต้องเพิ่มกฎตรงนั้น
 - ทั้งหมด `site.js` (`buildNavOverview`) สร้างจาก `.main-nav` ตอนโหลด และ cms.js เรียกซ้ำหลังเขียนเมนูจาก DB

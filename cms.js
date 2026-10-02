@@ -197,11 +197,18 @@
            '</td><td class="credits">' + esc(c.credits) + '</td></tr>';
   }
 
-  function tuitionRow(t){
-    return '<tr><td>' + esc(t.student_group) + '</td>' +
-      '<td class="num-cell">' + esc(t.part_university) + '</td>' +
-      '<td class="num-cell">' + esc(t.part_faculty) + '</td>' +
-      '<td class="total">' + esc(t.total_per_semester) + '</td></tr>';
+  /* การ์ดค่าเล่าเรียน (เดิมเป็นแถวตาราง) — ต้องตรงกับ fee_card ใน sync-content.py ทุกตัวอักษร
+     "Thai students (AY2020 onward)" แยกเป็นชื่อ + ป้ายจากวงเล็บท้าย; ยอดรวมตัด " THB" ออกไปเป็นหน่วยข้างตัวเลข */
+  function feeCard(t){
+    const m = /^(.*?)\s*\(([^()]*)\)$/.exec(t.student_group || '');
+    const name = m ? m[1] : (t.student_group || '');
+    const total = String(t.total_per_semester || '').replace(/\s*THB$/, '');
+    return '<article class="fee-card">' +
+      (m ? '<span class="fee-tag">' + esc(m[2]) + '</span>' : '') +
+      '<h3 class="fee-name">' + esc(name) + '</h3>' +
+      '<div class="fee-total"><span class="num">' + esc(total) + '</span><span class="unit">THB / semester</span></div>' +
+      '<dl class="fee-parts"><div><dt>University</dt><dd>' + esc(t.part_university) + '</dd></div>' +
+      '<div><dt>Faculty</dt><dd>' + esc(t.part_faculty) + '</dd></div></dl></article>';
   }
 
   /* ---------- เมนูหลัก ----------
@@ -372,7 +379,7 @@
 
   if(need('tuition')){
     jobs.push(get('tuition').then(function(rows){
-      fill('tuition', rows, tuitionRow);
+      fill('tuition', rows, feeCard);
     }));
   }
 

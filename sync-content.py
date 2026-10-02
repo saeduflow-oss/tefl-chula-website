@@ -265,11 +265,18 @@ def apply_settings(html, st):
     return html
 
 
-def tuition_row(t):
-    return (f'<tr><td>{esc(t["student_group"])}</td>'
-            f'<td class="num-cell">{esc(t["part_university"])}</td>'
-            f'<td class="num-cell">{esc(t["part_faculty"])}</td>'
-            f'<td class="total">{esc(t["total_per_semester"])}</td></tr>')
+def fee_card(t):
+    """การ์ดค่าเล่าเรียน — ต้องตรงกับ feeCard ใน cms.js ทุกตัวอักษร"""
+    g = t['student_group'] or ''
+    m = re.match(r'^(.*?)\s*\(([^()]*)\)$', g)
+    name = m.group(1) if m else g
+    total = re.sub(r'\s*THB$', '', str(t['total_per_semester'] or ''))
+    return ('<article class="fee-card">'
+            + (f'<span class="fee-tag">{esc(m.group(2))}</span>' if m else '')
+            + f'<h3 class="fee-name">{esc(name)}</h3>'
+            f'<div class="fee-total"><span class="num">{esc(total)}</span><span class="unit">THB / semester</span></div>'
+            f'<dl class="fee-parts"><div><dt>University</dt><dd>{esc(t["part_university"])}</dd></div>'
+            f'<div><dt>Faculty</dt><dd>{esc(t["part_faculty"])}</dd></div></dl></article>')
 
 
 # ---------- แทนที่เนื้อหาในกรอบ data-cms ----------
@@ -408,7 +415,7 @@ def main():
             ('links-useful', [useful_card(l) for l in by('links', 'kind', 'useful')], None),
         ],
         'academics.html': [
-            ('tuition', [tuition_row(t) for t in data['tuition']], None),
+            ('tuition', [fee_card(t) for t in data['tuition']], None),
         ],
     }
     for g in sorted({c['group_name'] for c in data['courses']}):
