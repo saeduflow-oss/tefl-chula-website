@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this is
 
 Marketing/information site for the TEFL (Teaching English as a Foreign Language) master's program,
-Faculty of Education, Chulalongkorn University. Nine hand-written static HTML pages plus one shared
+Faculty of Education, Chulalongkorn University. Ten hand-written static HTML pages plus one shared
 stylesheet and two shared scripts, with content served from Supabase and edited through a small
 admin page. **No build step, no package manager, no tests, no framework** — `admin/index.html` and
 `cms.js` talk to the Supabase REST API with plain `fetch`, deliberately avoiding a CDN SDK.
@@ -52,11 +52,11 @@ check `git status` — an edit that was never committed is also never deployed.
 
 ## Architecture
 
-### No templating — the nav is copy-pasted into all 9 pages
+### No templating — the nav is copy-pasted into all 10 pages
 
 The header, search overlay, drawer shell, and footer are duplicated markup in every HTML file.
 The menu *items* now come from the `nav` table (edit them in `/admin` → เมนู; `sync-content.py`
-writes them into all 9 files), but the header shell around them is still copy-pasted. `DESIGN.md`
+writes them into all 10 files), but the header shell around them is still copy-pasted. `DESIGN.md`
 §8 has the full checklist for adding a page. `index.backup.html` is a stale copy that is not
 deployed — do not update it in sync.
 
@@ -74,6 +74,11 @@ Four features exist only after `site.js` runs — none of them are in the HTML:
 - **Plan sheet** (`academics.html`) — the bottom sheet opened by the Plan A / Plan B cards in Study Plan
   (and the Plan A / Plan B menu items). Its content is cloned from the card and the matching course
   tabpanel on every open, so it follows whatever `cms.js` rendered.
+- **Nav overview** (`explore.html`) — one group per top-level menu with a dropdown, one title-only tile
+  per second-level item, rebuilt from `.main-nav` on load and again by `cms.js` after `renderNav()`
+  (`window.TEFLNavOverview`). The tiles in the file are only the no-JS copy.
+- **Section tabs** — the text strip under the banner on subpages with a submenu (not About, which opts
+  out with `data-section-tabs="off"`), rebuilt by the section filter.
 
 The first two read the nav markup as their data source. So a new page becomes searchable *only*
 once it is linked from the menus, and renaming or restructuring the `.main-nav` / `.dropdown` /

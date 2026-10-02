@@ -34,6 +34,7 @@ forms-and-links.html  Forms and Links     → #request-forms, #thesis-forms,
                                             #research-collaboration-letters, #graduation-request, #useful-links
 faqs.html             FAQs
 contact.html          Contact
+explore.html          Explore (หน้ารวม) — การ์ดเมนูย่อยจัดกลุ่มตามเมนูหลัก ไม่มีเนื้อหาของตัวเอง (ดู §5.4)
 index.backup.html     สำรองหน้าแรก (ไม่ใช้งานจริง)
 ```
 
@@ -53,6 +54,12 @@ breadcrumb บน banner กลายเป็น `Home > About > Academic Staff
 ไม่มีแผง "Explore more on this page" / ปุ่ม `VIEW FULL PAGE` แล้ว (เอาออกตามที่เจ้าของเว็บขอ ต.ค. 2026) —
 ทางกลับไปดูทั้งหน้าคือชื่อหน้าใน breadcrumb ซึ่งลบ hash ด้วย `pushState` แล้วแสดงทั้งหน้าโดยไม่โหลดใหม่
 ส่วนที่สลับมาแสดงได้คลาส `.sm-enter` (fade-up 0.5s, ปิดเมื่อ reduced-motion)
+
+**แถบหัวข้อใต้ banner (`.section-tabs`, `site.js` → `renderSectionTabs`)** — ลิงก์ตัวหนังสือไปหัวกลุ่มแต่ละกลุ่ม
+(ข้อความเมนูย่อย) แบบเว็บกิจการนิสิต sa.edu.chula.ac.th ตามที่เจ้าของเว็บขอ ต.ค. 2026 — **โผล่เฉพาะตอนเลือกหัวข้อแล้ว** (มี `#hash`)
+เปิดทั้งหน้าไม่มีแถบ เนื้อหาแสดงครบตามเดิม; ตัวที่เลือก (`.is-active`) ตัวหนา + ขีดส้ม 2px ใต้ชื่อ กดตัวอื่นเพื่อสลับหัวข้อ
+แสดงเฉพาะหน้าที่มีเมนูย่อยและมี ≥2 กลุ่ม — **About ปิดไว้** ด้วย `.content[data-section-tabs="off"]` (เจ้าของเว็บขอให้คงแบบเดิม)
+วางเป็นพี่น้องก่อน `.page-wrap` ไม่ใช่ใน banner เพราะ cms.js เขียนทับ banner ทั้งก้อน; มือถือเลื่อนแนวนอนได้
 
 ---
 
@@ -517,6 +524,18 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
   - ตัวสลับใน `site.js` delegate บน `document` จึงรอดการเขียนทับ innerHTML ของบล็อกโดยไม่ต้องมี rebind hook
   - ลิงก์ที่มี `data-tab-open="<id ของแผง>"` (ปุ่ม "See Plan B courses") เปิดแท็บนั้นก่อนแล้วค่อยไปที่ `#list-of-courses`
 
+- **เปิดทั้งหน้า (`body.is-page-view`)** การ์ด Plan A / Plan B เหลือแค่ป้าย + ชื่อแผน และซ่อนหมายเหตุหลักสูตร B.E. 2566 (`#study-plan > .note`)
+  ตามที่เจ้าของเว็บขอ ต.ค. 2026 — รายละเอียดเต็มดูได้จากการกดการ์ด (แผ่นโคลนเนื้อหาครบ) หรือเปิดผ่าน `#study-plan`
+  `is-page-view` ใส่โดยตัวกรอง section เท่านั้น ไม่มี JS = การ์ดเต็มเหมือนเดิม
+  ตอนย่อการ์ดหน้าตาเหมือน `.ov-tile` ของหน้ารวม: กว้าง 190–210px จัดกลาง, ไอคอนแบรนด์ซ้ายล่าง (Plan A หมวกบัณฑิต,
+  Plan B คลิปบอร์ดเช็ก) + ปุ่มลูกศรกลมเทาขวาล่าง — ทั้งสองเป็น `::before`/`::after` (mask SVG) ไม่เพิ่มมาร์กอัปในบล็อก DB
+
+- **List of Courses (B.E. 2568, ต.ค. 2026)** แท็บ Plan A Academic Track / Plan B Professional Track แต่ละแท็บ (`.pt-panel`)
+  มี `h3.course-head` วิชาบังคับ → ตาราง Required (12 credits) → `h3.course-head` วิชาเลือก → ตาราง Group 1 และ Group 2
+  ตารางแรกในแท็บต้องเป็นวิชาบังคับเสมอ — แผ่นรายละเอียดของ Study Plan หยิบ `table` ตัวแรกไปแสดงเป็น "Required courses"
+  กลุ่มใน DB (`courses.group_name`): `Plan A — Academic Track — 12 credits`, `Plan A — Electives — Group 1|2`, และชุดเดียวกันของ Plan B
+  เปิดทั้งหน้า (`is-page-view`) ซ่อนแท็บ/ตาราง เหลือการ์ด `.course-tiles` (หน้าตา `.ov-tile`) สองใบ กดแล้วไป `#list-of-courses` พร้อมเปิดแท็บนั้น
+
 ## 5.3 คอมโพเนนต์เฉพาะ `research.html`
 
 สไตล์อยู่ท้าย `site.css` (บล็อก **FLOWCHART**) — ผัง "Working on Master Project: From Start to Finish"
@@ -533,6 +552,19 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
   เพราะเส้นทแยงย่อลงมือถือไม่ได้
 
 ---
+
+## 5.4 หน้ารวม `explore.html` (`.nav-overview`)
+
+ทำตามเว็บกิจการนิสิต sa.edu.chula.ac.th/scholarships ตามที่เจ้าของเว็บขอ (ต.ค. 2026)
+- แต่ละกลุ่ม (`.ov-group`) = เมนูหลักที่มีดรอปดาวน์: `h2` + เส้นยาว (`.ov-line`) + ปุ่มแคปซูล `View all` ไปหน้านั้น
+  กลุ่มคู่พื้น `#f4f6f6` เต็มจอ; เมนูที่ไม่มีดรอปดาวน์ (FAQs, Contact) ไม่ขึ้น
+- การ์ด (`.ov-tile`) = เมนูย่อยชั้นที่ 2 — **ชื่ออย่างเดียว** + ไอคอนเส้นสีแบรนด์ (`.ov-icon`) + ปุ่มลูกศรกลมเทา
+  grid `auto-fill minmax(170px,1fr)` (สูงสุด ~6 ใบต่อแถวที่ 1180px) → 2 คอลัมน์ ≤640px (ซ่อนเส้นยาว)
+- ไอคอนเลือกจากคำในชื่อเมนู (`OV_RULES` ใน site.js) ลำดับสำคัญ ตัวแรกที่ตรงชนะ ไม่ตรงคำไหน = ไอคอนเอกสาร
+  เพิ่มเมนูใหม่ใน `/admin` แล้วอยากได้ไอคอนเฉพาะ ต้องเพิ่มกฎตรงนั้น
+- ทั้งหมด `site.js` (`buildNavOverview`) สร้างจาก `.main-nav` ตอนโหลด และ cms.js เรียกซ้ำหลังเขียนเมนูจาก DB
+  มาร์กอัปในไฟล์เป็นสำเนา no-JS ที่ได้จากฟังก์ชันเดียวกัน — แก้ฟังก์ชันแล้วให้สร้างสำเนาใหม่ อย่าแก้มือ
+- หน้านี้ยังไม่อยู่ในเมนู — จะให้คนเข้าถึงได้ต้องเพิ่มลิงก์ใน `/admin` → เมนู หรือ footer
 
 ## 6. Motion & Accessibility
 

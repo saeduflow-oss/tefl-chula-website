@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explore | TEFL Program</title>
+<!-- ไอคอนแท็บ: ตัดเปลวไฟจาก img/logo.png เพราะโลโก้เต็มเป็นแนวนอน ย่อเหลือ 16px แล้วอ่านไม่ออก -->
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="stylesheet" href="fonts/chula.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+  <!-- ============ MAIN HEADER (ใช้ร่วมกันทุกหน้า) ============ -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+
+      <a href="index.html" class="logo" aria-label="TEFL Program home">
+        <img src="img/logo.png" alt="TEFL Program Logo">
+      </a>
+
+      <nav class="main-nav" id="mainNav" aria-label="Main menu">
+        <ul data-cms="nav">
+          <li><a href="about.html" data-dropdown="dd-about">About<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-about"><div class="dd-menu"><a class="dd-title" href="about.html">About the Program</a><ul><li><a href="about.html#goals">Goals and Objectives</a></li><li><a href="about.html#academic-staff">Academic Staff</a></li><li><a href="about.html#guest-lecturers">Guest Lecturers</a></li></ul></div></div></li>
+          <li><a href="academics.html" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li class="has-sub"><a href="academics.html#study-plan">Study Plan</a><ul class="dd-sub"><li><a href="academics.html#plan-a">Plan A (Thesis and Coursework)</a></li><li><a href="academics.html#plan-b">Plan B (Coursework &amp; Comprehensive Exam)</a></li></ul></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></div></div></li>
+          <li><a href="admission.html" data-dropdown="dd-admission">Admission<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-admission"><div class="dd-menu"><a class="dd-title" href="admission.html">Admission</a><ul><li><a href="admission.html#admission-requirements">Admission Requirements</a></li><li><a href="admission.html#admission-procedures">Admission Procedures</a></li><li><a href="admission.html#admission-deadline">Admission Deadline</a></li></ul></div></div></li>
+          <li><a href="research.html" data-dropdown="dd-research">Research<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-research"><div class="dd-menu"><a class="dd-title" href="research.html">Research</a><ul><li><a href="research.html#research-guidelines">Guidelines for Research Procedures</a></li><li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li><li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li></ul></div></div></li>
+          <li><a href="activities.html" data-dropdown="dd-activities">Activities<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-activities"><div class="dd-menu"><a class="dd-title" href="activities.html">Activities</a><ul><li><a href="activities.html#activities-list">Activities List</a></li><li><a href="activities.html#intensive-course">Intensive Course</a></li><li><a href="activities.html#announcements">Announcements</a></li><li><a href="activities.html#calendar">Event Calendar</a></li></ul></div></div></li>
+          <li><a href="forms-and-links.html" data-dropdown="dd-forms-links">Forms &amp; Links<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-forms-links"><div class="dd-menu"><a class="dd-title" href="forms-and-links.html">Forms and Links</a><ul><li><a href="forms-and-links.html#request-forms">Request Forms</a></li><li><a href="forms-and-links.html#thesis-forms">Thesis and Master Project Forms</a></li><li><a href="forms-and-links.html#research-collaboration-letters">Research Collaboration Letters</a></li><li><a href="forms-and-links.html#graduation-request">Graduation Request</a></li><li><a href="forms-and-links.html#useful-links">Useful Links</a></li></ul></div></div></li>
+          <li><a href="faqs.html">FAQs</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-tools">
+        <button class="tool-btn" id="searchToggle" aria-label="Search" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        </button>
+
+        <button class="tool-btn burger" id="mobileToggle" aria-label="Open full menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ============ SEARCH OVERLAY ============ -->
+  <div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Search this site">
+    <button class="tool-btn search-close" id="searchClose" aria-label="Close search">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="search-box">
+      <form id="searchForm" role="search">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        <input type="search" id="searchInput" placeholder="Search the TEFL site&hellip;" autocomplete="off">
+      </form>
+      <p class="search-hint">Try &ldquo;admission&rdquo;, &ldquo;tuition&rdquo;, &ldquo;thesis&rdquo;, &ldquo;schedule&rdquo;.</p>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- ============ FULL MENU DRAWER ============ -->
+  <div class="nav-drawer" id="navDrawer" role="dialog" aria-modal="true" aria-label="Full menu">
+    <a href="index.html" class="drawer-logo" aria-label="TEFL Program home">
+      <img src="img/logo.png" alt="TEFL Program Logo">
+    </a>
+    <button class="tool-btn drawer-close" id="drawerClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="drawer-body" id="drawerBody"></div>
+  </div>
+
+  <!-- ============ PAGE BANNER ============
+       ไม่มี data-cms-block — หน้านี้ไม่มีข้อความใน DB ทั้งหน้าสร้างจากเมนู -->
+  <section class="page-banner">
+    <div class="inner">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html" aria-label="Home">
+          <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2 3 10.4V21h6v-6h6v6h6V10.4z"/></svg>
+        </a>
+        <svg class="sep" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+        <span class="current" aria-current="page">Explore</span>
+      </nav>
+      <h1>Explore TEFL</h1>
+      <p class="subtitle">Everything about the TEFL Program at a glance &mdash; pick a topic to read more.</p>
+    </div>
+  </section>
+
+  <!-- ============ NAV OVERVIEW ============
+       หัวข้อ = เมนูหลัก, การ์ด = เมนูย่อย — site.js (buildNavOverview) สร้างใหม่จากเมนูทุกครั้งที่โหลด
+       ของในกรอบนี้คือสำเนาสำหรับ no-JS/SEO ที่ได้จากฟังก์ชันเดียวกัน อย่าแก้มือ -->
+  <main class="nav-overview" id="navOverview">
+    <section class="ov-group" id="ov-about"><div class="ov-inner" style=""><div class="ov-head"><h2>About</h2><span class="ov-line" aria-hidden="true"></span><a class="ov-all" href="about.html">View all<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span class="sr-only"> About</span></a></div><div class="ov-grid"><a class="ov-tile" href="about.html#goals"><span class="ov-title">Goals and Objectives</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1"></circle></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="about.html#academic-staff"><span class="ov-title">Academic Staff</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="about.html#guest-lecturers"><span class="ov-title">Guest Lecturers</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M19 10a7 7 0 0 1-14 0M12 17v5"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a></div></div></section>
+    <section class="ov-group" id="ov-academics"><div class="ov-inner reveal" style="--reveal-delay: 0ms;"><div class="ov-head"><h2>Academics</h2><span class="ov-line" aria-hidden="true"></span><a class="ov-all" href="academics.html">View all<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span class="sr-only"> Academics</span></a></div><div class="ov-grid"><a class="ov-tile" href="academics.html#curriculum-info"><span class="ov-title">Curriculum Info.</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"></path><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="academics.html#study-plan"><span class="ov-title">Study Plan</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3z"></path><path d="M9 3v15M15 6v15"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="academics.html#list-of-courses"><span class="ov-title">List of Courses</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="academics.html#class-schedule"><span class="ov-title">Class Schedule</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="academics.html#tentative-schedule"><span class="ov-title">Tentative Schedule</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="academics.html#tuition-and-fees"><span class="ov-title">Tuition and Fees</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"></path><path d="M21 11h-5a2 2 0 0 0 0 4h5z"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a></div></div></section>
+    <section class="ov-group" id="ov-admission"><div class="ov-inner reveal" style="--reveal-delay: 0ms;"><div class="ov-head"><h2>Admission</h2><span class="ov-line" aria-hidden="true"></span><a class="ov-all" href="admission.html">View all<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span class="sr-only"> Admission</span></a></div><div class="ov-grid"><a class="ov-tile" href="admission.html#admission-requirements"><span class="ov-title">Admission Requirements</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 11 3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="admission.html#admission-procedures"><span class="ov-title">Admission Procedures</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="admission.html#admission-deadline"><span class="ov-title">Admission Deadline</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a></div></div></section>
+    <section class="ov-group" id="ov-research"><div class="ov-inner reveal" style="--reveal-delay: 0ms;"><div class="ov-head"><h2>Research</h2><span class="ov-line" aria-hidden="true"></span><a class="ov-all" href="research.html">View all<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span class="sr-only"> Research</span></a></div><div class="ov-grid"><a class="ov-tile" href="research.html#research-guidelines"><span class="ov-title">Guidelines for Research Procedures</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="research.html#tefl-research-thesis"><span class="ov-title">TEFL Research [THESIS]</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="research.html#tefl-research-ojed"><span class="ov-title">TEFL Research from OJED</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a></div></div></section>
+    <section class="ov-group" id="ov-activities"><div class="ov-inner reveal" style="--reveal-delay: 0ms;"><div class="ov-head"><h2>Activities</h2><span class="ov-line" aria-hidden="true"></span><a class="ov-all" href="activities.html">View all<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span class="sr-only"> Activities</span></a></div><div class="ov-grid"><a class="ov-tile" href="activities.html#activities-list"><span class="ov-title">Activities List</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="activities.html#intensive-course"><span class="ov-title">Intensive Course</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="activities.html#announcements"><span class="ov-title">Announcements</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="activities.html#calendar"><span class="ov-title">Event Calendar</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a></div></div></section>
+    <section class="ov-group" id="ov-forms-and-links"><div class="ov-inner reveal" style="--reveal-delay: 0ms;"><div class="ov-head"><h2>Forms &amp; Links</h2><span class="ov-line" aria-hidden="true"></span><a class="ov-all" href="forms-and-links.html">View all<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span class="sr-only"> Forms &amp; Links</span></a></div><div class="ov-grid"><a class="ov-tile" href="forms-and-links.html#request-forms"><span class="ov-title">Request Forms</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="forms-and-links.html#thesis-forms"><span class="ov-title">Thesis and Master Project Forms</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="forms-and-links.html#research-collaboration-letters"><span class="ov-title">Research Collaboration Letters</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 6L2 7"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="forms-and-links.html#graduation-request"><span class="ov-title">Graduation Request</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a><a class="ov-tile" href="forms-and-links.html#useful-links"><span class="ov-title">Useful Links</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></span></a></div></div></section>
+  </main>
+
+  <!-- ============ FOOTER (ใช้ร่วมกันทุกหน้า) ============ -->
+  <footer id="contact">
+
+    <div class="footer-inner">
+
+      <div class="footer-cols" data-cms-block="site/footer-cols">
+        <div class="footer-col">
+          <h4>About</h4>
+          <ul>
+            <li><a href="about.html">About the Program</a></li>
+            <li><a href="about.html#goals">Goals and Objectives</a></li>
+            <li><a href="about.html#academic-staff">Academic Staff</a></li>
+            <li><a href="about.html#guest-lecturers">Guest Lecturers</a></li>
+            <li><a href="activities.html#announcements">News &amp; Events</a></li>
+            <li><a href="faqs.html">FAQs</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="forms-and-links.html#request-forms">Request Forms</a></li>
+            <li><a href="forms-and-links.html#thesis-forms">Thesis &amp; Master Project Forms</a></li>
+            <li><a href="forms-and-links.html#graduation-request">Graduation Request</a></li>
+            <li><a href="forms-and-links.html#research-collaboration-letters">Research Collaboration Letters</a></li>
+            <li><a href="forms-and-links.html#useful-links">Useful Links</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Academics</h4>
+          <ul>
+            <li><a href="academics.html#curriculum-info">Curriculum Info</a></li>
+            <li><a href="academics.html#list-of-courses">List of Courses</a></li>
+            <li><a href="academics.html#study-plan">Study Plan</a></li>
+            <li><a href="academics.html#class-schedule">Class Schedule</a></li>
+            <li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li>
+            <li><a href="admission.html">Admission</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col is-split">
+          <h4>Related Links</h4>
+          <ul>
+            <li><a href="https://www.edu.chula.ac.th/" target="_blank" rel="noopener">Faculty of Education</a></li>
+            <li><a href="https://www.chula.ac.th/" target="_blank" rel="noopener">Chulalongkorn University</a></li>
+            <li><a href="https://www.reg.chula.ac.th/" target="_blank" rel="noopener">Reg Chula</a></li>
+            <li><a href="https://mooc.chula.ac.th/" target="_blank" rel="noopener">CHULA MOOC</a></li>
+            <li><a href="https://www.car.chula.ac.th/" target="_blank" rel="noopener">CU Library</a></li>
+            <li><a href="https://www.grad.chula.ac.th/" target="_blank" rel="noopener">Graduate School</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-mid" data-cms-block="site/footer-mid">
+        <div class="footer-brand">
+          <img src="img/logo.png" alt="TEFL Chula, Faculty of Education, Chulalongkorn University">
+        </div>
+
+        <div class="f-line">
+          Address: Faculty of Education, Chulalongkorn University<br>
+          254 Phayathai Road, Wang Mai, Pathum Wan, Bangkok 10330
+        </div>
+
+        <div class="f-line">
+          Tel: <a href="tel:+6622182565" data-setting-href="contact.phone_href" data-setting-prefix="tel:" data-setting-text="contact.phone">0–2218–2565</a><br>
+          Email: <a href="mailto:tefl@chula.ac.th">tefl@chula.ac.th</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom" data-cms-block="site/footer-bottom">
+      <div class="footer-bottom-inner">
+
+        <div class="footer-social">
+          <a href="https://www.facebook.com/TEFL.Chula/" class="is-fb" data-setting-href="social.facebook" aria-label="Facebook" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.7c0-.9.3-1.6 1.6-1.6h1.7V4.2c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.4V14h2.7v8z"/></svg>
+          </a>
+          <a href="#" class="is-line" data-setting-href="social.line" aria-label="LINE">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2C6.6 3.2 2.2 6.7 2.2 11c0 3.85 3.48 7.08 8.18 7.69.32.07.75.21.86.49.1.25.06.64.03.89l-.14.85c-.04.25-.2.97.85.53s5.65-3.33 7.7-5.7c1.42-1.56 2.1-3.15 2.1-4.75 0-4.3-4.4-7.8-9.78-7.8z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/p/DbiparfD3FO/?img_index=18" class="is-ig" data-setting-href="social.instagram" aria-label="Instagram" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zm0 3.8a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0 9.9a3.9 3.9 0 1 1 0-7.8 3.9 3.9 0 0 1 0 7.8zm7.6-10.1a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/></svg>
+          </a>
+        </div>
+
+        <div class="copyright">Copyright &copy; 2026 TEFL Program, Faculty of Education, Chulalongkorn University</div>
+
+      </div>
+    </div>
+
+    <!-- จำเป็นต้องมีตามเงื่อนไขสัญญาอนุญาต CC ของภาพ ห้ามลบ -->
+    <div class="photo-credits" data-cms-block="site/photo-credits">
+      Photo credits (Wikimedia Commons):
+      <a href="https://commons.wikimedia.org/wiki/File:Faculty_of_Arts_Library,_Chulalongkorn_University.jpg" target="_blank" rel="noopener">Faculty of Arts Library</a> &copy; Geonuch (CC BY-SA 4.0) &middot;
+      <a href="https://commons.wikimedia.org/wiki/File:Chulalongkorn_University_Language_Institute_06.23.jpg" target="_blank" rel="noopener">CU Language Institute</a> &copy; Supanut Arunoprayote (CC BY 4.0) &middot;
+      <a href="https://commons.wikimedia.org/wiki/File:Axis_landscape_in_Chula2.jpg" target="_blank" rel="noopener">Axis Landscape</a> &copy; Theerapon Bunnak (CC BY-SA 4.0) &middot;
+      <a href="https://commons.wikimedia.org/wiki/File:Mahachulalongkorn_ChulalongkornUniversity.jpg" target="_blank" rel="noopener">Mahachulalongkorn Building</a> &copy; BunBn (CC BY-SA 4.0)
+    </div>
+
+  </footer>
+
+  <a href="#" class="back-top" id="backTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </a>
+
+  <script src="site.js"></script>
+  <!-- CMS: ดึงเนื้อหาล่าสุดจากฐานข้อมูลมาทับ ถ้าโหลดไม่ได้ใช้ของในไฟล์นี้แทน -->
+  <script src="cms.js"></script>
+</body>
+</html>

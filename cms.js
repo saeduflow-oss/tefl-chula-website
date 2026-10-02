@@ -242,6 +242,8 @@
     }).join('');
     /* site.js โคลนเมนูไปทำลิ้นชักมือถือตอนโหลด ต้องบอกให้โคลนใหม่ */
     if(typeof window.TEFLDrawerRebuild === 'function') window.TEFLDrawerRebuild();
+    /* หน้ารวม (explore.html) สร้างการ์ดจากเมนูเหมือนกัน */
+    if(typeof window.TEFLNavOverview === 'function') window.TEFLNavOverview();
   }
 
   /* ---------- ค่าการเชื่อมต่อ (settings) ----------

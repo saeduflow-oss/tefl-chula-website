@@ -267,40 +267,119 @@
           <span class="rule"></span>
           <h2>List of Courses</h2>
         </div>
-        <p>Required courses under Curriculum B.E. 2568.</p>
+        <p>The new curriculum B.E. 2568 will apply to students admitted from the academic year 2025 onwards.</p>
 
-        <div class="plan-tabs" role="tablist" aria-label="Required courses by plan">
-          <button type="button" class="pt-tab" role="tab" id="tab-courses-plan-a" aria-controls="courses-plan-a" aria-selected="true"><span class="t-tag">Plan A</span>Academic Track <span class="pt-cr">12 credits</span></button>
-          <button type="button" class="pt-tab" role="tab" id="tab-courses-plan-b" aria-controls="courses-plan-b" aria-selected="false" tabindex="-1"><span class="t-tag">Plan B</span>Professional Track <span class="pt-cr">12 credits</span></button>
+        <!-- เปิดทั้งหน้า (body.is-page-view) เห็นแค่การ์ดสองใบนี้ เปิดผ่าน #list-of-courses เห็นตารางเต็ม -->
+        <div class="ov-grid course-tiles">
+          <a class="ov-tile" href="#list-of-courses" data-tab-open="courses-plan-a"><span class="ov-title">Academic Track (Coursework and Thesis)</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span></a>
+          <a class="ov-tile" href="#list-of-courses" data-tab-open="courses-plan-b"><span class="ov-title">Professional Track (Coursework and Comprehensive Exam)</span><span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span></a>
         </div>
-        <div class="table-wrap pt-panel" role="tabpanel" id="courses-plan-a" aria-labelledby="tab-courses-plan-a">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th scope="col">Code</th>
-                <th scope="col">Course Title</th>
-                <th scope="col">Credits</th>
-              </tr>
-            </thead>
-            <tbody data-cms="courses" data-group="Plan A — Academic Track — 12 credits">
+
+        <div class="plan-tabs" role="tablist" aria-label="Courses by plan">
+          <button type="button" class="pt-tab" role="tab" id="tab-courses-plan-a" aria-controls="courses-plan-a" aria-selected="true"><span class="t-tag">Plan A</span>Academic Track <span class="pt-cr">Coursework and Thesis</span></button>
+          <button type="button" class="pt-tab" role="tab" id="tab-courses-plan-b" aria-controls="courses-plan-b" aria-selected="false" tabindex="-1"><span class="t-tag">Plan B</span>Professional Track <span class="pt-cr">Coursework and Comprehensive Exam</span></button>
+        </div>
+        <div class="pt-panel" role="tabpanel" id="courses-plan-a" aria-labelledby="tab-courses-plan-a">
+          <h3 class="course-head">Required Courses for Academic Track (Coursework and Thesis)</h3>
+          <div class="table-label">
+            <span class="t-tag">Required</span>
+            <span class="t-title">Required courses for TEFL students for Academic Track (12 Credits)</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">Code</th>
+                  <th scope="col">Course Title</th>
+                  <th scope="col">Credits</th>
+                </tr>
+              </thead>
+              <tbody data-cms="courses" data-group="Plan A — Academic Track — 12 credits">
               <tr><td class="code">2725634</td><td>Principles of English Language Teaching</td><td class="credits">3(3-0-9)</td></tr>
               <tr><td class="code">2725637</td><td>English Language Assessment and Evaluation</td><td class="credits">3(3-0-9)</td></tr>
               <tr><td class="code">2725708</td><td>English Language Curriculum Development</td><td class="credits">3(3-0-9)</td></tr>
               <tr><td class="code">2725739</td><td>Research Design in English Language Teaching</td><td class="credits">3(3-0-9)</td></tr>
             </tbody>
-          </table>
+            </table>
+          </div>
+          <h3 class="course-head">Elective Courses for Academic Track (Coursework and Thesis)</h3>
+          <div class="table-label">
+            <span class="t-tag">Group 1</span>
+            <span class="t-title">English Language, Learning, and Teaching</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">Code</th>
+                  <th scope="col">Course Title</th>
+                  <th scope="col">Credits</th>
+                </tr>
+              </thead>
+              <tbody data-cms="courses" data-group="Plan A — Electives — Group 1">
+              <tr><td class="code">2725622*</td><td>Teaching English Listening and Oral Communication</td><td class="credits">1(1-0-3)</td></tr>
+              <tr><td class="code">2725623*</td><td>Teaching English Reading</td><td class="credits">1(1-0-3)</td></tr>
+              <tr><td class="code">2725624*</td><td>Teaching English Writing</td><td class="credits">1(1-0-3)</td></tr>
+              <tr><td class="code">2725625*</td><td>Morphology and Syntax in English Language Teaching</td><td class="credits">1(1-0-3)</td></tr>
+              <tr><td class="code">2725626*</td><td>Semantics in English Language Teaching</td><td class="credits">1(1-0-3)</td></tr>
+              <tr><td class="code">2725627*</td><td>Pragmatics in English Language Teaching</td><td class="credits">1(1-0-3)</td></tr>
+              <tr><td class="code">2725704</td><td>Supervision of English Language Teaching</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725705</td><td>Selected Topics in English Language Teaching</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725706</td><td>Teaching English for Workplaces</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725712</td><td>Second Language Acquisition</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725716</td><td>Sociolinguistics for English Language Teaching</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725717</td><td>Selected Topics in Language and Linguistics</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725733</td><td>Teaching English for Young Learners</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725734</td><td>Teaching English for Adolescent Learners</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725838</td><td>Multilingual and Multicultural Education</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725741</td><td>Teaching English Literacy</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725744*</td><td>Teaching English for Intercultural Communication</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725746*</td><td>Teaching English for Adult Learners and Lifelong Learning</td><td class="credits">3(3-0-9)</td></tr>
+            </tbody>
+            </table>
+          </div>
+          <div class="table-label">
+            <span class="t-tag">Group 2</span>
+            <span class="t-title">Innovations and Professional Development</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">Code</th>
+                  <th scope="col">Course Title</th>
+                  <th scope="col">Credits</th>
+                </tr>
+              </thead>
+              <tbody data-cms="courses" data-group="Plan A — Electives — Group 2">
+              <tr><td class="code">2725702</td><td>English Language Teaching Materials and Media</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725710</td><td>Reading and Writing for English Language Teachers</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725711</td><td>Professional Oral Communication Skills</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725723</td><td>English Language Teaching Innovations</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725724</td><td>Individual Study</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725743*</td><td>Selected Topics in English Language Education Research and Innovation</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725745*</td><td>Multimedia and Digital Technology for ELT</td><td class="credits">3(3-0-9)</td></tr>
+            </tbody>
+            </table>
+          </div>
         </div>
 
-        <div class="table-wrap pt-panel" role="tabpanel" id="courses-plan-b" aria-labelledby="tab-courses-plan-b" hidden>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th scope="col">Code</th>
-                <th scope="col">Course Title</th>
-                <th scope="col">Credits</th>
-              </tr>
-            </thead>
-            <tbody data-cms="courses" data-group="Plan B — Professional Track — 12 credits">
+        <div class="pt-panel" role="tabpanel" id="courses-plan-b" aria-labelledby="tab-courses-plan-b" hidden>
+          <h3 class="course-head">Required Courses for Professional Track (Coursework and Comprehensive Exam)</h3>
+          <div class="table-label">
+            <span class="t-tag">Required</span>
+            <span class="t-title">Required courses for TEFL students for Professional Track (12 Credits)</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">Code</th>
+                  <th scope="col">Course Title</th>
+                  <th scope="col">Credits</th>
+                </tr>
+              </thead>
+              <tbody data-cms="courses" data-group="Plan B — Professional Track — 12 credits">
               <tr><td class="code">2725622*</td><td>Teaching English Listening and Oral Communication</td><td class="credits">1(1-0-3)</td></tr>
               <tr><td class="code">2725623*</td><td>Teaching English Reading</td><td class="credits">1(1-0-3)</td></tr>
               <tr><td class="code">2725624*</td><td>Teaching English Writing</td><td class="credits">1(1-0-3)</td></tr>
@@ -308,39 +387,66 @@
               <tr><td class="code">2725637</td><td>English Language Assessment and Evaluation</td><td class="credits">3(3-0-9)</td></tr>
               <tr><td class="code">2725708</td><td>English Language Curriculum Development</td><td class="credits">3(3-0-9)</td></tr>
             </tbody>
-          </table>
-        </div>
-
-        <div class="table-label">
-          <span class="t-tag">Electives</span>
-          <span class="t-title">Two elective groups</span>
-        </div>
-        <div class="tile-grid">
-
-          <a href="https://portal.edu.chula.ac.th/pub/tefl/index.php/academics/list-of-courses" target="_blank" rel="noopener" class="tile-card">
-            <span class="t-label">Group 1</span>
-            <div class="t-name">English Language, Learning and Teaching</div>
-            <p class="t-meta">For example: Second Language Acquisition, Sociolinguistics for ELT, Teaching English for Young Learners, Teaching English for Adolescent Learners.</p>
-            <div class="t-foot">
-              <span class="t-ic">
-                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8.5A3.5 3.5 0 0 1 8.5 5H30v23H8.5A3.5 3.5 0 0 0 5 31.5z"/><path d="M5 8.5V31"/><path d="M12 12h11M12 17h8"/></svg>
-              </span>
-              <span class="t-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
-            </div>
-          </a>
-
-          <a href="https://portal.edu.chula.ac.th/pub/tefl/index.php/academics/list-of-courses" target="_blank" rel="noopener" class="tile-card">
-            <span class="t-label">Group 2</span>
-            <div class="t-name">Innovations and Professional Development</div>
-            <p class="t-meta">For example: ELT Materials and Media, ELT Innovations, Multimedia and Digital Technology for ELT.</p>
-            <div class="t-foot">
-              <span class="t-ic">
-                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="7" width="28" height="18" rx="2"/><path d="M13 31h10M18 25v6"/><path d="m15 12 6 4-6 4z"/></svg>
-              </span>
-              <span class="t-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
-            </div>
-          </a>
-
+            </table>
+          </div>
+          <h3 class="course-head">Elective Courses for Professional Track (Coursework and Comprehensive Exam)</h3>
+          <div class="table-label">
+            <span class="t-tag">Group 1</span>
+            <span class="t-title">English Language, Learning, and Teaching</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">Code</th>
+                  <th scope="col">Course Title</th>
+                  <th scope="col">Credits</th>
+                </tr>
+              </thead>
+              <tbody data-cms="courses" data-group="Plan B — Electives — Group 1">
+              <tr><td class="code">2725625*</td><td>Morphology and Syntax in English Language Teaching</td><td class="credits">1(1-0-3)</td></tr>
+              <tr><td class="code">2725626*</td><td>Semantics in English Language Teaching</td><td class="credits">1(1-0-3)</td></tr>
+              <tr><td class="code">2725627*</td><td>Pragmatics in English Language Teaching</td><td class="credits">1(1-0-3)</td></tr>
+              <tr><td class="code">2725704</td><td>Supervision of English Language Teaching</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725705</td><td>Selected Topics in English Language Teaching</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725706</td><td>Teaching English for Workplaces</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725712</td><td>Second Language Acquisition</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725716</td><td>Sociolinguistics for English Language Teaching</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725717</td><td>Selected Topics in Language and Linguistics</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725733</td><td>Teaching English for Young Learners</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725734</td><td>Teaching English for Adolescent Learners</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725838</td><td>Multilingual and Multicultural Education</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725741</td><td>Teaching English Literacy</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725744*</td><td>Teaching English for Intercultural Communication</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725746*</td><td>Teaching English for Adult Learners and Lifelong Learning</td><td class="credits">3(3-0-9)</td></tr>
+            </tbody>
+            </table>
+          </div>
+          <div class="table-label">
+            <span class="t-tag">Group 2</span>
+            <span class="t-title">Innovations and Professional Development</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">Code</th>
+                  <th scope="col">Course Title</th>
+                  <th scope="col">Credits</th>
+                </tr>
+              </thead>
+              <tbody data-cms="courses" data-group="Plan B — Electives — Group 2">
+              <tr><td class="code">2725702</td><td>English Language Teaching Materials and Media</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725710</td><td>Reading and Writing for English Language Teachers</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725711</td><td>Professional Oral Communication Skills</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725723</td><td>English Language Teaching Innovations</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725724</td><td>Individual Study</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725739</td><td>Research Design in English Language Education</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725743*</td><td>Selected Topics in English Language Education Research and Innovation</td><td class="credits">3(3-0-9)</td></tr>
+              <tr><td class="code">2725745*</td><td>Multimedia and Digital Technology for ELT</td><td class="credits">3(3-0-9)</td></tr>
+            </tbody>
+            </table>
+          </div>
         </div>
       </section>
 

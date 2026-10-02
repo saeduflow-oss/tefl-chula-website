@@ -53,6 +53,76 @@
     });
   }
 
+  /* ============ NAV OVERVIEW — หน้ารวม (explore.html) ============
+     แบบเว็บกิจการนิสิต sa.edu.chula.ac.th: หัวข้อใหญ่ = เมนูหลักที่มีดรอปดาวน์ + เส้น + ปุ่ม View all
+     การ์ด = เมนูย่อยชั้นที่ 2 (ชื่อ + ไอคอน + ลูกศร) ชั้นที่ 3 (Plan A / Plan B) ไม่เอามา
+     อ่านจาก .main-nav ทุกครั้ง เหมือนลิ้นชัก — แก้เมนูใน /admin แล้วหน้านี้เปลี่ยนตามเอง
+     cms.js เรียกซ้ำหลังเขียนเมนูใหม่ (ไม่งั้นการ์ดยังเป็นเมนูชุดเก่าในไฟล์)
+     มาร์กอัปในไฟล์ explore.html สร้างจากฟังก์ชันนี้ — แก้ตรงนี้แล้วต้องคัดลอกผลไปใส่ไฟล์ใหม่ด้วย (สำเนา no-JS) */
+  const OV_ICONS = {
+    target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+    users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+    mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10a7 7 0 0 1-14 0M12 17v5"/>',
+    book:'<path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/>',
+    map:'<path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3z"/><path d="M9 3v15M15 6v15"/>',
+    star:'<path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>',
+    list:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+    calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    wallet:'<path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"/><path d="M21 11h-5a2 2 0 0 0 0 4h5z"/>',
+    check:'<path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+    steps:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/>',
+    search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/>',
+    mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>',
+    link:'<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+    megaphone:'<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+    grad:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
+    file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>'
+  };
+  /* เลือกไอคอนจากคำในชื่อเมนู — ลำดับสำคัญ ตัวแรกที่ตรงชนะ
+     (Intensive Course ต้องเป็นกิจกรรมก่อนเจอ course, Guidelines for Research Procedures ก่อนเจอ procedure,
+      Thesis ... Forms ต้องเป็นฟอร์มก่อนเจอ thesis)
+     เมนูใหม่ที่ไม่ตรงคำไหนได้ไอคอนเอกสาร */
+  const OV_RULES = [
+    [/goal|objective/,'target'], [/staff/,'users'], [/lecturer|speaker/,'mic'],
+    [/curriculum/,'book'], [/plan/,'map'], [/intensive|activit/,'star'], [/course/,'list'],
+    [/calendar|event/,'calendar'], [/schedule|deadline/,'clock'], [/tuition|fee/,'wallet'],
+    [/guideline/,'search'], [/requirement/,'check'], [/procedure|step/,'steps'],
+    [/letter/,'mail'], [/link/,'link'], [/announce|news/,'megaphone'], [/graduat/,'grad'],
+    [/form/,'file'], [/thesis|research|ojed/,'grad']
+  ];
+  function ovIcon(label){
+    const text = label.toLowerCase();
+    const hit = OV_RULES.find(function(r){ return r[0].test(text); });
+    return '<svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true">' + OV_ICONS[hit ? hit[1] : 'file'] + '</svg>';
+  }
+  function buildNavOverview(){
+    const root = document.getElementById('navOverview');
+    if(!root) return;
+    const escH = function(t){ return t.replace(/[&<>"]/g, function(c){ return '&#' + c.charCodeAt(0) + ';'; }); };
+    const ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+    let html = '';
+    document.querySelectorAll('.main-nav > ul > li').forEach(function(item){
+      const top = item.querySelector(':scope > a');
+      const links = item.querySelectorAll(':scope > .dropdown .dd-menu > ul > li > a');
+      if(!top || !links.length) return;
+      const title = top.textContent.trim();
+      const href = top.getAttribute('href') || '#';
+      html += '<section class="ov-group" id="ov-' + escH(href.replace(/\.html.*$/, '')) + '"><div class="ov-inner">' +
+        '<div class="ov-head"><h2>' + escH(title) + '</h2><span class="ov-line" aria-hidden="true"></span>' +
+        '<a class="ov-all" href="' + escH(href) + '">View all' + ARROW + '<span class="sr-only"> ' + escH(title) + '</span></a></div>' +
+        '<div class="ov-grid">' + Array.prototype.map.call(links, function(a){
+          const label = a.textContent.trim();
+          return '<a class="ov-tile" href="' + escH(a.getAttribute('href') || '#') + '">' +
+            '<span class="ov-title">' + escH(label) + '</span>' +
+            '<span class="ov-foot">' + ovIcon(label) + '<span class="ov-arrow">' + ARROW + '</span></span></a>';
+        }).join('') + '</div></div></section>';
+    });
+    if(root._html !== html){ root._html = html; root.innerHTML = html; }
+  }
+  buildNavOverview();
+  window.TEFLNavOverview = buildNavOverview;
+
   /* ============ HEADER: search ============ */
   const searchToggle  = document.getElementById('searchToggle');
   const searchOverlay = document.getElementById('searchOverlay');
@@ -569,6 +639,7 @@
         leading.push(s);
       }
     });
+    groups.hasMenu = hasMenu;
     return groups;
   }
 
@@ -607,7 +678,11 @@
     });
     sections.forEach(function(s){ s.hidden = !!group && group.members.indexOf(s) < 0; });
     document.body.classList.toggle('is-section-view', !!group);
+    /* เปิดทั้งหน้า — CSS ใช้ย่อบางส่วนให้สั้น (เช่นการ์ด Study Plan เหลือแค่ป้ายกับชื่อแผน)
+       เป็นคลาสแยก ไม่ใช้ :not(.is-section-view) เพราะไม่มี JS ต้องเห็นเนื้อหาเต็ม (การ์ดย่อแล้วกดเปิดแผ่นไม่ได้) */
+    document.body.classList.toggle('is-page-view', !group);
     updateCrumb(group && group.label);
+    renderSectionTabs(content, groups, group);
 
     if(!group) return;
 
@@ -637,6 +712,36 @@
         openSheet(inner);
       }
     }
+  }
+  /* แถบหัวข้อใต้ banner — ลิงก์ตัวหนังสือไปแต่ละกลุ่ม ตัวที่เลือกอยู่มีขีดส้มใต้ชื่อ
+     ไม่มี hash = ไม่มีแถบ และเนื้อหาทั้งหน้ายังแสดงตามเดิม
+     ใส่เป็นพี่น้องของ .page-wrap ไม่ใช่ใน banner — banner ถูก cms.js เขียนทับทั้งก้อน แถบจะหายไปด้วย
+     แสดงเฉพาะหน้าที่มีเมนูย่อยและมีมากกว่าหนึ่งกลุ่ม; ปิดได้ด้วย .content[data-section-tabs="off"] (about.html)
+     สร้างใหม่ทุกครั้งเพราะชื่อเมนูเปลี่ยนได้หลัง cms.js โหลด */
+  function renderSectionTabs(content, groups, current){
+    const wrap = content.closest('.page-wrap');
+    let bar = document.querySelector('.section-tabs');
+    /* เปิดทั้งหน้า (ไม่ได้เลือกหัวข้อ) ไม่ต้องมีแถบ — เจ้าของเว็บขอ ต.ค. 2026 ให้โผล่เฉพาะตอนเลือกหัวข้อแล้ว */
+    if(!wrap || !current || !groups.hasMenu || groups.length < 2 || content.dataset.sectionTabs === 'off'){
+      if(bar) bar.remove();
+      return;
+    }
+    if(!bar){
+      bar = document.createElement('nav');
+      bar.className = 'section-tabs';
+      bar.setAttribute('aria-label', 'On this page');
+      wrap.before(bar);
+    }
+    const html = '<div class="st-inner">' + groups.map(function(g){
+      const on = g === current;
+      return '<a href="#' + esc(g.lead.id) + '"' + (on ? ' class="is-active" aria-current="true"' : '') + '>' + esc(g.label) + '</a>';
+    }).join('') + '</div>';
+    if(bar._html === html) return;
+    bar._html = html;
+    bar.innerHTML = html;
+    /* มือถือแถบเลื่อนแนวนอน — เลื่อนให้เห็นตัวที่เลือก */
+    const active = bar.querySelector('.is-active');
+    if(active) bar.firstChild.scrollLeft = active.offsetLeft - 16;
   }
   /* hash ปัจจุบันชี้ element ข้างใน section ไหม — ใช้ข้ามการเลื่อนขึ้นบนสุดตอนโหลดหน้า */
   function hashIsInner(){

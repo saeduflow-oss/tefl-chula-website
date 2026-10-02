@@ -335,7 +335,10 @@ def replace_block(html, hook, inner, group=None, attr=None, norm=None):
 
 ALL_PAGES = ['index.html', 'about.html', 'academics.html', 'admission.html',
              'research.html', 'activities.html', 'faqs.html',
-             'forms-and-links.html', 'contact.html']
+             'forms-and-links.html', 'contact.html',
+             # หน้ารวม — ไม่มีบล็อกของตัวเอง แต่ต้องได้เมนูและ footer ชุดเดียวกับทุกหน้า
+             # (การ์ดในหน้านี้ site.js สร้างจากเมนูตอนโหลด)
+             'explore.html']
 
 
 def sync_blocks(blocks, check, st):
