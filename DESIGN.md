@@ -506,7 +506,10 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
   · `.p-facts` (`<dl>` แถวเปรียบเทียบ) · `.p-desc` · `.p-link` (ดันลงก้นการ์ดด้วย `margin-top:auto`)
   - การ์ดไม่ใช่ลิงก์ทั้งใบ จึง**ไม่มี** hover ยกการ์ด — ลิงก์อยู่ที่ `.p-link` อย่างเดียว
   - ทุกการ์ดต้องมีแถว `.p-facts` ชุดเดียวกันเรียงเหมือนกัน แผนที่ไม่มีข้อนั้นใส่ `&mdash;` ห้ามตัดแถวทิ้ง
-  - ใส่เฉพาะข้อเท็จจริงที่หน้าเว็บยืนยันได้ (เช่น ไม่มีแถว Publication เพราะยังไม่ชัดว่า Plan B ต้องตีพิมพ์หรือไม่)
+  - ใส่เฉพาะข้อเท็จจริงจากหน้าพอร์ทัลของหลักสูตร (Plan A / Plan B) — ชื่อแผนใช้ตามพอร์ทัล "Thesis and Coursework" /
+    "Coursework and Comprehensive Exam" · แถวปัจจุบัน: Final work · Publication · Comprehensive exam
+  - **กว้างเท่า Curriculum Info** (ยื่นออกนอก `.page-wrap` 980px ถึง 1180px) — max-width, ขอบข้าง `clamp(16px,2.4vw,24px)`,
+    gap `clamp(16px,2.4vw,32px)`, มุม `clamp(18px,2vw,26px)`, padding `clamp(22px,3vw,44px)` ต้องตรงกับบล็อก PHOTO CARD BAND
   - ≤560px แถว `.p-facts` เปลี่ยนจากสองคอลัมน์เป็นหัวข้อซ้อนบนค่า
 - **`.plan-tabs` / `.pt-tab` / `.pt-panel`** (List of Courses) — แท็บสลับตาราง Plan A / B ตามแบบ ARIA tabs
   (`role="tab"`, `aria-selected`, `aria-controls`, ลูกศรซ้าย/ขวา Home/End) แผงที่ไม่ได้เลือกติด `hidden`
