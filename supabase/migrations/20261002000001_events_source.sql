@@ -8,7 +8,8 @@
 -- image  — ภาพประกอบเล็กด้านขวาของรายการ (เว้นว่างได้)
 -- =========================================================
 
+-- if not exists — รันซ้ำได้ไม่ error (ถ้าคอลัมน์มีแล้ว Postgres ข้ามทั้งนิยาม รวม check constraint ด้วย)
 alter table public.events
-  add column source text not null default 'tefl'
+  add column if not exists source text not null default 'tefl'
     constraint events_source_check check (source in ('tefl', 'edu', 'chula')),
-  add column image text;
+  add column if not exists image text;
