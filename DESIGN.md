@@ -436,6 +436,12 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
   · รูปผูกกับลำดับการ์ดด้วย `nth-child` → ตัวแปร `--card-img` (สลับลำดับการ์ดในบล็อกแล้วรูปจะสลับตาม) ไฟล์อยู่ `img/goals/`:
     Goals `card-teachers` (PRWEB-067) `card-research` (161) · Five Things `know-enrollment` (009) `know-grading` (150)
     `know-thesis` (034) `know-publication` (110) `know-exam` (162) — ห้ามใช้รูปที่อยู่ในแถบรูปเลื่อนซ้ำ
+- **Plan sheet (`.plan-sheet`) — academics.html #study-plan** กดการ์ด Plan A / Plan B (ทั้งใบ) หรือเมนู Plan A / Plan B
+  → แผ่นล่างเลื่อนขึ้นจากขอบล่างแทนการกระโดดไป List of Courses (ไม่มี JS ลิงก์ยังไป `#list-of-courses` ตามเดิม)
+  · พื้น `#faf7f3` มุมบนโค้ง 26px (≤560px 22px) กว้างสุด 760px สูงสุด 86vh เลื่อนในแผ่น · ที่จับ 46×5px ติดบน (ลากลง >90px ปิด) · ปุ่ม × กลม
+  · ป้าย Plan เป็นแคปซูล `#fde3da` ตัวส้มเข้ม · หัวข้อ `--font-display` · หน่วยกิต · คำอธิบาย · แถว facts · ตาราง "Required courses"
+  · **เนื้อหาโคลนสดจากการ์ดและ tabpanel ของ List of Courses ทุกครั้งที่เปิด** (หา tabpanel จาก `data-tab-open` ของลิงก์ในการ์ด) — แก้ใน /admin แล้วแผ่นตามเอง
+  · ปิดได้ด้วย ×, คลิกพื้นหลัง, Esc, ลากลง · ล็อกสกรอลหน้าด้วย `html.sheet-open`
 - **`.photo-strip` + `.ps-viewer`** — แถบรูปสองแถวใต้แถบส้ม Goals and Objectives **แสดงเฉพาะตอนเปิดผ่านเมนูย่อย (`about.html#goals`, `body.is-section-view`) — กด About เฉย ๆ ไม่เห็น** (เต็มความกว้างจอ, การ์ด 3:4 มุม 18px,
   กว้าง `clamp(150px,15vw,230px)`) แถวบนเลื่อนซ้าย 28px/s แถวล่างเลื่อนขวา 24px/s · **ปัดด้วยนิ้ว/ล้อเมาส์/คลิกลากได้**
   (หยุดเลื่อนเอง 2.5 วินาทีหลังผู้ใช้แตะ, เมาส์ชี้แล้วหยุด, reduced-motion = ไม่เลื่อนเองแต่ยังปัดได้)

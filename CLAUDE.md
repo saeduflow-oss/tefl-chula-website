@@ -62,7 +62,7 @@ deployed — do not update it in sync.
 
 ### site.js generates markup at runtime
 
-Three features exist only after `site.js` runs — none of them are in the HTML:
+Four features exist only after `site.js` runs — none of them are in the HTML:
 
 - **Mobile drawer** — cloned from each `.main-nav > ul > li` and its `.dropdown > .dd-menu`.
 - **Search index** — built from `.main-nav .dd-menu a` + `.footer-col a` (grouped by the parent
@@ -70,6 +70,10 @@ Three features exist only after `site.js` runs — none of them are in the HTML:
 - **Background music** — a hidden `<video muted playsinline>` (used as an audio player) and its
   toggle button are created and appended to `<body>`, so every page that loads `site.js` gets them
   without editing that page.
+
+- **Plan sheet** (`academics.html`) — the bottom sheet opened by the Plan A / Plan B cards in Study Plan
+  (and the Plan A / Plan B menu items). Its content is cloned from the card and the matching course
+  tabpanel on every open, so it follows whatever `cms.js` rendered.
 
 The first two read the nav markup as their data source. So a new page becomes searchable *only*
 once it is linked from the menus, and renaming or restructuring the `.main-nav` / `.dropdown` /

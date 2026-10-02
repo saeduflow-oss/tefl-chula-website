@@ -630,6 +630,12 @@
         void inner.offsetWidth;
         inner.classList.add('is-target');
       }
+      /* เมนู Plan A / Plan B เปิดแผ่นรายละเอียดเลย — จำ hash ไว้ ไม่ให้เปิดซ้ำตอน cms.js render ใหม่
+         (ไม่งั้นผู้ใช้ปิดไปแล้วแผ่นจะเด้งกลับขึ้นมา) */
+      if(inner.classList.contains('plan-card') && (fromHashChange === true || sheetHash !== location.hash)){
+        sheetHash = location.hash;
+        openSheet(inner);
+      }
     }
   }
   /* hash ปัจจุบันชี้ element ข้างใน section ไหม — ใช้ข้ามการเลื่อนขึ้นบนสุดตอนโหลดหน้า */
@@ -705,6 +711,137 @@
     if(next === undefined) return;
     event.preventDefault();
     selectTab(tabs[(next + tabs.length) % tabs.length], true);
+  });
+
+  /* ============ PLAN SHEET — กดการ์ดแผนใน Study Plan แล้วรายละเอียดเลื่อนขึ้นจากล่าง (academics.html) ============
+     แทนที่การกระโดดไป List of Courses: แผ่นล่าง (bottom sheet) แสดงรายละเอียดแผน + ตารางวิชาบังคับของแผนนั้น
+     เนื้อหาโคลนสด ๆ จากการ์ดและตารางในหน้าทุกครั้งที่เปิด ไม่ได้เก็บไว้ในโค้ด
+     — การ์ดมาจากบล็อก academics/study-plan ตารางมาจาก collection courses ใน DB แก้ใน /admin แล้วแผ่นนี้ตามเอง
+     ตารางหาจาก data-tab-open ของลิงก์ "See Plan X courses" ในการ์ด (ชี้ id ของ tabpanel ใน List of Courses)
+     ผูก event ที่ document และหา element สดทุกครั้ง เพราะ cms.js เขียนทับ section ทั้งก้อน (ดู CLAUDE.md)
+     ตัวแผ่นเองต่อท้าย <body> ไม่ได้อยู่ในบล็อกไหน จึงไม่โดนเขียนทับ — สร้างครั้งเดียวตอนเปิดครั้งแรก
+     ไม่มี JS = ลิงก์ยังพาไป #list-of-courses ตามเดิม */
+  /* var ไม่ใช่ let — filterSections ด้านบนเรียก openSheet ตอนโหลดหน้า ก่อนบรรทัดนี้จะทำงาน
+     ถ้าเป็น let จะติด TDZ (ReferenceError) แล้วตัวกรอง section พังทั้งหน้า */
+  var sheet = null;
+  var sheetReturn = null;
+  var sheetHash = '';
+
+  function buildSheet(){
+    sheet = document.createElement('div');
+    sheet.className = 'plan-sheet';
+    sheet.hidden = true;
+    sheet.innerHTML =
+      '<div class="ps-backdrop" data-sheet-close></div>' +
+      '<div class="ps-panel" role="dialog" aria-modal="true" aria-labelledby="planSheetTitle">' +
+        '<div class="ps-grab" aria-hidden="true"><span></span></div>' +
+        '<button type="button" class="ps-close" data-sheet-close aria-label="Close">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>' +
+        '<div class="ps-body"></div>' +
+      '</div>';
+    document.body.appendChild(sheet);
+    sheet.addEventListener('click', function(event){
+      if(event.target.closest('[data-sheet-close]')) closeSheet();
+    });
+    /* ลากที่จับ (หรือหัวแผ่น) ลงเพื่อปิด แบบแผ่นล่างบนมือถือ — ลากเกิน 90px ปิด ไม่ถึงเด้งกลับ */
+    const panel = sheet.querySelector('.ps-panel');
+    let startY = null, dy = 0;
+    panel.addEventListener('pointerdown', function(event){
+      if(!event.target.closest('.ps-grab')) return;
+      startY = event.clientY; dy = 0;
+      panel.setPointerCapture(event.pointerId);
+      panel.style.transition = 'none';
+    });
+    panel.addEventListener('pointermove', function(event){
+      if(startY === null) return;
+      dy = Math.max(0, event.clientY - startY);
+      /* คง -50% แนวนอนไว้ — แผ่นจัดกลางด้วย left:50% + translate (ดู PLAN SHEET ใน site.css) */
+      panel.style.transform = 'translate(-50%,' + dy + 'px)';
+    });
+    const release = function(){
+      if(startY === null) return;
+      startY = null;
+      panel.style.transition = '';
+      panel.style.transform = '';
+      if(dy > 90) closeSheet();
+    };
+    panel.addEventListener('pointerup', release);
+    panel.addEventListener('pointercancel', release);
+  }
+
+  function openSheet(card){
+    if(!sheet) buildSheet();
+    const pick = function(sel){ const el = card.querySelector(sel); return el ? el.cloneNode(true) : null; };
+    const link = card.querySelector('[data-tab-open]');
+    const panelEl = link && document.getElementById(link.getAttribute('data-tab-open'));
+    const table = panelEl && panelEl.querySelector('table');
+    const body = sheet.querySelector('.ps-body');
+    body.innerHTML = '';
+
+    const head = document.createElement('div');
+    head.className = 'ps-head';
+    const name = card.querySelector('.p-name');
+    const title = document.createElement('h2');
+    title.id = 'planSheetTitle';
+    title.textContent = name ? name.textContent.trim() : '';
+    const label = pick('.p-label');
+    if(label){ label.className = 'ps-tag'; head.appendChild(label); }
+    head.appendChild(title);
+    const credits = pick('.p-credits');
+    if(credits){
+      credits.className = 'ps-credits';
+      /* บนการ์ดหน่วยตัดเป็นสองบรรทัดด้วย <br> — ในแผ่นอยู่บรรทัดเดียว เปลี่ยนเป็นช่องว่าง (ซ่อน br เฉย ๆ คำจะติดกัน) */
+      credits.querySelectorAll('br').forEach(function(br){ br.replaceWith(' '); });
+      head.appendChild(credits);
+    }
+    body.appendChild(head);
+
+    const desc = pick('.p-desc');
+    if(desc){ desc.className = 'ps-desc'; body.appendChild(desc); }
+    const facts = pick('.p-facts');
+    if(facts){ facts.className = 'ps-facts'; body.appendChild(facts); }
+    if(table){
+      const h = document.createElement('h3');
+      h.className = 'ps-sub';
+      h.textContent = 'Required courses';
+      const wrap = document.createElement('div');
+      wrap.className = 'table-wrap';
+      wrap.appendChild(table.cloneNode(true));
+      body.appendChild(h);
+      body.appendChild(wrap);
+    }
+
+    sheetReturn = document.activeElement;
+    sheet.hidden = false;
+    document.documentElement.classList.add('sheet-open');
+    /* อ่าน offsetWidth บังคับให้เบราว์เซอร์คำนวณสถานะปิดก่อน แล้วค่อยใส่ .is-open ไม่งั้นไม่เห็นแผ่นเลื่อนขึ้น
+       (ไม่ใช้ requestAnimationFrame — แท็บพื้นหลัง/headless ไม่ยิง rAF แผ่นจะค้างเป็นจอใส ๆ บังหน้าทั้งหน้า) */
+    void sheet.offsetWidth;
+    sheet.classList.add('is-open');
+    sheet.querySelector('.ps-panel').scrollTop = 0;
+    sheet.querySelector('.ps-close').focus({ preventScroll:true });
+  }
+
+  function closeSheet(){
+    if(!sheet || sheet.hidden) return;
+    sheet.classList.remove('is-open');
+    document.documentElement.classList.remove('sheet-open');
+    setTimeout(function(){ if(!sheet.classList.contains('is-open')) sheet.hidden = true; }, 320);
+    if(sheetReturn && sheetReturn.focus) sheetReturn.focus({ preventScroll:true });
+  }
+
+  /* ทั้งการ์ดกดได้ (ไม่ใช่แค่ลิงก์ล่างการ์ด) — แต่ถ้ากำลังลากเลือกข้อความอยู่ ไม่เปิด */
+  document.addEventListener('click', function(event){
+    const card = event.target.closest('#study-plan .plan-card');
+    if(!card || event.metaKey || event.ctrlKey || event.shiftKey) return;
+    const sel = window.getSelection && String(window.getSelection());
+    if(sel && !event.target.closest('a')) return;
+    event.preventDefault();
+    event.stopPropagation();
+    openSheet(card);
+  }, true);
+  document.addEventListener('keydown', function(event){
+    if(event.key === 'Escape') closeSheet();
   });
 
   /* ============ KEYBOARD: Esc ปิดเมนู/ค้นหา ============ */
