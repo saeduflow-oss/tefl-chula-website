@@ -15,3 +15,6 @@ node_modules/
 # ไฟล์ชั่วคราวของ Supabase CLI
 supabase/.temp
 supabase/.branches
+
+# แคชของ Python จาก sync-content.py
+__pycache__/

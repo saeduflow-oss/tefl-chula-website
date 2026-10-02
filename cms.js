@@ -120,10 +120,22 @@
       '<div class="answer">' + (f.answer || '') + '</div></details>';
   }
 
+  /* วันที่ของข่าว — ตาราง news ไม่มีคอลัมน์วันที่ แต่ fb-sync เก็บเวลาโพสต์ไว้ใน sort_order
+     (= ลบของนาทีนับจาก epoch เพื่อให้ใหม่สุดขึ้นก่อน) จึงถอดกลับเป็นวันที่ได้เฉพาะแถวที่มี fb_post_id
+     ข่าวที่พิมพ์เองไม่มีวันที่ → ไม่แสดงบรรทัดวันที่เลย ดีกว่าแสดงวันผิด
+     คิดเป็นเวลาไทย (+7) ด้วย getUTC* เพื่อให้ตรงกับ sync-content.py ทุกเครื่องไม่ว่าเบราว์เซอร์อยู่โซนไหน */
+  function newsDate(n){
+    if(!n.fb_post_id || !(n.sort_order < 0)) return '';
+    const d = new Date(-n.sort_order * 60000 + 7 * 3600000);
+    const iso = d.toISOString().slice(0, 10);
+    return '<time class="nc-date" datetime="' + iso + '">' +
+      d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + '</time>';
+  }
+
   function newsCard(n){
     return '<article class="nc-card"><a href="' + esc(n.url || '#') + '">' +
       '<div class="nc-thumb"><img src="' + img(n.image) + '" alt=""></div>' +
-      '<div class="nc-body"><h3>' + esc(n.title) + '</h3>' +
+      '<div class="nc-body">' + newsDate(n) + '<h3>' + esc(n.title) + '</h3>' +
       (n.tag ? '<span class="nc-tag">' + esc(n.tag) + '</span>' : '') +
       '</div></a></article>';
   }
@@ -217,7 +229,13 @@
         h += '<div class="dropdown" id="' + id + '"><div class="dd-menu">' +
              (t.dd_title ? '<a class="dd-title" href="' + esc(t.href) + '">' + esc(t.dd_title) + '</a>' : '') +
              '<ul>' + kids.map(function(k){
-               return '<li><a href="' + esc(k.href) + '">' + esc(k.label) + '</a></li>';
+               /* ชั้นที่ 3 (เช่น Study Plan → Plan A / Plan B) — เมนูย่อยที่กางออกด้านข้าง
+                  ต้องตรงกับ nav_items() ใน sync-content.py ทุกตัวอักษร */
+               const subs = rows.filter(function(r){ return r.parent_id === k.id; });
+               return '<li' + (subs.length ? ' class="has-sub"' : '') + '><a href="' + esc(k.href) + '">' + esc(k.label) + '</a>' +
+                      (subs.length ? '<ul class="dd-sub">' + subs.map(function(s){
+                        return '<li><a href="' + esc(s.href) + '">' + esc(s.label) + '</a></li>';
+                      }).join('') + '</ul>' : '') + '</li>';
              }).join('') + '</ul></div></div>';
       }
       return h + '</li>';
@@ -385,6 +403,8 @@
       /* section.news-carousel ก็โดนเขียนทับเหมือนกัน ปุ่มลูกศร/จุดไข่ปลาจึงต้องผูกใหม่
          (initCarousels มีเครื่องหมายกันผูกซ้ำอยู่แล้ว เรียกซ้ำได้ปลอดภัย) */
       if(typeof window.TEFLCarouselInit === 'function') window.TEFLCarouselInit();
+      /* แถบรูปเลื่อนใน Goals (about.html) สร้างโดย site.js ต่อท้าย section — โดนลบไปกับการเขียนทับ */
+      if(typeof window.TEFLPhotoStripInit === 'function') window.TEFLPhotoStripInit();
     })
     .then(renderCollections)
     .then(function(results){
@@ -399,6 +419,8 @@
       /* หัวข้อ section ลิงก์ในเมนู และ footer เปลี่ยนไปแล้ว ดัชนีค้นหาที่ site.js
          สร้างไว้ตอนโหลดจึงเป็นของเก่า ต้องสั่งสร้างใหม่ */
       if(typeof window.TEFLSearchReindex === 'function') window.TEFLSearchReindex();
+      /* แผง "ไปส่วนอื่น" ของ site.js ใช้ชื่อจาก h2 — หัวข้อเพิ่งเปลี่ยน ต้องสร้างใหม่ */
+      if(typeof window.TEFLSectionFilter === 'function') window.TEFLSectionFilter();
 
       (results || []).forEach(function(r){
         if(r.status === 'rejected'){

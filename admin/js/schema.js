@@ -35,17 +35,26 @@ const SCHEMA = {
     listT:r=>r.label, listS:r=>r.href + (r.dd_title ? '  ·  หัวดรอปดาวน์: ' + r.dd_title : ''),
     /* เรียงเป็นต้นไม้: รายการบนตามลำดับ แล้วตามด้วยรายการย่อยของมัน
        ถ้าเรียงตาม sort_order ดิบ ๆ รายการย่อยของทุกเมนูจะปนกันหมด */
+    /* มี 3 ชั้น: แถบบน → ดรอปดาวน์ → เมนูข้าง (เช่น Study Plan → Plan A / Plan B) — เรียงลูกต่อท้ายแม่ทีละชั้น */
     sortRows:rows=>{
-      const tops = rows.filter(r=>!r.parent_id).sort((a,b)=>a.sort_order-b.sort_order);
-      return tops.flatMap(t=>[t, ...rows.filter(r=>r.parent_id===t.id).sort((a,b)=>a.sort_order-b.sort_order)]);
+      const kids = id=>rows.filter(r=>(r.parent_id||null)===id).sort((a,b)=>a.sort_order-b.sort_order);
+      const walk = id=>kids(id).flatMap(r=>[r, ...walk(r.id)]);
+      return walk(null);
     },
-    groupBy:r=>r.parent_id ? '↳ ในดรอปดาวน์ของ ' + (rows.find(x=>x.id===r.parent_id)||{}).label : 'แถบเมนูบน: ' + r.label,
+    groupBy:r=>{
+      if(!r.parent_id) return 'แถบเมนูบน: ' + r.label;
+      const p = rows.find(x=>x.id===r.parent_id) || {};
+      return p.parent_id ? '↳↳ เมนูข้างของ ' + p.label : '↳ ในดรอปดาวน์ของ ' + p.label;
+    },
     fields:[
       {k:'label', t:'text', label:'ข้อความบนเมนู', req:true},
       {k:'href', t:'text', label:'ลิงก์', req:true,
        hint:'พิมพ์ชื่อหน้า เช่น about.html หรือถ้าจะให้เลื่อนไปหัวข้อในหน้านั้น ใส่ # ต่อท้าย เช่น about.html#goals'},
       {k:'parent_id', t:'select', label:'อยู่ที่ไหน',
-       opts:rows=>[['','แถบเมนูบนสุด'], ...rows.filter(r=>!r.parent_id).map(r=>[r.id, 'ในดรอปดาวน์ของ ' + r.label])]},
+       /* เลือกแม่ได้ 2 ชั้น (แถบบน หรือรายการในดรอปดาวน์) — ชั้นที่ 4 cms.js ไม่ได้วาด จึงไม่ให้เลือก */
+       opts:rows=>[['','แถบเมนูบนสุด'],
+         ...rows.filter(r=>!r.parent_id).flatMap(t=>[[t.id, 'ในดรอปดาวน์ของ ' + t.label],
+           ...rows.filter(r=>r.parent_id===t.id).map(k=>[k.id, '　เมนูข้างของ ' + k.label + ' (ใน ' + t.label + ')'])])]},
       {k:'dd_title', t:'text', label:'หัวดรอปดาวน์',
        hint:'ใช้เฉพาะรายการบนสุดที่มีรายการย่อย เช่น "About the Program" ไม่มีรายการย่อยเว้นว่างได้'}
     ]

@@ -23,7 +23,7 @@
       <nav class="main-nav" id="mainNav" aria-label="Main menu">
         <ul data-cms="nav">
           <li><a href="about.html" data-dropdown="dd-about">About<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-about"><div class="dd-menu"><a class="dd-title" href="about.html">About the Program</a><ul><li><a href="about.html#goals">Goals and Objectives</a></li><li><a href="about.html#academic-staff">Academic Staff</a></li><li><a href="about.html#guest-lecturers">Guest Lecturers</a></li></ul></div></div></li>
-          <li><a href="academics.html" class="active" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#study-plan">Study Plan</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></div></div></li>
+          <li><a href="academics.html" class="active" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li class="has-sub"><a href="academics.html#study-plan">Study Plan</a><ul class="dd-sub"><li><a href="academics.html#plan-a">Plan A (Thesis and Coursework)</a></li><li><a href="academics.html#plan-b">Plan B (Coursework &amp; Comprehensive Exam)</a></li></ul></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></div></div></li>
           <li><a href="admission.html" data-dropdown="dd-admission">Admission<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-admission"><div class="dd-menu"><a class="dd-title" href="admission.html">Admission</a><ul><li><a href="admission.html#admission-requirements">Admission Requirements</a></li><li><a href="admission.html#admission-procedures">Admission Procedures</a></li><li><a href="admission.html#admission-deadline">Admission Deadline</a></li></ul></div></div></li>
           <li><a href="research.html" data-dropdown="dd-research">Research<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-research"><div class="dd-menu"><a class="dd-title" href="research.html">Research</a><ul><li><a href="research.html#research-guidelines">Guidelines for Research Procedures</a></li><li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li><li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li></ul></div></div></li>
           <li><a href="activities.html" data-dropdown="dd-activities">Activities<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-activities"><div class="dd-menu"><a class="dd-title" href="activities.html">Activities</a><ul><li><a href="activities.html#activities-list">Activities List</a></li><li><a href="activities.html#intensive-course">Intensive Course</a></li><li><a href="activities.html#announcements">Announcements</a></li><li><a href="activities.html#calendar">Event Calendar</a></li></ul></div></div></li>
@@ -162,7 +162,6 @@
           </div>
 
           <div class="inner">
-            <div class="band-title">Five Things to Know</div>
             <div class="mission-cards">
 
               <div class="mission-card">
@@ -222,55 +221,31 @@
           year 2025 onward) offers two tracks:
         </p>
 
-        <div class="tile-grid">
+        <div class="plan-grid">
 
-          <a href="#list-of-courses" class="tile-card">
-            <span class="t-label">Plan A</span>
-            <div class="t-name">Academic Track<br>Coursework + Thesis</div>
-            <p class="t-meta">36 credit hours of coursework, plus a thesis &mdash; part of which must be published or presented at an academic conference.</p>
-            <div class="t-foot">
-              <span class="t-ic">
-                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 4H10a2 2 0 0 0-2 2v24a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V10z"/><path d="M22 4v6h6"/><path d="M13 18h10M13 23h7"/></svg>
-              </span>
-              <span class="t-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
-            </div>
-          </a>
+          <article class="plan-card">
+            <span class="p-label">Plan A</span>
+            <h3 class="p-name">Academic Track</h3>
+            <div class="p-credits"><span class="num">36</span><span class="unit">credit hours<br>of coursework</span></div>
+            <dl class="p-facts">
+              <div><dt>Final work</dt><dd>Thesis</dd></div>
+              <div><dt>Comprehensive exam</dt><dd>&mdash;</dd></div>
+            </dl>
+            <p class="p-desc">The thesis is supervised independent research on an explicit theoretical foundation &mdash; problem, framework, methodology, findings and conclusions. Part of it must be published or presented at an academic conference.</p>
+            <a href="#list-of-courses" class="p-link" data-tab-open="courses-plan-a">See Plan A courses<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+          </article>
 
-          <a href="#list-of-courses" class="tile-card">
-            <span class="t-label">Plan B</span>
-            <div class="t-name">Professional Track<br>Coursework + Project</div>
-            <p class="t-meta">33 credit hours of coursework, plus a 3-credit research-based master project and a comprehensive exam.</p>
-            <div class="t-foot">
-              <span class="t-ic">
-                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 4a9 9 0 0 0-5 16.5V25h10v-4.5A9 9 0 0 0 18 4z"/><path d="M14.5 29h7M15.5 32h5"/></svg>
-              </span>
-              <span class="t-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
-            </div>
-          </a>
-
-          <a href="#curriculum-info" class="tile-card">
-            <span class="t-label">Plan A</span>
-            <div class="t-name">About the Thesis</div>
-            <p class="t-meta">Supervised independent research on an explicit theoretical foundation &mdash; problem, framework, methodology, findings and conclusions.</p>
-            <div class="t-foot">
-              <span class="t-ic">
-                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="16" r="10"/><path d="m23.5 23.5 7 7"/><path d="M16 11v10M11 16h10"/></svg>
-              </span>
-              <span class="t-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
-            </div>
-          </a>
-
-          <a href="#curriculum-info" class="tile-card">
-            <span class="t-label">Plan B</span>
-            <div class="t-name">About the Master Project</div>
-            <p class="t-meta">More applied than a thesis &mdash; a tangible product plus a written report covering its basis, development and any trial results.</p>
-            <div class="t-foot">
-              <span class="t-ic">
-                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 4 4 11l14 7 14-7z"/><path d="M4 11v12l14 7 14-7V11"/><path d="M18 18v12"/></svg>
-              </span>
-              <span class="t-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
-            </div>
-          </a>
+          <article class="plan-card">
+            <span class="p-label">Plan B</span>
+            <h3 class="p-name">Professional Track</h3>
+            <div class="p-credits"><span class="num">33</span><span class="unit">credit hours<br>of coursework</span></div>
+            <dl class="p-facts">
+              <div><dt>Final work</dt><dd>Research-based master project (3 credits)</dd></div>
+              <div><dt>Comprehensive exam</dt><dd>Required</dd></div>
+            </dl>
+            <p class="p-desc">The master project is more applied than a thesis &mdash; a tangible product plus a written report covering its basis, development and any trial results.</p>
+            <a href="#list-of-courses" class="p-link" data-tab-open="courses-plan-b">See Plan B courses<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+          </article>
 
         </div>
 
@@ -291,11 +266,11 @@
         </div>
         <p>Required courses under Curriculum B.E. 2568.</p>
 
-        <div class="table-label">
-          <span class="t-tag">Plan A</span>
-          <span class="t-title">Academic Track &mdash; 12 credits</span>
+        <div class="plan-tabs" role="tablist" aria-label="Required courses by plan">
+          <button type="button" class="pt-tab" role="tab" id="tab-courses-plan-a" aria-controls="courses-plan-a" aria-selected="true"><span class="t-tag">Plan A</span>Academic Track <span class="pt-cr">12 credits</span></button>
+          <button type="button" class="pt-tab" role="tab" id="tab-courses-plan-b" aria-controls="courses-plan-b" aria-selected="false" tabindex="-1"><span class="t-tag">Plan B</span>Professional Track <span class="pt-cr">12 credits</span></button>
         </div>
-        <div class="table-wrap">
+        <div class="table-wrap pt-panel" role="tabpanel" id="courses-plan-a" aria-labelledby="tab-courses-plan-a">
           <table class="data-table">
             <thead>
               <tr>
@@ -313,11 +288,7 @@
           </table>
         </div>
 
-        <div class="table-label">
-          <span class="t-tag">Plan B</span>
-          <span class="t-title">Professional Track &mdash; 12 credits</span>
-        </div>
-        <div class="table-wrap">
+        <div class="table-wrap pt-panel" role="tabpanel" id="courses-plan-b" aria-labelledby="tab-courses-plan-b" hidden>
           <table class="data-table">
             <thead>
               <tr>

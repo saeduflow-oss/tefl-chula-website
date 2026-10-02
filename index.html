@@ -10,15 +10,16 @@
 <link rel="stylesheet" href="fonts/chula.css">
 <link rel="stylesheet" href="site.css">
 <style>
-  /* พีชอ่อน = สีส้มแบรนด์เจือขาวจนเกือบสุด ใช้เป็นพื้นหัวการ์ด Courses
-     อยู่ในหน้านี้หน้าเดียว ถ้าวันหนึ่งมีหน้าอื่นใช้ด้วย ให้ย้ายไปเป็น token ใน site.css */
-  :root{ --card-peach:#fdf1ea; }
 
-  /* ============ HERO (full screen + audience switcher) ============ */
+  /* ============ HERO (สไลด์รูป + audience switcher) ============
+     สูงราว 70% ของจอ (เดิมเต็มจอ ผู้ดูแลขอให้เล็กลง ให้เห็นเนื้อหาถัดไปตั้งแต่แรกเปิด)
+     มีขั้นต่ำ 420px กันหัวเรื่องอัดแน่นบนจอเตี้ย และเพดาน 720px กันจอใหญ่สูงเกิน
+     ค่าเดียวกันต้องใส่ทั้ง .hero และ .hero-inner — ตัวในเป็นตัวจัดหัวเรื่องให้อยู่กลางแนวตั้ง */
   .hero{
+    --hero-h:clamp(420px,70vh,720px);
     position:relative;
     width:100%;
-    min-height:calc(100vh - var(--hdr-h));
+    min-height:var(--hero-h);
     overflow:hidden;
     background:#110e0d;
   }
@@ -57,7 +58,7 @@
   .hero-inner{
     position:relative;
     z-index:3;
-    min-height:calc(100vh - var(--hdr-h));
+    min-height:var(--hero-h);
     display:grid;
     grid-template-columns:minmax(0,1fr);
     justify-items:center;
@@ -81,48 +82,51 @@
   }
   .hero-copy .sub{
     margin-top:20px;
-    font-size:clamp(14px,1.25vw,18px);
+    font-size:clamp(15.5px,1.4vw,20px);
     font-weight:500;
     letter-spacing:.4px;
     opacity:.94;
     text-shadow:0 3px 18px rgba(0,0,0,.32);
   }
+  /* จุดบอกสไลด์: ใบปัจจุบันยืดเป็นแคปซูลสีแบรนด์ ใบอื่นเป็นจุดเทาทึบ
+     ยืดด้วย width (ไม่ใช่ scale) ให้ปุ่มข้าง ๆ ขยับหลบตามจริง ไม่ทับกัน */
   .slider-dots{
     position:absolute;
     bottom:22px;left:50%;
     transform:translateX(-50%);
     z-index:6;
-    display:flex;gap:9px;
+    display:flex;align-items:center;gap:12px;
   }
   .slider-dots button{
-    width:9px;height:9px;
-    border-radius:50%;
-    border:1.5px solid rgba(255,255,255,.6);
-    background:transparent;
+    width:11px;height:11px;
+    border-radius:999px;
+    border:0;
+    background:rgba(255,255,255,.55);
     cursor:pointer;
-    transition:all .25s;
+    transition:width .35s ease,background .35s ease;
     padding:0;
   }
+  .slider-dots button:hover{background:rgba(255,255,255,.85);}
   .slider-dots button.active{
-    background:#fff;border-color:#fff;
-    transform:scale(1.25);
+    width:36px;
+    background:var(--brand);
   }
   @media (max-width:900px){
-    .hero,.hero-inner{min-height:calc(100vh - var(--hdr-h));}
+    .hero{--hero-h:clamp(380px,62vh,600px);}
     .hero-inner{padding:40px 0 58px;}
     .hero-copy{padding:0 20px;}
   }
 
   /* ============ WELCOME ============ */
   .welcome{
-    max-width:860px;
+    max-width:940px;
     margin:0 auto;
     text-align:center;
     padding:64px 24px 56px;
   }
   /* heading handled by the shared .section-head component */
   .welcome p{
-    font-size:16px;
+    font-size:20px;
     line-height:2;
     color:var(--text-muted);
     margin-bottom:26px;
@@ -150,7 +154,7 @@
 }
   .missions .inner{max-width:1180px;margin:0 auto;}
   .missions h2{
-    font-size:clamp(28px,3vw,38px);
+    font-size:clamp(31.5px,3.36vw,42.5px);
     font-family:var(--font-display);
     color:#fff;
     margin-bottom:clamp(30px,3.4vw,44px);
@@ -194,14 +198,14 @@
   }
   .mission-card h4{
     margin-top:clamp(16px,1.8vw,24px);
-    font-size:clamp(17.5px,1.5vw,23px);
+    font-size:clamp(19.5px,1.68vw,26px);
     font-weight:700;
     line-height:1.3;
     color:#fff;
   }
   .mission-card p{
     margin-top:10px;
-    font-size:clamp(14px,1.1vw,16px);
+    font-size:clamp(15.5px,1.23vw,18px);
     line-height:1.65;
     color:rgba(255,255,255,.9);
     max-width:30ch;
@@ -256,30 +260,30 @@
     justify-content:center;
     margin-top:clamp(18px,2.2vw,26px);
   }
-  /* การ์ดรูปแนวตั้ง: รูปเต็มใบ + ม่านไล่สีทับด้านบน หัวข้ออยู่บน ปุ่ม + อยู่มุมล่างขวา */
+  /* การ์ดรูปแนวตั้ง: รูปเต็มใบ + ม่านมืดไล่จากบน ตัวอักษรขาวอยู่บน ปุ่ม + อยู่มุมล่างขวา */
   .course-card{
     position:relative;
     display:block;
-    aspect-ratio:3/4;
+    aspect-ratio:4/5;               /* ทรงสูงพอดี ๆ: รูปแนวนอน 3:2 เห็นราว 53% ของความกว้าง
+                                       3:4 สูงไปจนคนในรูปดูถูกซูมเข้า, 1:1 เตี้ยไป — ผู้ดูแลเลือกตรงกลาง */
     border-radius:18px;
     overflow:hidden;
-    background:var(--card-peach);   /* ต้องเป็นสีเดียวกับสต็อปแรกของ .c-bg เป๊ะ ๆ ไม่งั้นเห็นรอยต่อสี */
-    box-shadow:0 6px 18px rgba(43,43,43,.10);
+    background:#2b2b30;             /* กันขาวแวบตอนรูปยังโหลดไม่เสร็จ */
+    box-shadow:0 6px 18px rgba(43,43,43,.14);
     transition:transform .3s ease,box-shadow .3s ease;
   }
   .course-card:hover,
   .course-card:focus-visible{
     transform:translateY(-6px);
-    box-shadow:0 18px 38px rgba(43,43,43,.20);
+    box-shadow:0 18px 38px rgba(43,43,43,.26);
   }
   .course-card:focus-visible{outline:2px solid var(--brand-dark);outline-offset:3px;}
 
-  /* รูปอยู่ "แถบล่าง" ของการ์ด (38%→ขอบล่าง) ไม่ใช่เต็มใบ — ใส่รูปที่ style="--img:url('img/ชื่อไฟล์.jpg')"
-     เดิมรูปเต็มใบแล้วเอาม่านขาวทับครึ่งบน ทำให้ต้องครอปรูปชิดมากจนหน้าคนโดนขอบการ์ดตัด
-     กรอบแถบล่างมีอัตราส่วนราว 1.21:1 จึงใช้รูปแนวนอนที่จัดองค์ประกอบมาพอดีกรอบได้เลย */
+  /* รูปเต็มใบ — ใส่รูปที่ style="--img:url('img/ชื่อไฟล์.jpg')"
+     รูปแนวนอนจะถูกครอปด้านข้างบ้าง จึงควรเลือกรูปที่คน/จุดสนใจอยู่กลางภาพ */
   .course-card .c-photo{
     position:absolute;
-    top:38%;left:0;right:0;bottom:0;
+    inset:0;
     background-image:var(--img,none);
     background-size:cover;
     background-position:center;
@@ -287,37 +291,35 @@
   }
   .course-card:hover .c-photo{transform:scale(1.05);}
 
-  /* ม่านไล่สี: หัวการ์ดสีพีชอ่อนทึบให้ตัวหนังสืออ่านออก แล้วจางหมดก่อนถึงกลางรูป ใช้เฉดเดียวกันทุกใบ
-     - ทึบถึง 36% เพราะรูปเริ่มที่ 38% ตรงจุดนั้นม่านยังเข้มราว .95 จึงกลบขอบบนของรูปได้มิด
-       ถ้าลดลงจะเห็นเป็นเส้นตัดขวางการ์ด
-     - จางหมดที่ 56% ห้ามลากยาวกว่านี้ เพราะสีพีชจะไปเคลือบหน้าคนจนดูเป็นรูปย้อมสี
-       (เคยลองแบบทับทั้งใบและแบบส้มแบรนด์เต็มมาแล้ว หน้าคนกลายเป็นสีส้มทั้งคู่)
-     - ห้ามดันจุดทึบขึ้นเกิน ~36% เพราะบรรทัดคำอธิบายในการ์ดแคบยาวลงมาถึงราว 44% */
+  /* ม่านมืดไล่จากบน ให้หัวข้อ+คำอธิบายสีขาวอ่านออกไม่ว่ารูปจะสว่างแค่ไหน
+     การ์ดจัตุรัสข้อความยาวลงมาเกือบครึ่งใบ ม่านจึงจางหมดที่ 72% ส่วนล่างยังเห็นรูปเต็มสี (ถ้าลากยาวกว่านี้รูปจะหม่นทั้งใบ) */
   .course-card .c-bg{
     position:absolute;inset:0;
     background:linear-gradient(180deg,
-      var(--card-peach) 0%,
-      var(--card-peach) 36%,
-      rgba(253,241,234,.80) 44%,
-      rgba(253,241,234,.20) 50%,
-      rgba(253,241,234,0) 56%);
+      rgba(12,10,14,.82) 0%,
+      rgba(12,10,14,.64) 32%,
+      rgba(12,10,14,.26) 54%,
+      rgba(12,10,14,0) 72%);
   }
 
   .course-card .c-body{
     position:relative;
-    padding:20px 18px 0;
+    padding:22px 20px 0;
   }
   .course-card h5{
-    font-size:clamp(15px,1.25vw,18px);
+    font-family:var(--font-display);
+    font-size:clamp(19px,1.62vw,23.5px);
     font-weight:700;
-    line-height:1.32;
-    color:var(--text-dark);
+    line-height:1.3;
+    color:#fff;
+    text-shadow:0 1px 8px rgba(0,0,0,.25);
   }
   .course-card p{
-    margin-top:7px;
-    font-size:13px;
-    line-height:1.6;
-    color:var(--text-muted);
+    margin-top:8px;
+    font-size:14.5px;
+    line-height:1.65;
+    color:rgba(255,255,255,.88);
+    text-shadow:0 1px 6px rgba(0,0,0,.25);
   }
   .course-card .plus{
     position:absolute;
@@ -370,12 +372,12 @@
   .program-text{flex:1 1 380px;}
   .program-text h3{
     font-family:var(--font-display);
-    font-size:30px;
+    font-size:33.5px;
      color:var(--brand);
     margin-bottom:16px;
   }
   .program-text p{
-    font-size:16px;
+    font-size:20px;
     line-height:2;
     color:var(--text-muted);
     margin-bottom:20px;
@@ -388,7 +390,7 @@
     background:linear-gradient(135deg,#8aa6cf,#4a6da0);
     display:flex;align-items:center;justify-content:center;
     color:#fff;
-    font-size:13px;
+    font-size:14.5px;
     letter-spacing:2px;
     box-shadow:0 16px 36px rgba(36,58,97,.22);
   }
@@ -518,7 +520,7 @@
   .intro-title{
     font-family:var(--font-body);
     font-weight:400;
-    font-size:clamp(24px,3vw,38px);
+    font-size:clamp(27px,3.36vw,42.5px);
     line-height:1.75;
     color:var(--text-dark);
     letter-spacing:.2px;
@@ -612,7 +614,7 @@
   .faq h2{
     text-align:center;
     font-family:var(--font-display);
-    font-size:32px;
+    font-size:36px;
     margin-bottom:36px;
     color:var(--text-dark);
   }
@@ -629,7 +631,7 @@
     cursor:pointer;
     list-style:none;
     padding:18px 22px;
-    font-size:16px;
+    font-size:18px;
     font-weight:600;
     display:flex;
     justify-content:space-between;
@@ -647,10 +649,20 @@
   .faq-item[open] summary::after{content:"\2013";}
   .faq-item .answer{
     padding:0 22px 20px;
-    font-size:14.5px;
+    font-size:16px;
     line-height:1.9;
     color:var(--text-muted);
   }
+
+  /* ซ่อนชั่วคราว: Our Missions, ตัวเลขสถิติ, TEFL Program Overview / Learning Beyond the Classroom, FAQ
+     ซ่อนด้วย CSS แทนการลบ HTML เพราะ cms.js/sync-content.py เขียนเฉพาะ "ข้างใน" section
+     ถ้าลบ section ทิ้ง บล็อกใน Supabase จะหาที่ลงไม่เจอ — จะเอากลับมาแค่ลบกฎนี้ */
+  .missions,
+  .programs,
+  .intro-about,
+  .faq{display:none;}
+
+  /* LATEST NEWS — การ์ดรูปเต็มใบ ย้ายไป site.css แล้ว (บล็อก PHOTO CARDS) ใช้ร่วมกับ activities.html */
 </style>
 </head>
 <body>
@@ -666,7 +678,7 @@
       <nav class="main-nav" id="mainNav" aria-label="Main menu">
         <ul data-cms="nav">
           <li><a href="about.html" data-dropdown="dd-about">About<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-about"><div class="dd-menu"><a class="dd-title" href="about.html">About the Program</a><ul><li><a href="about.html#goals">Goals and Objectives</a></li><li><a href="about.html#academic-staff">Academic Staff</a></li><li><a href="about.html#guest-lecturers">Guest Lecturers</a></li></ul></div></div></li>
-          <li><a href="academics.html" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#study-plan">Study Plan</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></div></div></li>
+          <li><a href="academics.html" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li class="has-sub"><a href="academics.html#study-plan">Study Plan</a><ul class="dd-sub"><li><a href="academics.html#plan-a">Plan A (Thesis and Coursework)</a></li><li><a href="academics.html#plan-b">Plan B (Coursework &amp; Comprehensive Exam)</a></li></ul></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></div></div></li>
           <li><a href="admission.html" data-dropdown="dd-admission">Admission<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-admission"><div class="dd-menu"><a class="dd-title" href="admission.html">Admission</a><ul><li><a href="admission.html#admission-requirements">Admission Requirements</a></li><li><a href="admission.html#admission-procedures">Admission Procedures</a></li><li><a href="admission.html#admission-deadline">Admission Deadline</a></li></ul></div></div></li>
           <li><a href="research.html" data-dropdown="dd-research">Research<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-research"><div class="dd-menu"><a class="dd-title" href="research.html">Research</a><ul><li><a href="research.html#research-guidelines">Guidelines for Research Procedures</a></li><li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li><li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li></ul></div></div></li>
           <li><a href="activities.html" data-dropdown="dd-activities">Activities<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-activities"><div class="dd-menu"><a class="dd-title" href="activities.html">Activities</a><ul><li><a href="activities.html#activities-list">Activities List</a></li><li><a href="activities.html#intensive-course">Intensive Course</a></li><li><a href="activities.html#announcements">Announcements</a></li><li><a href="activities.html#calendar">Event Calendar</a></li></ul></div></div></li>
@@ -977,7 +989,7 @@
 
 
     <!-- ============ NEWS CAROUSEL ============ -->
-    <section class="news-carousel" id="news" aria-label="Latest News" data-cms-block="index/news">
+    <section class="news-carousel photo-cards" id="news" aria-label="Latest News" data-cms-block="index/news">
       <div class="nc-inner">
 
         <div class="nc-head">
@@ -987,12 +999,12 @@
 
         <div class="nc-viewport" tabindex="0" role="region" aria-label="News items, scrollable">
           <div class="nc-track" data-cms="news-home">
-            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1113029951076352"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1113029951076352.jpg" alt=""></div><div class="nc-body"><h3>🎓✨ The TEFL Graduation Party: Celebrating Achievement and New Beginnings ✨🎓</h3><span class="nc-tag">Facebook</span></div></a></article>
-            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1106338508412163"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1106338508412163.jpg" alt=""></div><div class="nc-body"><h3>Our Study Room is Officially Alive! 📚🎉</h3><span class="nc-tag">Facebook</span></div></a></article>
-            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1099401705772510"><div class="nc-thumb"><img src="" alt=""></div><div class="nc-body"><h3>🌏 Building International Bridges: Welcome Chuo University 🇯🇵🇹🇭</h3><span class="nc-tag">Facebook</span></div></a></article>
-            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1091044226608258"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1091044226608258.jpg" alt=""></div><div class="nc-body"><h3>🎓✨ You’re Invited! ✨🎓</h3><span class="nc-tag">Facebook</span></div></a></article>
-            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1087455723633775"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1087455723633775.jpg" alt=""></div><div class="nc-body"><h3>🙏✨Wai Kru Ceremony 2026✨🙏</h3><span class="nc-tag">Facebook</span></div></a></article>
-            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1072846615094686"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1072846615094686.jpg" alt=""></div><div class="nc-body"><h3>We would like to extend our deepest gratitude to Professor Angel M. Y. Lin for being our guest lecturer. She delivere…</h3><span class="nc-tag">Facebook</span></div></a></article>
+            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1128425796203434"><div class="nc-thumb"><img src="" alt=""></div><div class="nc-body"><time class="nc-date" datetime="2026-09-30">30 September 2026</time><h3>Chulalongkorn University Announcement</h3><span class="nc-tag">Facebook</span></div></a></article>
+            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1126115489767798"><div class="nc-thumb"><img src="" alt=""></div><div class="nc-body"><time class="nc-date" datetime="2026-09-27">27 September 2026</time><h3>Announcement of Chulalongkorn University</h3><span class="nc-tag">Facebook</span></div></a></article>
+            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1125777413134939"><div class="nc-thumb"><img src="" alt=""></div><div class="nc-body"><time class="nc-date" datetime="2026-09-27">27 September 2026</time><h3>Chulalongkorn University Announcement</h3><span class="nc-tag">Facebook</span></div></a></article>
+            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1113029951076352"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1113029951076352.jpg" alt=""></div><div class="nc-body"><time class="nc-date" datetime="2026-09-12">12 September 2026</time><h3>🎓✨ The TEFL Graduation Party: Celebrating Achievement and New Beginnings ✨🎓</h3><span class="nc-tag">Facebook</span></div></a></article>
+            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1106338508412163"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1106338508412163.jpg" alt=""></div><div class="nc-body"><time class="nc-date" datetime="2026-09-04">4 September 2026</time><h3>Our Study Room is Officially Alive! 📚🎉</h3><span class="nc-tag">Facebook</span></div></a></article>
+            <article class="nc-card"><a href="https://www.facebook.com/1120271157018898/posts/1091044226608258"><div class="nc-thumb"><img src="https://dpyhvsdtbihssapuwert.supabase.co/storage/v1/object/public/media/fb/104746398573611_1091044226608258.jpg" alt=""></div><div class="nc-body"><time class="nc-date" datetime="2026-08-17">17 August 2026</time><h3>🎓✨ You’re Invited! ✨🎓</h3><span class="nc-tag">Facebook</span></div></a></article>
           </div>
         </div>
 

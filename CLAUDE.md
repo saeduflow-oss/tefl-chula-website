@@ -43,7 +43,7 @@ check `git status` — an edit that was never committed is also never deployed.
 - The screenshot is always captured from the **top of the document**, ignoring `#anchor` and scroll.
   To inspect a section far down the page, temporarily hide the ones above it
   (e.g. inject `.hero,.welcome{display:none!important}`) rather than using a very tall window —
-  the hero is `min-height:calc(100vh - var(--hdr-h))` and will grow to fill it.
+  the hero is `min-height:clamp(420px,70vh,720px)` and grows with the window height.
 - Headless Chrome **clamps the layout viewport to a minimum of 500px**, so `--window-size=375`
   still lays out at 500px and crops the right side. Narrow-mobile breakpoints (≤420px, ≤460px)
   cannot be verified this way; verify them by reading the CSS.
@@ -111,8 +111,8 @@ pattern (see the CONTACT PAGE and FORMS & LINKS blocks).
   a menu must carry that exact `id`. The `scroll-margin-top` already on `.content section` keeps the
   sticky header from covering the heading — it must stay larger than the current header height.
 - **`--hdr-h`** holds the real header height at each of the three breakpoints (see the top of
-  `site.css` for the current values — they change whenever the logo is resized) and the hero height
-  is computed from it. Changing logo size or header padding means updating `--hdr-h` *and* the
+  `site.css` for the current values — they change whenever the logo is resized). The homepage hero no
+  longer uses it — its height is `--hero-h` in `index.html`. Changing logo size or header padding means updating `--hdr-h` *and* the
   `scroll-margin-top` above, or headings end up hidden behind the header on anchor links.
 - **`data-cms` attributes.** The hooks `cms.js` and `sync-content.py` use to find content
   containers. Renaming or removing one silently stops that block from updating — the page keeps
@@ -129,7 +129,7 @@ Two kinds of content now live in Supabase and are edited through `admin/index.ht
   items with real columns, marked in the HTML by `data-cms`
 - **blocks** (`blocks`, 58 rows) — the prose and headings of every `<section>` plus four footer
   regions, stored as raw HTML and marked by `data-cms-block`
-- **nav** (`nav`, two levels via `parent_id`) — the main menu, rendered into `.main-nav ul[data-cms="nav"]`
+- **nav** (`nav`, up to three levels via `parent_id` — the third renders as a side flyout, `li.has-sub > ul.dd-sub`) — the main menu, rendered into `.main-nav ul[data-cms="nav"]`
   with `class="active"` computed from the current filename
 - **settings** (`settings`, key/value) — the site's external connections: form endpoint, contact
   email/phone, map place, social URLs, background music. Applied to elements marked
@@ -175,12 +175,15 @@ So after `renderBlocks()`, `cms.js` calls, in this order:
 
 - `window.TEFLHeroRebind()` — re-applies the current slide to the new `#heroTrack` (`index.html`)
 - `window.TEFLCarouselInit()` — binds the news carousel to the new `.nc-viewport` (`site.js`)
+- `window.TEFLPhotoStripInit()` — rebuilds the Goals photo strip (auto-scroll, swipe/drag, tap-to-view lightbox) from the section's `data-photo-strip` (`site.js`)
 - `renderNav()` → `window.TEFLDrawerRebuild()` — the mobile drawer is cloned from the nav at load,
   so a new nav needs a new drawer
 - collections fill, then a `resize` event — recomputes carousel dots and arrow states
 - `applySettings()` — must run **after** blocks, because its targets (footer social links,
   phone) live inside the `site/footer-*` blocks and would be overwritten otherwise
 - `window.TEFLSearchReindex()` — rebuilds the search index from the new nav, headings and footer
+- `window.TEFLSectionFilter()` — re-applies the `#hash` section filter and rebuilds the breadcrumb
+  (the "Explore more on this page" panel was removed at the owner's request, Oct 2026)
 
 `sync-content.py` mirrors the same dependency: it applies settings to a block's HTML *before*
 writing it, otherwise the block pass and the settings pass overwrite each other on every run.

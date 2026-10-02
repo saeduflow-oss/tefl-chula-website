@@ -21,6 +21,7 @@ import json
 import re
 import subprocess
 import sys
+from datetime import datetime, timedelta, timezone
 
 URL = 'https://dpyhvsdtbihssapuwert.supabase.co'
 KEY = 'sb_publishable_f5Y0D69E80W_f7B5E5cgtQ_NV-H2kyN'
@@ -107,11 +108,24 @@ def faq_item(f):
             f'<div class="answer">{f["answer"]}</div></details>')
 
 
+def news_date(n):
+    """วันที่ของข่าว — ต้องตรงกับ newsDate() ใน cms.js
+    ถอดจาก sort_order ที่ fb-sync เก็บเป็นลบของนาทีนับจาก epoch ใช้ได้เฉพาะแถวจาก Facebook
+    ข่าวที่พิมพ์เองคืนค่าว่าง (ไม่แสดงวันที่) คิดเป็นเวลาไทย +7 เหมือนฝั่ง JS
+    """
+    so = n.get('sort_order') or 0
+    if not n.get('fb_post_id') or so >= 0:
+        return ''
+    d = datetime.fromtimestamp(-so * 60, tz=timezone(timedelta(hours=7)))
+    return (f'<time class="nc-date" datetime="{d:%Y-%m-%d}">'
+            f'{d.day} {MONTHS[d.month - 1]} {d.year}</time>')
+
+
 def news_card(n):
     tag = f'<span class="nc-tag">{esc(n["tag"])}</span>' if n.get('tag') else ''
     return (f'<article class="nc-card"><a href="{esc(n.get("url") or "#")}">'
             f'<div class="nc-thumb"><img src="{esc(n["image"])}" alt=""></div>'
-            f'<div class="nc-body"><h3>{esc(n["title"])}</h3>{tag}</div></a></article>')
+            f'<div class="nc-body">{news_date(n)}<h3>{esc(n["title"])}</h3>{tag}</div></a></article>')
 
 
 MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
@@ -187,6 +201,19 @@ def slug(v):
     return re.sub(r'^-|-$', '', re.sub(r'[^a-z0-9]+', '-', str(v).lower()))
 
 
+def nav_kid(rows, k):
+    """รายการในดรอปดาวน์ พร้อมชั้นที่ 3 ที่กางออกด้านข้าง (เช่น Study Plan → Plan A / Plan B)
+    ต้องตรงกับ renderNav() ใน cms.js ทุกตัวอักษร"""
+    subs = [r for r in rows if r.get('parent_id') == k['id']]
+    cls = ' class="has-sub"' if subs else ''
+    h = f'<li{cls}><a href="{esc(k["href"])}">{esc(k["label"])}</a>'
+    if subs:
+        h += ('<ul class="dd-sub">'
+              + ''.join(f'<li><a href="{esc(s["href"])}">{esc(s["label"])}</a></li>' for s in subs)
+              + '</ul>')
+    return h + '</li>'
+
+
 def nav_items(rows, page):
     """เมนูหลัก — ต้องตรงกับ renderNav() ใน cms.js
     class="active" ใส่ให้เมนูของหน้าที่กำลังเขียน จึงต้องเรียกแยกทีละหน้า"""
@@ -200,7 +227,7 @@ def nav_items(rows, page):
             title = (f'<a class="dd-title" href="{esc(t["href"])}">{esc(t["dd_title"])}</a>'
                      if t.get('dd_title') else '')
             h += (f'<div class="dropdown" id="dd-{slug(t["label"])}"><div class="dd-menu">{title}<ul>'
-                  + ''.join(f'<li><a href="{esc(k["href"])}">{esc(k["label"])}</a></li>' for k in kids)
+                  + ''.join(nav_kid(rows, k) for k in kids)
                   + '</ul></div></div>')
         out.append(h + '</li>')
     return out

@@ -324,6 +324,389 @@
   /* cms.js เรียกซ้ำหลังเขียนทับ section เพื่อผูกกับมาร์กอัปชุดใหม่ */
   window.TEFLCarouselInit = initCarousels;
 
+  /* ============ PHOTO STRIP — แถบรูปเลื่อนเองสองแถว + ปัด/ลากได้ + กดดูรูปใหญ่ (Goals and Objectives) ============
+     รายชื่อรูปเก็บไว้ที่แอตทริบิวต์ data-photo-strip บนตัว <section> (คั่นด้วยจุลภาค)
+     เพราะ section ไม่โดนเขียนทับ — cms.js กับ sync-content.py แทนแค่ข้างใน
+     มาร์กอัปจึงต้องสร้างจาก JS ที่นี่ ถ้าเขียนลง HTML/บล็อกใน DB จะโดนบล็อกเขียนทับหาย
+     รูปใหญ่สำหรับหน้าดูรูปคือชื่อเดียวกันต่อท้าย -lg (img/goals/g01.jpg → img/goals/g01-lg.jpg)
+
+     ครึ่งแรกเป็นแถวบน ครึ่งหลังเป็นแถวล่าง — รูปไม่ซ้ำกันข้ามแถว
+     แต่ละแถววางรูปซ้ำสองชุดต่อกันเพื่อให้วนได้ไม่สุด: เลื่อนเลยครึ่งก็ดีดกลับไปจุดเดียวกันของชุดแรก
+     (ชุดหนึ่งต้องกว้างกว่าจอ ไม่งั้นจะเห็นรอยดีด — ใช้แถวละ 10+ รูป)
+
+     ใช้ scrollLeft ของแถวจริง ๆ ไม่ใช้ CSS animation เพราะ animation ทำให้นิ้วปัดเองไม่ได้
+     ตำแหน่งเก็บเป็นทศนิยมใน pos ของเราเอง — บางเบราว์เซอร์ปัด scrollLeft เป็นจำนวนเต็ม
+     ถ้าอ่านกลับมาบวกต่อทีละ 0.5px จะติดอยู่กับที่ */
+  function initPhotoStrips(){
+    document.querySelectorAll('section[data-photo-strip]').forEach(function(section){
+      if(section.querySelector(':scope > .photo-strip')) return;
+      const photos = section.getAttribute('data-photo-strip').split(',')
+        .map(function(src){ return src.trim(); }).filter(Boolean);
+      if(!photos.length) return;
+      const half = Math.ceil(photos.length / 2);
+      const rows = photos.length > 12 ? [photos.slice(0, half), photos.slice(half)] : [photos];
+
+      const strip = document.createElement('div');
+      strip.className = 'photo-strip';
+      strip.innerHTML = rows.map(function(row, r){
+        function cells(copy){
+          return row.map(function(src){
+            const index = photos.indexOf(src);
+            /* ชุดที่สองมีไว้ให้วนเท่านั้น — ซ่อนจากโปรแกรมอ่านหน้าจอและลำดับ Tab ไม่ให้เจอรูปซ้ำ */
+            return '<button type="button" class="ps-card" data-ps-index="' + index + '"' +
+              (copy ? ' tabindex="-1" aria-hidden="true"' : ' aria-label="View photo ' + (index + 1) + ' of ' + photos.length + '"') +
+              '><img src="' + src + '" alt="" decoding="async" draggable="false"></button>';
+          }).join('');
+        }
+        return '<div class="ps-row' + (r ? ' is-reverse' : '') + '"><div class="ps-track">' + cells(false) + cells(true) + '</div></div>';
+      }).join('');
+      section.appendChild(strip);
+
+      const still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      strip.querySelectorAll('.ps-row').forEach(function(row){ runRow(row, still); });
+
+      strip.addEventListener('click', function(event){
+        const card = event.target.closest('.ps-card');
+        if(!card || strip.dataset.dragged === '1') return;
+        openViewer(photos, +card.dataset.psIndex, card);
+      });
+    });
+  }
+
+  function runRow(row, still){
+    const SPEED = row.classList.contains('is-reverse') ? -24 : 28;   /* px ต่อวินาที — ช้าพอให้ดูรูปทัน */
+    const strip = row.parentNode;
+    let pos = 0, last = 0, holdUntil = 0, hovering = false, drag = null;
+
+    function period(){ return row.scrollWidth / 2; }
+    /* ดีดกลับเข้าช่วง [0, ครึ่งแถว) — ภาพที่ตำแหน่ง x กับ x + ครึ่งแถวเป็นรูปเดียวกัน จึงไม่เห็นการกระโดด */
+    function wrap(){
+      const p = period();
+      if(p <= 0) return;
+      /* ใช้ modulo ไม่ใช่ลบครั้งเดียว — pos อาจไหลไปไกลหลายรอบ แล้ว scrollLeft ไปค้างท้ายแถวที่ว่างเปล่า */
+      pos = ((pos % p) + p) % p;
+      row.scrollLeft = pos;
+    }
+    /* แถวล่างเลื่อนไปทางขวา — เริ่มที่กลางแถวเพื่อให้มีที่ให้ถอยตั้งแต่แรก */
+    if(SPEED < 0) pos = -1;   /* wrap() แปลงเป็นท้ายชุดแรกเองเมื่อแถวมีความกว้างจริง (ตอนซ่อนอยู่ยังเป็น 0) */
+
+    function tick(now){
+      if(!row.isConnected) return;   /* ชุดเก่าที่ cms.js เขียนทับไปแล้ว ให้หยุดเอง */
+      const dt = last ? Math.min(now - last, 64) / 1000 : 0;
+      last = now;
+      /* section ถูกตัวกรองซ่อนอยู่ (เปิดเมนูย่อยอื่น) = แถวกว้าง 0 — ห้ามเดิน pos ต่อ
+         ไม่งั้นพอกด Goals and Objectives แถวจะโผล่มาที่ตำแหน่งเลยท้ายรูปไปแล้ว เห็นเป็นที่ว่าง */
+      if(!still && !hovering && !drag && now > holdUntil && row.clientWidth > 0){
+        pos += SPEED * dt;
+        wrap();
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    /* นิ้วปัด/ล้อเมาส์/แทร็กแพด เลื่อน scrollLeft เอง — ดึงค่ากลับมาเป็น pos แล้วหยุดเลื่อนเองสักพัก */
+    row.addEventListener('scroll', function(){
+      if(Math.abs(row.scrollLeft - pos) > 1){
+        pos = row.scrollLeft;
+        holdUntil = performance.now() + 2500;
+        wrap();
+      }
+    }, { passive:true });
+    row.addEventListener('touchstart', function(){ holdUntil = performance.now() + 2500; }, { passive:true });
+
+    row.addEventListener('mouseenter', function(){ hovering = true; });
+    row.addEventListener('mouseleave', function(){ hovering = false; });
+
+    /* เมาส์ไม่มีการปัดแบบนิ้ว — ทำ "คลิกค้างแล้วลาก" ให้เอง (นิ้วใช้การเลื่อนของเบราว์เซอร์อยู่แล้ว ลื่นกว่า) */
+    row.addEventListener('pointerdown', function(event){
+      if(event.pointerType !== 'mouse' || event.button !== 0) return;
+      drag = { x:event.clientX, start:pos, moved:false };
+      strip.dataset.dragged = '';
+    });
+    window.addEventListener('pointermove', function(event){
+      if(!drag) return;
+      const dx = event.clientX - drag.x;
+      /* ขยับเกิน 6px ถือว่าลาก ไม่ใช่คลิก — กันหน้าดูรูปเด้งขึ้นตอนปล่อยเมาส์ */
+      if(Math.abs(dx) > 6){ drag.moved = true; row.classList.add('is-dragging'); }
+      if(drag.moved){ pos = drag.start - dx; wrap(); }
+    });
+    window.addEventListener('pointerup', function(){
+      if(!drag) return;
+      if(drag.moved) strip.dataset.dragged = '1';
+      drag = null;
+      row.classList.remove('is-dragging');
+      holdUntil = performance.now() + 1500;
+      /* click ยิงหลัง pointerup — ล้างธงในรอบถัดไปให้คลิกครั้งหน้ากลับมาใช้ได้ */
+      setTimeout(function(){ strip.dataset.dragged = ''; }, 0);
+    });
+  }
+
+  /* ---- หน้าดูรูปใหญ่ (lightbox) — สร้างครั้งเดียวแปะไว้ที่ <body> นอก section จึงไม่โดน cms.js เขียนทับ ---- */
+  let viewer = null;
+  function openViewer(photos, index, opener){
+    if(!viewer){
+      viewer = document.createElement('div');
+      viewer.className = 'ps-viewer';
+      viewer.setAttribute('role', 'dialog');
+      viewer.setAttribute('aria-modal', 'true');
+      viewer.setAttribute('aria-label', 'Photo viewer');
+      viewer.innerHTML =
+        '<button type="button" class="psv-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>' +
+        '<button type="button" class="psv-nav is-prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button>' +
+        '<figure class="psv-stage"><img alt=""><figcaption class="psv-count"></figcaption></figure>' +
+        '<button type="button" class="psv-nav is-next" aria-label="Next photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>';
+      document.body.appendChild(viewer);
+
+      viewer.addEventListener('click', function(event){
+        if(event.target.closest('.psv-close') || event.target === viewer) closeViewer();
+        else if(event.target.closest('.is-prev')) step(-1);
+        else if(event.target.closest('.is-next')) step(1);
+      });
+      document.addEventListener('keydown', function(event){
+        if(!viewer.classList.contains('is-open')) return;
+        if(event.key === 'Escape') closeViewer();
+        else if(event.key === 'ArrowLeft') step(-1);
+        else if(event.key === 'ArrowRight') step(1);
+      });
+      /* ปัดซ้าย/ขวาบนรูปใหญ่เพื่อเปลี่ยนรูปบนมือถือ */
+      let touchX = null;
+      viewer.addEventListener('touchstart', function(event){ touchX = event.touches[0].clientX; }, { passive:true });
+      viewer.addEventListener('touchend', function(event){
+        if(touchX === null) return;
+        const dx = event.changedTouches[0].clientX - touchX;
+        touchX = null;
+        if(Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+      });
+    }
+    viewer._photos = photos;
+    viewer._opener = opener;
+    show(index);
+    viewer.classList.add('is-open');
+    document.documentElement.classList.add('ps-locked');
+    viewer.querySelector('.psv-close').focus();
+  }
+  function show(index){
+    const photos = viewer._photos;
+    viewer._index = (index + photos.length) % photos.length;
+    const img = viewer.querySelector('.psv-stage img');
+    img.src = photos[viewer._index].replace(/(\.\w+)$/, '-lg$1');
+    viewer.querySelector('.psv-count').textContent = (viewer._index + 1) + ' / ' + photos.length;
+  }
+  function step(delta){ show(viewer._index + delta); }
+  function closeViewer(){
+    viewer.classList.remove('is-open');
+    document.documentElement.classList.remove('ps-locked');
+    /* คืนโฟกัสให้การ์ดที่กดเปิด — คนใช้คีย์บอร์ดไม่หลุดกลับไปต้นหน้า */
+    if(viewer._opener && viewer._opener.isConnected) viewer._opener.focus({ preventScroll:true });
+  }
+
+  initPhotoStrips();
+  /* cms.js เรียกซ้ำหลังเขียนทับ section — แถบรูปโดนลบไปพร้อมกับเนื้อหาเดิม */
+  window.TEFLPhotoStripInit = initPhotoStrips;
+
+  /* ============ SECTION FILTER — กดเมนูย่อยแล้วเห็นเฉพาะส่วนนั้น ============
+     ลิงก์ #id จากเมนู/ค้นหา จะแสดงแค่กลุ่มของ section นั้น (ดู sectionGroups) ส่วนอื่นถูกซ่อน
+     แล้ว breadcrumb บน banner กลายเป็น Home > About > Academic Staff
+     ไม่มี hash หรือ hash ไม่ตรงกับ section ไหน = แสดงทั้งหน้าตามเดิม
+     ใช้ hidden บนตัว <section> เพราะ cms.js เขียนทับแค่ innerHTML — section เดิมยังอยู่
+     ค่า hidden จึงไม่หายหลัง render (อย่าย้ายไปไว้บน element ลูก)
+     ส่วน banner ถูก cms.js เขียนทับทั้งก้อน breadcrumb จึงต้องสร้างใหม่ทุกครั้ง (cms.js เรียกซ้ำให้)
+     ฟัง hashchange ด้วย เพราะกดเมนูขณะอยู่หน้าเดิมจะไม่โหลดหน้าใหม่
+     ทางกลับไปดูทั้งหน้ามีทางเดียวคือชื่อหน้าใน breadcrumb (แผง "Explore more" ถูกเอาออกแล้วตามที่ขอ) */
+  const CRUMB_SEP = '<svg class="sep" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>';
+  const pageFile = function(){ return location.pathname.split('/').pop() || 'index.html'; };
+  const esc = function(text){ return text.replace(/[&<>"]/g, function(c){ return '&#' + c.charCodeAt(0) + ';'; }); };
+  /* อ่านชื่อจาก h2 ทุกครั้ง (ไม่ cache) เพราะ cms.js อาจเปลี่ยนหัวข้อหลังโหลด */
+  const sectionTitle = function(s){ const h = s.querySelector('h2'); return (h ? h.textContent : s.id).trim(); };
+
+  function updateCrumb(label){
+    const crumb = document.querySelector('.page-banner .breadcrumb');
+    if(!crumb) return;
+    crumb.querySelectorAll('.crumb-sub').forEach(function(el){ el.remove(); });
+    let page = crumb.querySelector('[data-crumb-page]') || crumb.querySelector('.current');
+    if(!page) return;
+    /* ชื่อหน้า (About) เป็น span ตอนดูทั้งหน้า และเป็นลิงก์กลับทั้งหน้าตอนกรองอยู่ */
+    const wantLink = !!label;
+    if((page.tagName === 'A') !== wantLink){
+      const swap = document.createElement(wantLink ? 'a' : 'span');
+      swap.textContent = page.textContent;
+      swap.setAttribute('data-crumb-page', '');
+      if(wantLink) swap.href = pageFile();
+      else { swap.className = 'current'; swap.setAttribute('aria-current', 'page'); }
+      page.replaceWith(swap);
+      page = swap;
+    }
+    if(label){
+      page.insertAdjacentHTML('afterend',
+        CRUMB_SEP.replace('class="sep"', 'class="sep crumb-sub"') +
+        '<span class="current crumb-sub" aria-current="page">' + esc(label) + '</span>');
+    }
+  }
+
+  /* จัด section เป็นกลุ่มตามเมนู: section ที่เมนูลิงก์ถึงเป็นหัวกลุ่ม
+     section ที่เมนูไม่ได้ลิงก์ถึง ติดไปกับกลุ่มก่อนหน้า (เช่น Application Steps ไปกับ Admission Procedures)
+     ส่วนบทนำต้นหน้าที่ไม่มีในเมนู ติดไปกับกลุ่มแรก
+     (Program Overview → Goals and Objectives, Overview → Curriculum Info.)
+     อ่านเมนูสดทุกครั้ง เพราะ cms.js สร้างเมนูใหม่จากตาราง nav ได้ */
+  function sectionGroups(sections){
+    const file = pageFile();
+    const menu = {};
+    document.querySelectorAll('.main-nav .dd-menu a[href*="#"]').forEach(function(a){
+      const parts = (a.getAttribute('href') || '').split('#');
+      if((parts[0] || file) === file && parts[1]) menu[parts[1]] = a.textContent.trim();
+    });
+    const hasMenu = sections.some(function(s){ return s.id in menu; });
+    const groups = [];
+    let leading = [];
+    sections.forEach(function(s){
+      /* หน้าที่ไม่มีเมนูย่อย (FAQs) ให้ทุก section เป็นกลุ่มของตัวเอง — ยังลิงก์จากผลค้นหาได้ */
+      if(!hasMenu || s.id in menu){
+        groups.push({ lead:s, label:menu[s.id] || sectionTitle(s), members:leading.concat(s) });
+        leading = [];
+      } else if(groups.length){
+        groups[groups.length - 1].members.push(s);
+      } else {
+        leading.push(s);
+      }
+    });
+    return groups;
+  }
+
+  /* การ์ดแผนการเรียนใน Study Plan (academics.html) ได้ id จากป้ายบนการ์ด: "Plan A" → #plan-a
+     เป็นปลายทางของเมนูชั้นที่ 3 (Study Plan → Plan A / Plan B)
+     ใส่ด้วยสคริปต์ ไม่ได้เขียนใน HTML เพราะการ์ดมาจากบล็อก academics/study-plan ใน DB
+     cms.js เขียนบล็อกทับแล้ว id ที่เขียนไว้ในไฟล์จะหาย — จึงใส่ใหม่ทุกครั้งที่ filterSections ทำงาน
+     (cms.js เรียก TEFLSectionFilter หลัง render อยู่แล้ว) */
+  function tagPlanCards(){
+    document.querySelectorAll('.plan-card').forEach(function(card){
+      const label = card.querySelector('.p-label');
+      if(!card.id && label) card.id = label.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    });
+  }
+
+  /* hash ที่ชี้ element ข้างใน section (เช่น #plan-a) — คืน element นั้น ถ้าชี้ section เองคืน null */
+  function innerTarget(sections, id){
+    const el = id && document.getElementById(id);
+    if(!el || sections.indexOf(el) >= 0) return null;
+    return sections.find(function(s){ return s.contains(el); }) ? el : null;
+  }
+
+  function filterSections(fromHashChange){
+    const content = document.querySelector('.page-wrap .content');
+    if(!content) return;
+    tagPlanCards();
+    const sections = Array.from(content.querySelectorAll(':scope > section[id]'));
+    let id = '';
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch(e){}
+    const inner = innerTarget(sections, id);
+    /* ชี้ element ข้างใน = แสดงกลุ่มของ section ที่ครอบมันอยู่ */
+    if(inner) id = sections.find(function(s){ return s.contains(inner); }).id;
+    const groups = sectionGroups(sections);
+    const group = id && groups.find(function(g){
+      return g.members.some(function(s){ return s.id === id; });
+    });
+    sections.forEach(function(s){ s.hidden = !!group && group.members.indexOf(s) < 0; });
+    document.body.classList.toggle('is-section-view', !!group);
+    updateCrumb(group && group.label);
+
+    if(!group) return;
+
+    if(fromHashChange === true){
+      group.members.forEach(function(s){
+        s.classList.remove('sm-enter');
+        void s.offsetWidth;
+        s.classList.add('sm-enter');
+      });
+      if(!inner) toTop();
+    }
+    window.dispatchEvent(new Event('resize'));
+    /* เมนูชั้นที่ 3 — เลื่อนไปที่การ์ดนั้นแล้วกระพริบกรอบให้รู้ว่าเลือกอันไหน
+       เรียกตอน cms.js render ใหม่ด้วย เพราะเนื้อหาเปลี่ยนแล้วตำแหน่งการ์ดอาจขยับ */
+    if(inner){
+      inner.scrollIntoView({ block:'center', behavior:'instant' });
+      if(fromHashChange === true || !inner.dataset.flashed){
+        inner.dataset.flashed = '1';
+        inner.classList.remove('is-target');
+        void inner.offsetWidth;
+        inner.classList.add('is-target');
+      }
+    }
+  }
+  /* hash ปัจจุบันชี้ element ข้างใน section ไหม — ใช้ข้ามการเลื่อนขึ้นบนสุดตอนโหลดหน้า */
+  function hashIsInner(){
+    const content = document.querySelector('.page-wrap .content');
+    if(!content) return false;
+    let id = '';
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch(e){}
+    return !!innerTarget(Array.from(content.querySelectorAll(':scope > section[id]')), id);
+  }
+  /* ส่วนที่เลือกอยู่ใต้ banner พอดีแล้ว จึงเลื่อนขึ้นบนสุดให้เห็น breadcrumb ด้วย
+     แทนที่จะปล่อยให้เบราว์เซอร์เลื่อนไปที่ anchor (ซึ่งจะบัง banner ไว้)
+     'instant' ข้าม scroll-behavior:smooth ของ html — ไม่งั้นจะเห็นหน้าไหลขึ้นทุกครั้งที่เปิด */
+  function toTop(){ window.scrollTo({ top:0, left:0, behavior:'instant' }); }
+  filterSections();
+  if(document.body.classList.contains('is-section-view') && !hashIsInner()){
+    toTop();
+    /* เบราว์เซอร์เลื่อนไป anchor อีกรอบตอนโหลดเสร็จ ต้องดึงกลับขึ้นมา */
+    window.addEventListener('load', function(){
+      if(document.body.classList.contains('is-section-view') && !hashIsInner()) toTop();
+    });
+  }
+  window.addEventListener('hashchange', function(){ filterSections(true); });
+  /* "ดูทั้งหน้า" (ชื่อหน้าใน breadcrumb) — ลบ hash โดยไม่โหลดหน้าใหม่
+     แล้วค้างตำแหน่งไว้ที่ส่วนที่อ่านอยู่ */
+  document.addEventListener('click', function(event){
+    const link = event.target.closest('.breadcrumb a[data-crumb-page]');
+    if(!link || event.metaKey || event.ctrlKey || event.shiftKey) return;
+    event.preventDefault();
+    const current = document.getElementById(location.hash.slice(1));
+    history.pushState(null, '', location.pathname + location.search);
+    filterSections();
+    if(current) current.scrollIntoView({ block:'start' });
+  });
+  window.addEventListener('popstate', function(){ filterSections(true); });
+  /* cms.js เรียกซ้ำหลัง render เพื่อสร้าง breadcrumb ใหม่ */
+  window.TEFLSectionFilter = filterSections;
+
+  /* ============ PLAN TABS — สลับตารางรายวิชา Plan A / Plan B (academics.html) ============
+     ผูก event ไว้ที่ document แล้วหาแท็บสด ๆ ทุกครั้ง ไม่เก็บ element ไว้
+     เพราะ cms.js เขียนทับ innerHTML ของ section ทั้งก้อน ถ้าผูกกับปุ่มตรง ๆ แท็บจะกดไม่ติดหลัง render
+     (กับดักเดียวกับ hero/carousel ใน CLAUDE.md) — แบบนี้จึงไม่ต้องมี rebind hook ใน cms.js
+     ลิงก์ที่มี data-tab-open (ปุ่ม "See Plan B courses" ใน Study Plan) เปิดแท็บนั้นก่อน
+     แล้วปล่อยให้ hash พาไปที่ #list-of-courses ตามปกติ */
+  function selectTab(tab, focus){
+    const list = tab.closest('[role="tablist"]');
+    if(!list) return;
+    list.querySelectorAll('[role="tab"]').forEach(function(t){
+      const on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      const panel = document.getElementById(t.getAttribute('aria-controls'));
+      if(panel) panel.hidden = !on;
+    });
+    if(focus) tab.focus();
+  }
+  document.addEventListener('click', function(event){
+    const tab = event.target.closest('.plan-tabs [role="tab"]');
+    if(tab){ selectTab(tab); return; }
+    const opener = event.target.closest('[data-tab-open]');
+    if(opener){
+      const target = document.querySelector('[role="tab"][aria-controls="' + opener.getAttribute('data-tab-open') + '"]');
+      if(target) selectTab(target);
+    }
+  });
+  /* ลูกศรซ้าย/ขวา Home/End ย้ายระหว่างแท็บ ตามแบบแผน ARIA tabs (Tab ปกติข้ามไปที่ตารางเลย) */
+  document.addEventListener('keydown', function(event){
+    const tab = event.target.closest && event.target.closest('.plan-tabs [role="tab"]');
+    if(!tab) return;
+    const tabs = Array.from(tab.closest('[role="tablist"]').querySelectorAll('[role="tab"]'));
+    const i = tabs.indexOf(tab);
+    const next = { ArrowRight:i + 1, ArrowLeft:i - 1, Home:0, End:tabs.length - 1 }[event.key];
+    if(next === undefined) return;
+    event.preventDefault();
+    selectTab(tabs[(next + tabs.length) % tabs.length], true);
+  });
+
   /* ============ KEYBOARD: Esc ปิดเมนู/ค้นหา ============ */
   document.addEventListener('keydown', function(event){
     if(event.key === 'Escape'){ setSearch(false); setDrawer(false); }
