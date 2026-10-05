@@ -23,7 +23,7 @@
       <nav class="main-nav" id="mainNav" aria-label="Main menu">
         <ul data-cms="nav">
           <li><a href="about.html" data-dropdown="dd-about">About<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-about"><div class="dd-menu"><a class="dd-title" href="about.html">About the Program</a><ul><li><a href="about.html#goals">Goals and Objectives</a></li><li><a href="about.html#academic-staff">Academic Staff</a></li><li><a href="about.html#guest-lecturers">Guest Lecturers</a></li></ul></div></div></li>
-          <li><a href="academics.html" class="active" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li class="has-sub"><a href="academics.html#study-plan">Study Plan</a><ul class="dd-sub"><li><a href="academics.html#plan-a">Plan A (Thesis and Coursework)</a></li><li><a href="academics.html#plan-b">Plan B (Coursework &amp; Comprehensive Exam)</a></li></ul></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></div></div></li>
+          <li><a href="academics.html" class="active" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#curriculum-info">Curriculum Info</a></li><li class="has-sub"><a href="academics.html#study-plan">Study Plan</a><ul class="dd-sub"><li><a href="academics.html#plan-a">Plan A (Thesis and Coursework)</a></li><li><a href="academics.html#plan-b">Plan B (Coursework &amp; Comprehensive Exam)</a></li></ul></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></div></div></li>
           <li><a href="admission.html" data-dropdown="dd-admission">Admission<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-admission"><div class="dd-menu"><a class="dd-title" href="admission.html">Admission</a><ul><li><a href="admission.html#admission-requirements">Admission Requirements</a></li><li><a href="admission.html#admission-procedures">Admission Procedures</a></li><li><a href="admission.html#admission-deadline">Admission Deadline</a></li></ul></div></div></li>
           <li><a href="research.html" data-dropdown="dd-research">Research<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-research"><div class="dd-menu"><a class="dd-title" href="research.html">Research</a><ul><li><a href="research.html#research-guidelines">Guidelines for Research Procedures</a></li><li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li><li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li></ul></div></div></li>
           <li><a href="activities.html" data-dropdown="dd-activities">Activities<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-activities"><div class="dd-menu"><a class="dd-title" href="activities.html">Activities</a><ul><li><a href="activities.html#activities-list">Activities List</a></li><li><a href="activities.html#intensive-course">Intensive Course</a></li><li><a href="activities.html#announcements">Announcements</a></li><li><a href="activities.html#calendar">Event Calendar</a></li></ul></div></div></li>
@@ -558,10 +558,59 @@
 
   <!-- ============ CTA (แถบเต็มความกว้างหน้าจอ) ============ -->
   <section class="cta-band" data-cms-block="academics/cta-band">
+    <div class="cta-bg" aria-hidden="true">
+      <div class="cw cw-1">
+        <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="ctaWaveA" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ffe6d8"/>
+              <stop offset="55%" stop-color="#ffc3a5"/>
+              <stop offset="100%" stop-color="#ff9d6e"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#ctaWaveA)"
+            d="M-200,140 C 120,44 320,192 640,140 C 960,88 1140,14 1640,72 L1640,-120 L-200,-120 Z"/>
+        </svg>
+      </div>
+
+      <div class="cw cw-2">
+        <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="ctaWaveB" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#ffd7c2" stop-opacity="0"/>
+              <stop offset="42%" stop-color="#ffb489" stop-opacity=".9"/>
+              <stop offset="100%" stop-color="#f4915c" stop-opacity=".5"/>
+            </linearGradient>
+          </defs>
+          <path fill="none" stroke="url(#ctaWaveB)" stroke-width="80" stroke-linecap="round"
+            d="M-220,198 C 180,122 340,252 700,202 C 1020,158 1240,88 1660,132"/>
+        </svg>
+      </div>
+
+      <div class="cw cw-3">
+        <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="ctaWaveC" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#fff0e6"/>
+              <stop offset="100%" stop-color="#ffcdb0" stop-opacity=".6"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#ctaWaveC)"
+            d="M-200,300 C 220,240 400,332 780,278 C 1090,236 1300,302 1640,266 L1640,470 L-200,470 Z"/>
+        </svg>
+      </div>
+
+      <span class="cglow cglow-1"></span>
+      <span class="cglow cglow-2"></span>
+    </div>
     <div class="cta-inner">
-      <h3>Ready to Apply?</h3>
-      <p>Check the requirements, procedures and deadlines for the next intake.</p>
-      <a href="admission.html" class="btn-base is-outline">VIEW ADMISSION<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+      <span class="cta-kicker"><span class="dot" aria-hidden="true"></span>Master of Education in TEFL</span>
+      <h3>Ready to Take the Next Step?</h3>
+      <p>A research-driven curriculum, real classroom practice and close mentoring from TEFL specialists &mdash; all at Thailand&rsquo;s first university. Secure your place in the next intake.</p>
+      <div class="cta-actions">
+        <a href="admission.html" class="btn-base cta-apply">APPLY NOW<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+        <a href="faqs.html#faqs-applicants" class="btn-base is-outline">READ THE FAQS<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+      </div>
     </div>
   </section>
 

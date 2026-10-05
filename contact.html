@@ -102,194 +102,146 @@
         </p>
       </section>
 
-      <!-- ข้อมูลติดต่อ (ซ้าย) + ฟอร์มส่งข้อความ (ขวา) -->
-      <section id="contact-details" data-cms-block="contact/contact-details">
-        <div class="contact-split">
+      <!-- ฟอร์มส่งข้อความ (ซ้าย) + การ์ดข้อมูลติดต่อ (ขวา) + แผนที่ (ล่าง) — ปรับตามแบบที่เจ้าของเว็บส่งมา ต.ค. 2026
+           ฟอร์มกับแผนที่อยู่นอกบล็อก CMS โดยตั้งใจ: cms.js เขียน innerHTML ของบล็อกทับหลังโหลด ถ้าฟอร์มอยู่ในบล็อก
+           สคริปต์ท้ายไฟล์ที่ผูกกับ #contactForm ตอนโหลดจะผูกกับฟอร์มที่ถูกแทนไปแล้ว — กดส่งแล้วไม่ตรวจ ไม่ส่ง (เคยเป็นแบบนั้น)
+           แก้ข้อความในการ์ดขวาได้ใน /admin (บล็อก contact/contact-card) · ลิงก์อีเมล/โซเชียล/แผนที่มาจาก settings -->
+      <div class="contact-split">
+        <div class="contact-form-wrap" id="send-a-message">
+          <h3>Send Us a Message</h3>
+          <p class="panel-lead">Fill out the form and we will get back to you as soon as possible.</p>
+          <noscript>
+            <div class="form-status is-warn is-shown">
+              This form needs JavaScript to work. Please email us directly at
+              <a href="mailto:TEFL.Chula@gmail.com" data-setting-href="contact.email" data-setting-prefix="mailto:" data-setting-text="contact.email">TEFL.Chula@gmail.com</a>.
+            </div>
+          </noscript>
 
-          <!-- ---------- การ์ดซ้าย: ข้อมูลติดต่อ ---------- -->
-          <div class="contact-panel">
-            <h3>Contact Information</h3>
-            <p class="panel-lead">
-              Contact the TEFL Office for questions about the program, admissions
-              or student services. We are happy to help!
-            </p>
+          <form id="contactForm" novalidate>
+            <div class="form-grid">
 
-            <div class="ci-list">
-
-              <div class="ci-item">
-                <span class="ci-ic">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.5s7-5.7 7-11.2a7 7 0 1 0-14 0c0 5.5 7 11.2 7 11.2z"/><circle cx="12" cy="10" r="2.7"/></svg>
-                </span>
-                <div>
-                  <div class="ci-title">Our Location</div>
-                  <p class="ci-text">
-                    Faculty of Education, Chulalongkorn University<br>
-                    254 Phayathai Road, Wang Mai, Pathum Wan, Bangkok 10330
-                  </p>
-                </div>
+              <div class="field">
+                <label for="cf-first">First Name <span class="req" aria-hidden="true">*</span></label>
+                <input type="text" id="cf-first" placeholder="Ex. Somchai" name="firstName" autocomplete="given-name"
+                       required data-msg-required="Please enter your first name.">
+                <span class="f-error" id="err-first" role="alert"></span>
               </div>
 
-              <div class="ci-item">
-                <span class="ci-ic">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3.5 6.7 8.5 6.4 8.5-6.4"/></svg>
-                </span>
-                <div>
-                  <div class="ci-title">Email Address</div>
-                  <p class="ci-text"><a href="mailto:TEFL.Chula@gmail.com" data-setting-href="contact.email" data-setting-prefix="mailto:" data-setting-text="contact.email">TEFL.Chula@gmail.com</a></p>
-                </div>
+              <div class="field">
+                <label for="cf-last">Last Name <span class="req" aria-hidden="true">*</span></label>
+                <input type="text" id="cf-last" placeholder="Ex. Jaidee" name="lastName" autocomplete="family-name"
+                       required data-msg-required="Please enter your last name.">
+                <span class="f-error" id="err-last" role="alert"></span>
               </div>
 
-              <div class="ci-item">
-                <span class="ci-ic">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 3.5h3l1.5 4-2 1.4a12.4 12.4 0 0 0 6.2 6.2l1.4-2 4 1.5v3a2 2 0 0 1-2.2 2A17.3 17.3 0 0 1 4.4 5.7 2 2 0 0 1 6.4 3.5z"/></svg>
-                </span>
-                <div>
-                  <div class="ci-title">Phone Number</div>
-                  <p class="ci-text"><a href="tel:+6622182565">(662) 218-2565-97</a> ext. 8143</p>
-                </div>
+              <div class="field">
+                <label for="cf-email">Email <span class="req" aria-hidden="true">*</span></label>
+                <input type="email" id="cf-email" placeholder="example@gmail.com" name="email" autocomplete="email"
+                       required data-msg-required="Please enter the email address we should reply to.">
+                <span class="f-error" id="err-email" role="alert"></span>
               </div>
 
-              <div class="ci-item">
-                <span class="ci-ic">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8.5V3.5h10v5"/><rect x="3" y="8.5" width="18" height="7" rx="2"/><path d="M7 13.5h10v7H7z"/><path d="M17.2 11.4h.01"/></svg>
-                </span>
-                <div>
-                  <div class="ci-title">Fax</div>
-                  <p class="ci-text">(662) 218-2563</p>
-                </div>
+              <div class="field">
+                <label for="cf-phone">Phone <span class="opt">(optional)</span></label>
+                <input type="tel" id="cf-phone" placeholder="Ex. 081 234 5678" name="phone" autocomplete="tel">
+                <span class="f-error" id="err-phone" role="alert"></span>
               </div>
 
-              <div class="ci-item">
-                <span class="ci-ic">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2"/><path d="M12 3.4c2.3 2.4 3.5 5.3 3.5 8.6S14.3 18.2 12 20.6C9.7 18.2 8.5 15.3 8.5 12S9.7 5.8 12 3.4z"/></svg>
-                </span>
-                <div>
-                  <div class="ci-title">Faculty Website</div>
-                  <p class="ci-text"><a href="https://www.edu.chula.ac.th/" target="_blank" rel="noopener">edu.chula.ac.th</a></p>
-                </div>
+              <div class="field is-full">
+                <label for="cf-subject">Subject <span class="req" aria-hidden="true">*</span></label>
+                <select id="cf-subject" name="subject" required
+                        data-msg-required="Please choose a subject.">
+                  <option value="">&mdash; Please select &mdash;</option>
+                  <option>Admissions</option>
+                  <option>Program and Curriculum</option>
+                  <option>Student Services</option>
+                  <option>Thesis and Research</option>
+                  <option>Other</option>
+                </select>
+                <span class="f-error" id="err-subject" role="alert"></span>
+              </div>
+
+              <div class="field is-full">
+                <label for="cf-message">Message <span class="req" aria-hidden="true">*</span></label>
+                <textarea id="cf-message" name="message" placeholder="Enter here&hellip;" maxlength="1500"
+                          required data-msg-required="Please write your message."></textarea>
+                <span class="f-error" id="err-message" role="alert"></span>
+              </div>
+
+              <!-- กับดักบอท: คนจริงมองไม่เห็นและไม่ต้องกรอก -->
+              <div class="hp-field" aria-hidden="true">
+                <label for="cf-company">Company</label>
+                <input type="text" id="cf-company" name="company" tabindex="-1" autocomplete="off">
               </div>
 
             </div>
 
-            <div class="ci-social">
-              <a href="https://www.facebook.com/TEFL.Chula/" class="is-fb" data-setting-href="social.facebook" aria-label="Facebook" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.7c0-.9.3-1.6 1.6-1.6h1.7V4.2c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.4V14h2.7v8z"/></svg>
-              </a>
-              <a href="#" class="is-line" data-setting-href="social.line" aria-label="LINE">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2C6.6 3.2 2.2 6.7 2.2 11c0 3.85 3.48 7.08 8.18 7.69.32.07.75.21.86.49.1.25.06.64.03.89l-.14.85c-.04.25-.2.97.85.53s5.65-3.33 7.7-5.7c1.42-1.56 2.1-3.15 2.1-4.75 0-4.3-4.4-7.8-9.78-7.8z"/></svg>
-              </a>
-              <a href="https://www.instagram.com/p/DbiparfD3FO/?img_index=18" class="is-ig" data-setting-href="social.instagram" aria-label="Instagram" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zm0 3.8a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0 9.9a3.9 3.9 0 1 1 0-7.8 3.9 3.9 0 0 1 0 7.8zm7.6-10.1a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/></svg>
-              </a>
+            <div class="form-actions">
+              <!-- ข้อความต้องเป็นลูกตัวแรกของปุ่ม — สคริปต์ท้ายไฟล์สลับเป็น "Sending…" ผ่าน firstChild.nodeValue
+                   วงกลมลูกศรอยู่ทีหลังในมาร์กอัป แต่ CSS ย้ายไปซ้าย (order) -->
+              <button type="submit" class="btn-send" id="cf-submit">
+                Send Message
+                <span class="bs-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              </button>
+              <p class="form-hint">
+                Fields marked <span aria-hidden="true">*</span> are required.
+                Your message goes to TEFL.Chula@gmail.com.
+              </p>
             </div>
 
-            <!-- แผนที่ที่ตั้ง — ยืดเต็มพื้นที่ว่างท้ายการ์ด -->
-            <div class="ci-map" id="location">
-              <iframe data-setting-map="embed"
-                title="Map showing the Faculty of Education, Chulalongkorn University"
-                src="https://www.google.com/maps?q=Faculty%20of%20Education%2C%20Chulalongkorn%20University&amp;hl=en&amp;z=17&amp;output=embed"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-                allowfullscreen></iframe>
-              <a class="map-btn" data-setting-map="directions"
-                 href="https://www.google.com/maps/dir/?api=1&amp;destination=Faculty%20of%20Education%2C%20Chulalongkorn%20University"
-                 target="_blank" rel="noopener">
-                Get Directions
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v5a1.8 1.8 0 0 1-1.8 1.8H5A1.8 1.8 0 0 1 3.2 19V7.8A1.8 1.8 0 0 1 5 6h5"/></svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- ---------- การ์ดขวา: ฟอร์มส่งข้อความ ---------- -->
-          <div class="contact-panel" id="send-a-message">
-            <h3>Send Us a Message</h3>
-            <p class="panel-lead">
-              Please fill out the form below and we will get back to you as soon as possible.
-            </p>
-
-            <noscript>
-              <div class="form-status is-warn is-shown">
-                This form needs JavaScript to work. Please email us directly at
-                <a href="mailto:TEFL.Chula@gmail.com" data-setting-href="contact.email" data-setting-prefix="mailto:" data-setting-text="contact.email">TEFL.Chula@gmail.com</a>.
-              </div>
-            </noscript>
-
-            <form id="contactForm" novalidate>
-              <div class="form-grid">
-
-                <div class="field">
-                  <label for="cf-first">First Name <span class="req" aria-hidden="true">*</span></label>
-                  <input type="text" id="cf-first" name="firstName" autocomplete="given-name"
-                         required data-msg-required="Please enter your first name.">
-                  <span class="f-error" id="err-first" role="alert"></span>
-                </div>
-
-                <div class="field">
-                  <label for="cf-last">Last Name <span class="req" aria-hidden="true">*</span></label>
-                  <input type="text" id="cf-last" name="lastName" autocomplete="family-name"
-                         required data-msg-required="Please enter your last name.">
-                  <span class="f-error" id="err-last" role="alert"></span>
-                </div>
-
-                <div class="field is-full">
-                  <label for="cf-email">Email <span class="req" aria-hidden="true">*</span></label>
-                  <input type="email" id="cf-email" name="email" autocomplete="email"
-                         required data-msg-required="Please enter the email address we should reply to.">
-                  <span class="f-error" id="err-email" role="alert"></span>
-                </div>
-
-                <div class="field is-full">
-                  <label for="cf-phone">Phone <span class="opt">(optional)</span></label>
-                  <input type="tel" id="cf-phone" name="phone" autocomplete="tel">
-                  <span class="f-error" id="err-phone" role="alert"></span>
-                </div>
-
-                <div class="field is-full">
-                  <label for="cf-subject">Subject <span class="req" aria-hidden="true">*</span></label>
-                  <select id="cf-subject" name="subject" required
-                          data-msg-required="Please choose a subject.">
-                    <option value="">&mdash; Please select &mdash;</option>
-                    <option>Admissions</option>
-                    <option>Program and Curriculum</option>
-                    <option>Student Services</option>
-                    <option>Thesis and Research</option>
-                    <option>Other</option>
-                  </select>
-                  <span class="f-error" id="err-subject" role="alert"></span>
-                </div>
-
-                <div class="field is-full">
-                  <label for="cf-message">Message <span class="req" aria-hidden="true">*</span></label>
-                  <textarea id="cf-message" name="message" maxlength="1500"
-                            required data-msg-required="Please write your message."></textarea>
-                  <span class="f-error" id="err-message" role="alert"></span>
-                </div>
-
-                <!-- กับดักบอท: คนจริงมองไม่เห็นและไม่ต้องกรอก -->
-                <div class="hp-field" aria-hidden="true">
-                  <label for="cf-company">Company</label>
-                  <input type="text" id="cf-company" name="company" tabindex="-1" autocomplete="off">
-                </div>
-
-              </div>
-
-              <div class="form-actions">
-                <button type="submit" class="btn-send" id="cf-submit">
-                  Send Message
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 2.5 11 13"/><path d="M21.5 2.5 14.8 21.5l-3.8-8.5-8.5-3.8z"/></svg>
-                </button>
-                <p class="form-hint">
-                  Fields marked <span aria-hidden="true">*</span> are required.
-                  Your message goes to TEFL.Chula@gmail.com.
-                </p>
-              </div>
-
-              <div class="form-status" id="cf-status" role="status" aria-live="polite"></div>
-            </form>
-          </div>
-
+            <div class="form-status" id="cf-status" role="status" aria-live="polite"></div>
+          </form>
         </div>
-      </section>
+
+        <section id="contact-details" class="contact-card" data-cms-block="contact/contact-card">
+          <div class="cc-group">
+            <h4>Address</h4>
+            <p>Faculty of Education, Chulalongkorn University<br>254 Phayathai Road, Wang Mai,<br>Pathum Wan, Bangkok 10330</p>
+          </div>
+          <div class="cc-group">
+            <h4>Contact</h4>
+            <p>
+              Phone : <a href="tel:+6622182565">(662) 218-2565-97</a> ext. 8143<br>
+              Fax : (662) 218-2563<br>
+              Email : <a href="mailto:TEFL.Chula@gmail.com" data-setting-href="contact.email" data-setting-prefix="mailto:" data-setting-text="contact.email">TEFL.Chula@gmail.com</a>
+            </p>
+          </div>
+          <div class="cc-group">
+            <h4>Website</h4>
+            <p><a href="https://www.edu.chula.ac.th/" target="_blank" rel="noopener">edu.chula.ac.th</a></p>
+          </div>
+          <div class="cc-group">
+            <h4>Stay Connected</h4>
+              <div class="ci-social">
+                <a href="https://www.facebook.com/TEFL.Chula/" class="is-fb" data-setting-href="social.facebook" aria-label="Facebook" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.7c0-.9.3-1.6 1.6-1.6h1.7V4.2c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.4V14h2.7v8z"/></svg>
+                </a>
+                <a href="#" class="is-line" data-setting-href="social.line" aria-label="LINE">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2C6.6 3.2 2.2 6.7 2.2 11c0 3.85 3.48 7.08 8.18 7.69.32.07.75.21.86.49.1.25.06.64.03.89l-.14.85c-.04.25-.2.97.85.53s5.65-3.33 7.7-5.7c1.42-1.56 2.1-3.15 2.1-4.75 0-4.3-4.4-7.8-9.78-7.8z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/p/DbiparfD3FO/?img_index=18" class="is-ig" data-setting-href="social.instagram" aria-label="Instagram" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zm0 3.8a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0 9.9a3.9 3.9 0 1 1 0-7.8 3.9 3.9 0 0 1 0 7.8zm7.6-10.1a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/></svg>
+                </a>
+              </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- แผนที่เต็มความกว้างใต้ฟอร์ม -->
+      <div class="contact-map" id="location">
+        <iframe data-setting-map="embed"
+          title="Map showing the Faculty of Education, Chulalongkorn University"
+          src="https://www.google.com/maps?q=Faculty%20of%20Education%2C%20Chulalongkorn%20University&amp;hl=en&amp;z=17&amp;output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen></iframe>
+        <a class="map-btn" data-setting-map="directions"
+           href="https://www.google.com/maps/dir/?api=1&amp;destination=Faculty%20of%20Education%2C%20Chulalongkorn%20University"
+           target="_blank" rel="noopener">
+          Get Directions
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v5a1.8 1.8 0 0 1-1.8 1.8H5A1.8 1.8 0 0 1 3.2 19V7.8A1.8 1.8 0 0 1 5 6h5"/></svg>
+        </a>
+      </div>
 
     </div>
   </div>
@@ -342,9 +294,13 @@
       <span class="cglow cglow-2"></span>
     </div>
     <div class="cta-inner">
-      <h3>Interested in Joining the TEFL Program?</h3>
-      <p>Explore our curriculum, admissions information and student life.</p>
-      <a href="academics.html" class="btn-base is-outline">EXPLORE ACADEMICS<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+      <span class="cta-kicker"><span class="dot" aria-hidden="true"></span>Master of Education in TEFL</span>
+      <h3>Start Your Master&rsquo;s in TEFL</h3>
+      <p>Bring your passion for English teaching to Chulalongkorn University and learn alongside dedicated teachers, lecturers and researchers.</p>
+      <div class="cta-actions">
+        <a href="admission.html" class="btn-base cta-apply">APPLY NOW<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+        <a href="academics.html" class="btn-base is-outline">EXPLORE ACADEMICS<svg class="arrow" viewBox="0 0 26 14" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></a>
+      </div>
     </div>
   </section>
 
