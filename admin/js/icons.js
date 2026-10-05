@@ -29,7 +29,20 @@ const ICON = {
   clock:    I('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
   facebook: I('<path d="M14 8h2.5V4.5H14a4 4 0 0 0-4 4V11H7.5v3.5H10V21h3.5v-6.5H16l.5-3.5h-3V9a1 1 0 0 1 1-1z"/>'),
   events:   I('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 14h3M13 14h3M8 17h3"/>'),
-  refresh:  I('<path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/>')
+  refresh:  I('<path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/>'),
+  /* แถบเครื่องมือของตัวแก้ข้อความ และกล่องเผยแพร่ในหน้าแก้ไข */
+  bold:     I('<path d="M7 5h6a3.5 3.5 0 0 1 0 7H7z"/><path d="M7 12h7a3.5 3.5 0 0 1 0 7H7z"/>'),
+  italic:   I('<path d="M14 5h-4M14 19h-4M14 5l-4 14"/>'),
+  ul:       I('<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/>'),
+  ol:       I('<path d="M10 6h10M10 12h10M10 18h10"/><path d="M4 4.5h1.5V9M4 9h3"/><path d="M4 14.5a1.5 1.5 0 0 1 3 .3c0 1-3 2.2-3 3.7h3"/>'),
+  link:     I('<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5"/>'),
+  unlink:   I('<path d="M17 13.5 20 10.5a5 5 0 0 0-7-7L11.5 5"/><path d="M7 10.5 4 13.5a5 5 0 0 0 7 7l1.5-1.5"/><path d="M3 3l18 18"/>'),
+  clean:    I('<path d="M4 7V5h12v2"/><path d="M10 5 8 19M6 19h4"/><path d="m15 14 5 5M20 14l-5 5"/>'),
+  undo:     I('<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>'),
+  redo:     I('<path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/>'),
+  media:    I('<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5L5 20"/>'),
+  eye:      I('<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
+  back:     I('<path d="m15 6-6 6 6 6"/>')
 };
 /* สีกล่องไอคอนของแต่ละหมวด: หมุนเวียน 5 สี ให้แต่ละหมวดจำง่าย */
 const TINT = { blocks:'c1', nav:'c2', settings:'c3', staff:'c4', lecturers:'c4', news:'c1', facebook:'c2', events:'c3', faqs:'c2', links:'c3', courses:'c5', tuition:'c5' };

@@ -8,94 +8,90 @@
 <base href="../">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>TEFL CMS</title>
+<title>TEFL Chula — ระบบจัดการเนื้อหา</title>
 <link rel="icon" type="image/png" href="img/favicon.png">
-<!-- ฟอนต์ของหน้า admin แยกจากเว็บหลักโดยตั้งใจ: เว็บหลักใช้ฟอนต์จุฬาฯ (แบรนด์)
-     ส่วนเครื่องมือภายในใช้ IBM Plex Sans Thai ให้อ่านตารางและตัวเลขได้สบายตากว่า
-     โหลดจาก Google Fonts เป็นข้อยกเว้นของกฎ "ไม่พึ่ง CDN" เพราะถ้าโหลดไม่ได้ก็แค่ตกไปฟอนต์ระบบ ไม่มีอะไรพัง -->
+<!-- ฟอนต์ของหน้า admin แยกจากเว็บหลักโดยตั้งใจ: เนื้อความ/ตารางใช้ IBM Plex Sans Thai ให้อ่านตัวเลขสบายตา
+     ส่วนชื่อแบรนด์และหัวต้อนรับใช้ฟอนต์ Chulalongkorn ของเว็บหลัก ให้รู้ว่าเป็นระบบของ TEFL Chula
+     Google Fonts เป็นข้อยกเว้นของกฎ "ไม่พึ่ง CDN" เพราะถ้าโหลดไม่ได้ก็แค่ตกไปฟอนต์ระบบ ไม่มีอะไรพัง -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="fonts/chula.css">
 <link rel="stylesheet" href="admin/admin.css">
 </head>
 <body>
 
-<!-- ============ ล็อกอิน ============ -->
+<!-- ============ ล็อกอิน (แบบหน้า wp-login: โลโก้เหนือกล่อง) ============ -->
 <div id="login">
-  <form id="loginForm">
-    <img src="img/logo.png" alt="TEFL Program">
-    <h1>จัดการเนื้อหาเว็บไซต์</h1>
-    <p class="sub">สำหรับผู้ดูแลระบบเท่านั้น</p>
-    <div class="msg err" id="loginMsg"></div>
-    <div class="field">
-      <label for="email">อีเมล</label>
-      <input type="email" id="email" autocomplete="username" required>
-    </div>
-    <div class="field">
-      <label for="password">รหัสผ่าน</label>
-      <input type="password" id="password" autocomplete="current-password" required>
-    </div>
-    <button class="btn accent" style="width:100%;justify-content:center" id="loginBtn">เข้าสู่ระบบ</button>
-  </form>
+  <div class="login-wrap">
+    <img class="login-logo" src="img/logo.png" alt="TEFL Chula — Faculty of Education, Chulalongkorn University">
+    <form id="loginForm">
+      <p class="login-title">ระบบจัดการเนื้อหาเว็บไซต์หลักสูตร TEFL</p>
+      <div class="msg err" id="loginMsg"></div>
+      <div class="field">
+        <label for="email">อีเมล</label>
+        <input type="email" id="email" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="password">รหัสผ่าน</label>
+        <input type="password" id="password" autocomplete="current-password" required>
+      </div>
+      <div class="login-foot">
+        <span class="hint">สำหรับผู้ดูแลระบบเท่านั้น</span>
+        <button class="btn primary" id="loginBtn">เข้าสู่ระบบ</button>
+      </div>
+    </form>
+    <p class="login-back"><a href="index.html">← กลับไปที่เว็บไซต์ TEFL Chula</a></p>
+  </div>
 </div>
 
-<!-- ============ หน้าจัดการ ============ -->
-<div id="app"><div class="shell">
-  <aside class="side" id="side">
-    <div class="brand">
-      <img src="img/favicon.png" alt="">
-      <div><b>TEFL CMS</b><small>Faculty of Education, Chula</small></div>
-    </div>
-    <button class="btn newbtn" id="newAny">
-      <svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
-      เพิ่มรายการใหม่
+<!-- ============ หน้าจัดการ ============
+     โครงแบบ WordPress: แถบดำด้านบน (admin bar) + เมนูดำด้านซ้าย + พื้นที่ทำงานพื้นเทาอ่อน
+     หน้าแก้ไขเป็นหน้าเต็ม (ไม่ใช่แผงเลื่อน) และมี URL ของตัวเอง (#ชุดข้อมูล/รหัส) ปุ่ม Back ของเบราว์เซอร์จึงใช้ได้ -->
+<div id="app">
+  <header id="adminbar">
+    <button class="ab-item" id="sideToggle" aria-label="เมนู">
+      <svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <nav class="menu" id="menu"></nav>
-    <div class="me">
-      <div class="umenu" id="umenu">
-        <a data-v="profile"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>โปรไฟล์</a>
-        <a data-v="prefs"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>ตั้งค่า</a>
-        <hr>
-        <a id="logout" class="out"><svg class="i" viewBox="0 0 24 24"><path d="M9 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>ออกจากระบบ</a>
-      </div>
-      <button class="strip" id="ustrip" aria-haspopup="menu" aria-expanded="false">
-        <div class="av" id="avatar">A</div>
-        <div class="who"><b id="who"></b><small id="whoSub">ผู้ดูแลระบบ</small></div>
-        <svg class="i chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+    <a class="ab-item ab-site" href="index.html" target="_blank" rel="noopener" title="ดูเว็บไซต์">
+      <img src="img/favicon.png" alt=""><span class="ab-name">TEFL Chula</span>
+    </a>
+    <div class="ab-new">
+      <button class="ab-item" id="newAny" aria-haspopup="menu">
+        <svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="ab-label">เพิ่มใหม่</span>
       </button>
+      <div class="ab-drop" id="newMenu"></div>
     </div>
-  </aside>
+    <span class="ab-sp"></span>
+    <button class="ab-item" id="theme" title="สลับโหมดสว่าง/มืด">
+      <svg class="i" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+    <div class="ab-me">
+      <button class="ab-item" id="ustrip" aria-haspopup="menu" aria-expanded="false">
+        <span class="ab-label">สวัสดี, <b id="who"></b></span><span class="av" id="avatar">A</span>
+      </button>
+      <div class="umenu" id="umenu">
+        <div class="umenu-head"><span class="av big" id="avatarBig">A</span><div><b id="whoName"></b><small id="whoSub"></small></div></div>
+        <a data-v="profile">แก้ไขโปรไฟล์</a>
+        <a data-v="prefs">ตั้งค่าและผู้ดูแล</a>
+        <a id="logout" class="out">ออกจากระบบ</a>
+      </div>
+    </div>
+  </header>
 
-  <div class="work">
-    <header class="top">
-      <button class="btn icon" id="sideToggle" aria-label="เมนู">
-        <svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  <div class="shell" id="shell">
+    <aside class="side" id="side">
+      <nav class="menu" id="menu"></nav>
+      <button class="collapse" id="collapse">
+        <svg class="i" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg><span>ย่อเมนู</span>
       </button>
-      <h1 id="title"></h1>
-      <a class="btn" href="index.html" target="_blank" rel="noopener">ดูหน้าเว็บ ↗</a>
-      <button class="btn icon" id="theme" title="สลับโหมดสว่าง/มืด">
-        <svg class="i" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-      </button>
-    </header>
+    </aside>
+    <div class="side-scrim" id="scrim"></div>
     <main id="view"></main>
   </div>
-</div></div>
+</div>
 
 <div class="msg ok toast" id="toast"></div>
-
-<div id="modal"><div class="box">
-  <h3 id="modalTitle"></h3>
-  <form id="editForm">
-    <div class="msg err" id="editMsg"></div>
-    <p class="hint" id="editHelp" style="color:var(--muted);margin:-6px 0 16px;font-size:13.5px"></p>
-    <div id="fields"></div>
-    <div class="foot">
-      <button type="button" class="btn danger" id="delBtn">ลบรายการนี้</button>
-      <button type="button" class="btn" id="cancelBtn">ยกเลิก</button>
-      <button class="btn accent" id="saveBtn">บันทึก</button>
-    </div>
-  </form>
-</div></div>
 
 
 <!-- =========================================================

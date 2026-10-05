@@ -42,11 +42,11 @@ async function syncFacebook(btn){
    ค่าตั้งการแสดงผลเป็นแถวในตาราง settings ตัวเดียวกับหน้า "ข้อมูลติดต่อและลิงก์" แค่จัดหน้าให้ใช้ง่ายขึ้น
    token/Page ID อยู่ในตาราง integrations ซึ่งคนทั่วไปอ่านไม่ได้ (ต่างจาก settings) */
 async function facebookView(){
-  $('#title').textContent = 'Facebook';
+  setTitle('Facebook');
   const v = $('#view');
   v.innerHTML =
-    '<div class="head"><h2><span class="ico c2">' + ICON.facebook + '</span>เชื่อมต่อ Facebook</h2></div>' +
-    '<div class="where"><span>แสดงที่: สไลด์ Latest News หน้าแรก และหน้า Activities ส่วน Announcements</span><a href="activities.html#announcements" target="_blank" rel="noopener">ดูบนเว็บ ↗</a></div>' +
+    heading('เชื่อมต่อ Facebook') +
+    '<div class="where">' + ICON.site + '<span>แสดงที่: สไลด์ Latest News หน้าแรก และหน้า Activities ส่วน Announcements</span><a href="activities.html#announcements" target="_blank" rel="noopener">ดูบนเว็บ ↗</a></div>' +
     '<div class="card wide"><div class="conn">' +
       '<span class="ico fb"><svg viewBox="0 0 24 24"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.7c0-.9.3-1.6 1.6-1.6h1.7V4.2c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.4V14h2.7v8z"/></svg></span>' +
       '<div class="info"><b>การเชื่อมต่อเพจ</b><div class="st wait" id="fbSt">กำลังตรวจสอบ…</div><div class="kv" id="fbKv"></div></div>' +

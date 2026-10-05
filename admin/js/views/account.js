@@ -8,13 +8,13 @@
 
 /* ---------- โปรไฟล์: ชื่อที่แสดง + เปลี่ยนรหัสผ่าน ---------- */
 function profileView(){
-  $('#title').textContent = 'โปรไฟล์';
+  setTitle('โปรไฟล์');
   const name = (me.user_metadata && me.user_metadata.full_name) || '';
-  $('#view').innerHTML =
+  $('#view').innerHTML = heading('โปรไฟล์') +
     '<div class="card"><h3>ข้อมูลของฉัน</h3>' +
       '<div class="msg" id="pMsg"></div>' +
       '<div class="field"><label>ชื่อที่แสดง</label><input type="text" id="pName" value="' + esc(name) + '" placeholder="เช่น อาจารย์กิตติยา">' +
-      '<div class="hint">แสดงมุมล่างซ้ายแทนอีเมล</div></div>' +
+      '<div class="hint">แสดงที่มุมขวาบน (สวัสดี, …) และบนแดชบอร์ดแทนอีเมล</div></div>' +
       '<div class="field"><label>อีเมล</label><input type="text" value="' + esc(me.email) + '" disabled>' +
       '<div class="hint">ใช้ล็อกอิน เปลี่ยนไม่ได้จากหน้านี้</div></div>' +
       '<button class="btn primary" id="pSave">บันทึกชื่อ</button>' +
@@ -50,10 +50,10 @@ function profileView(){
 
 /* ---------- ตั้งค่า: ธีม + รายชื่อผู้ดูแล ---------- */
 async function prefsView(){
-  $('#title').textContent = 'ตั้งค่า';
-  let themePref = 'system'; try{ themePref = localStorage.getItem(THEME) || 'system'; }catch(e){}
+  setTitle('ตั้งค่า');
+  let themePref = 'light'; try{ themePref = localStorage.getItem(THEME) || 'light'; }catch(e){}
   const v = $('#view');
-  v.innerHTML =
+  v.innerHTML = heading('ตั้งค่า') +
     '<div class="card"><h3>หน้าตา</h3><div class="radio">' +
       ['light','dark','system'].map(t => '<label><input type="radio" name="th" value="' + t + '"' + (themePref === t ? ' checked' : '') + '>' +
         ({light:'สว่าง', dark:'มืด', system:'ตามเครื่อง'})[t] + '</label>').join('') +
@@ -67,7 +67,7 @@ async function prefsView(){
 
   v.querySelectorAll('[name=th]').forEach(r => r.addEventListener('change', function(){
     if(this.value === 'system'){
-      try{ localStorage.removeItem(THEME); }catch(e){}
+      try{ localStorage.setItem(THEME, 'system'); }catch(e){}
       document.documentElement.setAttribute('data-theme',
         window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     } else applyTheme(this.value);

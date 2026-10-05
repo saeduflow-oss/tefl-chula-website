@@ -9,7 +9,12 @@
 
 /* ---------- session ---------- */
 let session = null, current = 'dash', rows = [], editing = null, query = '';
-const counts = {};   /* จำนวนแถวต่อชุดข้อมูล ใช้ในแถบข้างและแดชบอร์ด */
+/* rowsKey = rows ตอนนี้เป็นของชุดข้อมูลไหน — เปิดลิงก์หน้าแก้ไขตรง ๆ (#staff/<id>) ต้องรู้ว่าต้องโหลดใหม่ไหม
+   filter = แท็บ ทั้งหมด/แสดงบนเว็บ/ซ่อนอยู่ เหนือตาราง
+   dirty = หน้าแก้ไขมีของที่ยังไม่บันทึก ใช้เตือนก่อนออกจากหน้า (แบบ WordPress) */
+let rowsKey = null, filter = 'all', dirty = false;
+const counts = {};   /* จำนวนแถวต่อชุดข้อมูล ใช้ในแดชบอร์ด */
+const badges = {};   /* ตัวเลขวงกลมส้มข้างเมนู (เช่น ข้อมูลติดต่อที่ยังว่าง) แบบ bubble แจ้งเตือนของ WordPress */
 /* ตารางส่วนใหญ่ใช้ id (uuid) แต่ blocks/settings ใช้ key เป็น primary key */
 const pkOf = () => SCHEMA[current].pk || 'id';
 const pkUrl = row => '?' + pkOf() + '=eq.' + encodeURIComponent(row[pkOf()]);
@@ -70,6 +75,20 @@ function when(iso){
   if(diff < 86400*7) return Math.round(diff/86400) + ' วันที่แล้ว';
   return d.toLocaleDateString('th-TH', { day:'numeric', month:'short', year:'2-digit' });
 }
+/* ชื่อแท็บเบราว์เซอร์แบบ WordPress: "หน้า ‹ เว็บ — ระบบ" — เปิดหลายแท็บแล้วแยกออกว่าแท็บไหนแก้อะไร */
+function setTitle(t){ document.title = t + ' ‹ TEFL Chula — ระบบจัดการเนื้อหา'; }
+/* หัวหน้าทุกหน้า: ชื่อหน้า + ปุ่มข้างชื่อ (เช่น "เพิ่มใหม่") แบบ .wp-heading-inline + .page-title-action */
+function heading(text, actions){
+  return '<div class="wrap-head"><h1>' + esc(text) + '</h1>' + (actions || '') + '</div>';
+}
+/* ลิงก์ภายในหน้า admin ต้องเป็น URL เต็มของหน้านี้เอง ห้ามเขียนแค่ "#staff":
+   index.html มี <base href="../"> ลิงก์ "#staff" จึงถูกตีความเป็น /#staff = หน้าแรกของเว็บสาธารณะ
+   (history.replaceState ก็เช่นกัน) — ใช้ H('staff') ทุกครั้ง ลิงก์ปกติยังแค่เปลี่ยน hash ไม่โหลดหน้าใหม่ และเปิดแท็บใหม่ได้ถูกที่ */
+const SELF = location.href.split('#')[0];
+const H = h => SELF + '#' + h;
+/* hash ของหน้าแก้ไขของแถว: key ของ blocks มี / อยู่ (เช่น site/footer-...) จึงต้อง encode */
+function editHash(k, row){ return k + '/' + encodeURIComponent(row[SCHEMA[k].pk || 'id']); }
+function editHref(k, row){ return H(editHash(k, row)); }
 function showLogin(err){
   $('#app').style.display = 'none';
   $('#login').style.display = 'grid';
@@ -77,14 +96,16 @@ function showLogin(err){
 }
 
 /* ---------- ธีม ----------
-   จำค่าที่ผู้ใช้เลือกไว้ ไม่มีค่าเลือกก็ตามระบบ */
+   ค่าเริ่มต้นคือสว่าง (พื้นขาว) เสมอ ไม่ตามโหมดมืดของเครื่อง — ผู้ใช้ขอพื้นขาว และเครื่องที่ตั้งโหมดมืดไว้
+   เปิดมาแล้วเจอหน้าดำทั้งจอ ดูเหมือนแก้แล้วไม่ได้ผล · มืดเฉพาะเมื่อกดสลับเอง หรือเลือก "ตามเครื่อง" ในหน้าตั้งค่า */
 function applyTheme(t){
   document.documentElement.setAttribute('data-theme', t);
   try{ localStorage.setItem(THEME, t); }catch(e){}
 }
 (function(){
   let t = null; try{ t = localStorage.getItem(THEME); }catch(e){}
-  if(!t) t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  if(t === 'system') t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  if(t !== 'dark') t = 'light';
   document.documentElement.setAttribute('data-theme', t);
 })();
 $('#theme').addEventListener('click', ()=>applyTheme(
@@ -118,11 +139,13 @@ $('#ustrip').addEventListener('click', function(e){
   this.setAttribute('aria-expanded', open);
 });
 document.addEventListener('click', ()=>{ $('#umenu').classList.remove('show'); $('#ustrip').setAttribute('aria-expanded', false); });
-$('#umenu').querySelectorAll('[data-v]').forEach(a => a.addEventListener('click', ()=>{ go(a.dataset.v); $('#side').classList.remove('open'); }));
+$('#umenu').querySelectorAll('[data-v]').forEach(a => a.addEventListener('click', ()=>go(a.dataset.v)));
 
 function paintMe(){
   const name = (me && me.user_metadata && me.user_metadata.full_name) || '';
-  $('#who').textContent = name || (me ? me.email : '');
-  $('#whoSub').textContent = name ? me.email : 'ผู้ดูแลระบบ';
-  $('#avatar').textContent = ((name || (me && me.email) || 'A')[0]).toUpperCase();
+  const email = me ? me.email : '';
+  $('#who').textContent = name || email.split('@')[0];
+  $('#whoName').textContent = name || email;
+  $('#whoSub').textContent = name ? email : 'ผู้ดูแลระบบ';
+  $('#avatar').textContent = $('#avatarBig').textContent = ((name || email || 'A')[0]).toUpperCase();
 }

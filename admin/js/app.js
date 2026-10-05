@@ -25,7 +25,8 @@ async function start(){
   $('#login').style.display = 'none';
   $('#app').style.display = 'block';
   buildMenu();
-  go('dash');
+  /* เปิดตาม hash ใน URL (เช่นลิงก์ที่คัดลอกมา #staff/<id>) ไม่มี = แดชบอร์ด */
+  route();
 }
 
 session = loadSession();

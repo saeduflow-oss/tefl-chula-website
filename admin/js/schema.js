@@ -12,7 +12,9 @@
    หน้าจอทั้งหมดสร้างจากตารางนี้ตัวเดียว เพิ่มชุดข้อมูลใหม่ = เพิ่มบล็อกที่นี่
    t: text | area | html | rich | bool | boolstr | image | select
    listT/listS = ข้อความคอลัมน์ชื่อ/รายละเอียดในตาราง
-   menu = กลุ่มในแถบข้าง */
+   titleKey = ช่องที่หน้าแก้ไขวาดเป็นช่องชื่อเรื่องตัวใหญ่ด้านบน (แบบ WordPress) ไม่มี = แสดงชื่อแบบอ่านอย่างเดียว
+   menu = กลุ่มในแถบข้าง (เมนูซ้ายคั่นกลุ่มด้วยเส้น)
+   ชนิด select/bool ไปอยู่กล่องข้างขวาของหน้าแก้ไข · image เป็นกล่องภาพ · rich เป็นตัวแก้ข้อความ · ที่เหลือลงกล่อง "รายละเอียด" */
 const SCHEMA = {
   blocks: {
     label:'ข้อความในหน้า', title:'ข้อความและหัวข้อในแต่ละหน้า', menu:'เนื้อหาเว็บ',
@@ -30,7 +32,7 @@ const SCHEMA = {
     fields:[ {k:'html', t:'rich', label:'เนื้อหา'} ]
   },
   nav: {
-    label:'เมนู', title:'เมนูหลักด้านบน', menu:'เนื้อหาเว็บ',
+    label:'เมนู', titleKey:'label', title:'เมนูหลักด้านบน', menu:'เนื้อหาเว็บ',
     where:'แถบเมนูบนสุดของทุกหน้า และเมนูในมือถือ', link:'index.html',
     listT:r=>r.label, listS:r=>r.href + (r.dd_title ? '  ·  หัวดรอปดาวน์: ' + r.dd_title : ''),
     /* เรียงเป็นต้นไม้: รายการบนตามลำดับ แล้วตามด้วยรายการย่อยของมัน
@@ -71,7 +73,7 @@ const SCHEMA = {
     fields:r=>[{k:'value', t:r.kind==='bool' ? 'boolstr' : 'text', label:r.label, hint:r.hint}]
   },
   staff: {
-    label:'อาจารย์', title:'อาจารย์ประจำ', thumb:'photo', menu:'บุคลากร',
+    label:'อาจารย์', titleKey:'name', title:'อาจารย์ประจำ', thumb:'photo', menu:'บุคลากร',
     where:'หน้า About ส่วน Academic Staff', link:'about.html#academic-staff',
     listT:r=>r.name, listS:r=>[r.role, r.ext].filter(Boolean).join(' · '),
     groupBy:r=>r.is_lead ? 'หัวหน้าสาขา (การ์ดใหญ่)' : 'อาจารย์ประจำ',
@@ -85,7 +87,7 @@ const SCHEMA = {
     ]
   },
   lecturers: {
-    label:'Guest Lecturers', title:'อาจารย์รับเชิญ (Guest Lecturers)', thumb:'photo', menu:'บุคลากร',
+    label:'Guest Lecturers', titleKey:'name', title:'อาจารย์รับเชิญ (Guest Lecturers)', thumb:'photo', menu:'บุคลากร',
     where:'หน้า About ส่วน Guest Lecturers', link:'about.html#guest-lecturers',
     listT:r=>r.name, listS:r=>[r.course, r.when_text].filter(Boolean).join(' · '),
     fields:[
@@ -98,7 +100,7 @@ const SCHEMA = {
     ]
   },
   news: {
-    label:'ข่าว/กิจกรรม', title:'ข่าวและกิจกรรม', thumb:'image', menu:'ข้อมูล',
+    label:'ข่าว/กิจกรรม', titleKey:'title', title:'ข่าวและกิจกรรม', thumb:'image', menu:'ข้อมูล',
     where:'สไลด์ Latest News หน้าแรก + Announcements หน้า Activities (ข่าว) · สไลด์ Recent Activities (กิจกรรม)', link:'activities.html#announcements',
     listT:r=>r.title, listS:r=>(r.fb_post_id ? 'จาก Facebook' : r.tag),
     /* โพสต์จากเพจดึงเข้ามาโดย Edge Function fb-sync (มี fb_post_id) แก้หัวข้อ/ซ่อนได้ตามปกติ
@@ -117,7 +119,7 @@ const SCHEMA = {
   /* หน้าพิเศษ ไม่ใช่ตาราง: view คือฟังก์ชันวาดหน้าเอง (go() แยกทางให้) */
   facebook: { label:'Facebook', menu:'ข้อมูล', noAdd:true, view:()=>facebookView() },
   events: {
-    label:'ปฏิทินกิจกรรม', title:'ปฏิทินกิจกรรม (Event Calendar)', menu:'ข้อมูล',
+    label:'ปฏิทินกิจกรรม', titleKey:'title', title:'ปฏิทินกิจกรรม (Event Calendar)', menu:'ข้อมูล',
     where:'หน้า Activities ส่วน Event Calendar เรียงตามวันที่เริ่มเสมอ · ผู้ชมกรองตามผู้จัด (TEFL / EDU / CHULA) ได้', link:'activities.html#calendar',
     thumb:'image',
     /* เรียงตามวันบนเว็บอยู่แล้ว ปุ่มเลื่อนลำดับจึงไม่มีความหมาย */
@@ -141,7 +143,7 @@ const SCHEMA = {
     ]
   },
   faqs: {
-    label:'FAQ', title:'คำถามที่พบบ่อย', menu:'ข้อมูล',
+    label:'FAQ', titleKey:'question', title:'คำถามที่พบบ่อย', menu:'ข้อมูล',
     where:'หน้า FAQs และส่วนคำถามท้ายหน้าแรก', link:'faqs.html',
     listT:r=>r.question, listS:r=>r.answer.replace(/<[^>]+>/g,'').slice(0,110),
     groupBy:r=>({home:'หน้าแรก', applicants:'ผู้สมัคร', students:'นิสิตปัจจุบัน'})[r.category],
@@ -153,7 +155,7 @@ const SCHEMA = {
     ]
   },
   links: {
-    label:'ฟอร์ม/ลิงก์', title:'ฟอร์มดาวน์โหลดและลิงก์ที่มีประโยชน์', menu:'ข้อมูล',
+    label:'ฟอร์ม/ลิงก์', titleKey:'title', title:'ฟอร์มดาวน์โหลดและลิงก์ที่มีประโยชน์', menu:'ข้อมูล',
     where:'หน้า Forms and Links', link:'forms-and-links.html',
     listT:r=>r.title, listS:r=>r.url,
     groupBy:r=>r.kind==='form' ? 'ฟอร์มดาวน์โหลด' : 'ลิงก์ที่มีประโยชน์',
@@ -172,7 +174,7 @@ const SCHEMA = {
     ]
   },
   courses: {
-    label:'รายวิชา', title:'รายวิชา', menu:'ข้อมูล',
+    label:'รายวิชา', titleKey:'title', title:'รายวิชา', menu:'ข้อมูล',
     where:'หน้า Academics ตาราง List of Courses', link:'academics.html#list-of-courses',
     listT:r=>r.title, listS:r=>[r.code, r.credits].filter(Boolean).join(' · '),
     groupBy:r=>r.group_name,
@@ -185,7 +187,7 @@ const SCHEMA = {
     ]
   },
   tuition: {
-    label:'ค่าเล่าเรียน', title:'ค่าเล่าเรียน', menu:'ข้อมูล',
+    label:'ค่าเล่าเรียน', titleKey:'student_group', title:'ค่าเล่าเรียน', menu:'ข้อมูล',
     where:'หน้า Academics ตาราง Tuition and Fees', link:'academics.html#tuition-and-fees',
     listT:r=>r.student_group, listS:r=>'รวม ' + (r.total_per_semester||'-') + ' /ภาคการศึกษา',
     fields:[

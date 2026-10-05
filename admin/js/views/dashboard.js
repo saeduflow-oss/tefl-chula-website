@@ -1,14 +1,15 @@
 /* =========================================================
-   admin/js/views/dashboard.js — แดชบอร์ด
+   admin/js/views/dashboard.js — แดชบอร์ดแบบ WordPress
+   แผงต้อนรับ (Welcome panel) + วิดเจ็ต: ข้อมูลโดยรวม · วิธีใช้ · แก้ไขล่าสุด · ยังไม่ได้ใส่
    ดึงทุกตารางพร้อมกันเอาแค่คอลัมน์ที่ต้องใช้ ข้ามชุดข้อมูลที่เป็นหน้าพิเศษ (มี view)
+   ใช้ postbox() จาก editor.js ซึ่งโหลดทีหลัง — เรียกตอนวาดหน้าเท่านั้น ไม่ใช่ตอนประกาศ จึงไม่เป็น undefined
    ทุกไฟล์ใน admin/js เป็น classic script ที่ประกาศตัวแปร/ฟังก์ชันไว้ระดับบนสุด
    จึงมองเห็นกันข้ามไฟล์ได้ ลำดับการโหลดกำหนดใน admin/index.html — อย่าสลับ
    ========================================================= */
 'use strict';
 
-/* ---------- แดชบอร์ด ---------- */
 async function dashboard(){
-  $('#title').textContent = 'แดชบอร์ด';
+  setTitle('แดชบอร์ด');
   const view = $('#view');
   view.innerHTML = '<div class="empty">กำลังโหลด…</div>';
 
@@ -24,69 +25,68 @@ async function dashboard(){
     return api('/rest/v1/' + k + '?select=' + cols.join(',') + '&order=updated_at.desc')
       .then(r => r.ok ? r.json() : []).catch(()=>[]);
   }));
+  if(current !== 'dash') return;   /* ผู้ใช้กดไปหน้าอื่นระหว่างรอ */
   const all = {};
   keys.forEach((k, i) => { all[k] = results[i]; counts[k] = results[i].length; });
-  paintMenu();
 
-  /* แก้ไขล่าสุด: รวมทุกตารางแล้วเรียงตามเวลา */
+  /* แก้ไขล่าสุด: รวมทุกตารางแล้วเรียงตามเวลา กดแล้วเข้าหน้าแก้ไขของแถวนั้นตรง ๆ */
   const recent = keys.flatMap(k => all[k].map(r => ({
     k, r, t: r.updated_at, name: SCHEMA[k].listT(Object.assign({ html:'', answer:'' }, r))
   }))).sort((a,b) => (b.t||'').localeCompare(a.t||'')).slice(0, 8);
 
-  /* ค่าเชื่อมต่อที่ยังว่าง: บอกไว้ตรงนี้ดีกว่าให้ไปเจอเองตอนฟอร์มไม่ส่ง */
+  /* ค่าเชื่อมต่อที่ยังว่าง: บอกไว้ตรงนี้ดีกว่าให้ไปเจอเองตอนฟอร์มไม่ส่ง — และขึ้นวงส้มที่เมนูด้วย */
   const unset = (all.settings || []).filter(s => !(s.value || '').trim());
+  badges.settings = unset.length;
+  paintMenu();
   const hidden = keys.reduce((n, k) => n + all[k].filter(r => r.is_visible === false).length, 0);
 
-  const strip = keys.map(k => {
+  const glance = '<ul class="glance">' + keys.map(k => {
     const off = all[k].filter(r => r.is_visible === false).length;
-    return '<a data-v="' + k + '"><span class="ico ' + (TINT[k] || 'c1') + '">' + (ICON[k] || '') + '</span><div>' +
-      '<div class="v">' + all[k].length + '</div>' +
-      '<div class="k">' + esc(SCHEMA[k].label) + '</div>' +
-      (off ? '<div class="h">ซ่อนอยู่ ' + off + '</div>' : '') + '</div></a>';
-  }).join('');
+    return '<li><a href="' + H(k) + '">' + (ICON[k] || '') + '<span><b>' + all[k].length + '</b> ' + esc(SCHEMA[k].label) +
+      (off ? ' <small>(ซ่อน ' + off + ')</small>' : '') + '</span></a></li>';
+  }).join('') + '</ul>' +
+  '<p class="glance-foot">' + (hidden ? 'มีรายการที่ซ่อนจากเว็บอยู่ ' + hidden + ' รายการ · ' : '') +
+    (unset.length ? 'ข้อมูลติดต่อยังไม่ได้ใส่ ' + unset.length + ' รายการ' : 'ข้อมูลติดต่อครบทุกรายการ') + '</p>';
 
-  view.innerHTML =
-    '<div class="lead"><h2>ภาพรวมเว็บไซต์</h2><p>' +
-      (hidden ? 'มีรายการที่ซ่อนจากเว็บอยู่ ' + hidden + ' รายการ · ' : '') +
-      (unset.length ? 'ข้อมูลติดต่อยังไม่ได้ใส่ ' + unset.length + ' รายการ' : 'ข้อมูลติดต่อครบทุกรายการ') +
-    '</p></div>' +
-    '<div class="sec">วิธีใช้</div>' +
-    '<div class="steps">' +
-      '<div><span class="n">1</span><b>' + ICON.dash + ' เลือกหมวดจากเมนูซ้าย</b><p>เช่น อาจารย์ ข่าว หรือข้อความในหน้า ทุกหน้ามีบอกว่าข้อมูลไปโผล่ตรงไหนบนเว็บ</p></div>' +
-      '<div><span class="n">2</span><b>' + ICON.edit + ' กด "แก้ไข" หรือ "+ เพิ่ม"</b><p>แผงจะเลื่อนมาทางขวา พิมพ์แก้ได้เลย ไม่ต้องรู้เรื่องโค้ด</p></div>' +
-      '<div><span class="n">3</span><b>' + ICON.site + ' กด "บันทึก" แล้วรีเฟรชหน้าเว็บ</b><p>เห็นผลทันที ถ้าอยากเอาออกชั่วคราวใช้ "ซ่อนจากเว็บ" ไม่ต้องลบ</p></div>' +
-    '</div>' +
-    '<div class="sec">ทำบ่อย</div>' +
-    '<div class="quick">' +
-      '<button class="btn" data-q="news">' + ICON.news + 'เพิ่มข่าว/กิจกรรม</button>' +
-      '<button class="btn" data-q="staff">' + ICON.staff + 'เพิ่มอาจารย์</button>' +
-      '<button class="btn" data-q="events">' + ICON.events + 'เพิ่มกิจกรรมในปฏิทิน</button>' +
-      '<button class="btn" data-go="facebook">' + ICON.facebook + 'เชื่อมต่อ Facebook</button>' +
-      '<button class="btn" data-go="nav">' + ICON.nav + 'แก้เมนู</button>' +
-      '<button class="btn" data-go="settings">' + ICON.settings + 'ข้อมูลติดต่อและลิงก์</button>' +
-    '</div>' +
-    '<div class="sec">เนื้อหาทั้งหมด</div>' +
-    '<div class="strip">' + strip + '</div>' +
-    '<div class="two" style="margin-top:26px">' +
-      '<div><div class="sec" style="margin-top:0">แก้ไขล่าสุด</div><div class="list">' +
-        (recent.length ? recent.map(x =>
-          '<div class="it" data-v="' + x.k + '" style="cursor:pointer">' +
-          '<span class="ico ' + (TINT[x.k] || 'c1') + '">' + (ICON[x.k] || '') + '</span><div style="min-width:0">' +
-          '<div class="t">' + esc(x.name) + '</div><div class="s">' + esc(SCHEMA[x.k].label) + '</div></div>' +
-          '<span class="r">' + when(x.t) + '</span></div>').join('')
-        : '<div class="empty">ยังไม่มีการแก้ไข</div>') +
-      '</div></div>' +
-      '<div><div class="sec" style="margin-top:0">ยังไม่ได้ใส่</div><div class="list">' +
-        (unset.length ? unset.map(s =>
-          '<div class="it warn" data-v="settings" style="cursor:pointer">' +
-          '<span class="ico c5">' + ICON.warn + '</span><div style="min-width:0">' +
-          '<div class="t">' + esc(s.label) + '</div><div class="s">กดเพื่อไปใส่</div></div>' +
-          '<span class="tag off">ยังว่าง</span></div>').join('')
-        : '<div class="empty">ข้อมูลติดต่อครบแล้ว</div>') +
-      '</div></div>' +
-    '</div>';
+  const how = '<ol class="how">' +
+    '<li><b>เลือกหมวดจากเมนูซ้าย</b> เช่น อาจารย์ ข่าว หรือข้อความในหน้า — ทุกหน้าบอกว่าข้อมูลไปโผล่ตรงไหนบนเว็บ</li>' +
+    '<li><b>คลิกชื่อรายการ</b> หรือ "เพิ่มใหม่" จะเปิดหน้าแก้ไขเต็มจอ พิมพ์แก้ได้เหมือนเขียนบทความใน WordPress</li>' +
+    '<li><b>กด "อัปเดต" ในกล่องเผยแพร่</b> (หรือ Ctrl+S) แล้วรีเฟรชหน้าเว็บ เห็นผลทันที — อยากเอาออกชั่วคราวให้ตั้งสถานะเป็น "ซ่อน" ไม่ต้องลบ</li>' +
+  '</ol>';
 
-  view.querySelectorAll('[data-v]').forEach(el => el.addEventListener('click', ()=>go(el.dataset.v)));
-  view.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', ()=>go(el.dataset.go)));
-  view.querySelectorAll('[data-q]').forEach(el => el.addEventListener('click', ()=>go(el.dataset.q).then(()=>openEdit(null))));
+  const activity = recent.length ? '<ul class="activity">' + recent.map(x =>
+    '<li><span class="when">' + when(x.t) + '</span><a href="' + editHref(x.k, x.r) + '">' + esc(x.name) + '</a>' +
+    /* บล็อกหลายหน้าชื่อซ้ำกัน (เช่น แถบชวนสมัครท้ายหน้า มีทุกหน้า) ต้องบอกว่าเป็นของหน้าไหน */
+    '<span class="in">ใน ' + esc(SCHEMA[x.k].label) + (x.k === 'blocks' ? ' · ' + esc(SCHEMA.blocks.groupBy(x.r)) : '') + '</span></li>').join('') + '</ul>'
+    : '<div class="empty">ยังไม่มีการแก้ไข</div>';
+
+  const todo = unset.length ? '<ul class="activity">' + unset.map(s =>
+    '<li><span class="tag off">ยังว่าง</span><a href="' + editHref('settings', s) + '">' + esc(s.label) + '</a></li>').join('') + '</ul>'
+    : '<div class="empty">ข้อมูลติดต่อครบแล้ว ✓</div>';
+
+  const who = (me && me.user_metadata && me.user_metadata.full_name) || '';
+  view.innerHTML = '<div class="wrap">' + heading('แดชบอร์ด') +
+    '<div class="welcome">' +
+      '<div class="welcome-head">' +
+        '<p class="eyebrow">TEFL Chula · Faculty of Education, Chulalongkorn University</p>' +
+        '<h2>ยินดีต้อนรับ' + (who ? ' ' + esc(who) : '') + ' สู่ระบบจัดการเนื้อหา TEFL</h2>' +
+        '<p>แก้ข้อความ ข่าว อาจารย์ และปฏิทินกิจกรรมของเว็บไซต์หลักสูตรได้จากที่นี่ ไม่ต้องแตะโค้ด</p>' +
+      '</div>' +
+      '<div class="welcome-cols">' +
+        '<div><h3>เริ่มต้นใช้งาน</h3><a class="btn primary hero" href="' + H('news/new') + '">' + ICON.news + 'เขียนข่าว/กิจกรรมใหม่</a>' +
+          '<p>หรือ <a href="' + H('blocks') + '">แก้ข้อความในหน้าเว็บ</a></p></div>' +
+        '<div><h3>ขั้นตอนถัดไป</h3><ul>' +
+          '<li><a href="' + H('staff/new') + '">' + ICON.staff + 'เพิ่มอาจารย์</a></li>' +
+          '<li><a href="' + H('events/new') + '">' + ICON.events + 'เพิ่มกิจกรรมในปฏิทิน</a></li>' +
+          '<li><a href="' + H('faqs/new') + '">' + ICON.faqs + 'เพิ่มคำถามที่พบบ่อย</a></li></ul></div>' +
+        '<div><h3>การจัดการอื่น ๆ</h3><ul>' +
+          '<li><a href="' + H('nav') + '">' + ICON.nav + 'แก้เมนูด้านบน</a></li>' +
+          '<li><a href="' + H('facebook') + '">' + ICON.facebook + 'เชื่อมต่อ Facebook</a></li>' +
+          '<li><a href="' + H('settings') + '">' + ICON.settings + 'ข้อมูลติดต่อและลิงก์</a></li></ul></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="dash-cols">' +
+      '<div>' + postbox('ข้อมูลโดยรวม', glance) + postbox('วิธีใช้', how) + '</div>' +
+      '<div>' + postbox('แก้ไขล่าสุด', activity) + postbox('ยังไม่ได้ใส่', todo) + '</div>' +
+    '</div></div>';
 }

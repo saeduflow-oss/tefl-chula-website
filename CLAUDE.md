@@ -162,7 +162,11 @@ Three pieces have to stay in step:
   `editor`, `app`). They are classic scripts sharing top-level globals — **load order in `index.html` is
   the contract**, and `schema.js` must reference later-loaded view functions lazily. `index.html` carries
   `<base href="../">` because it sits one directory down while every image, font, css and js path is
-  written relative to the site root — remove it and the page loses its styles, scripts, logo and thumbnails
+  written relative to the site root — remove it and the page loses its styles, scripts, logo and thumbnails.
+  The same base turns a bare `href="#staff"` into `/#staff` (the public homepage), so in-app links and
+  `history.replaceState` must use `H('staff')` / `editHref()` from `core.js`. The admin is laid out like
+  WordPress (admin bar, dark side menu, list tables, full-page classic editor) with hash routes `#table`,
+  `#table/new`, `#table/<pk>` handled by `route()` in `views/shell.js` — see `DESIGN.md` §9.1.1
 - `sync-content.py` — writes the DB content back into the HTML files
 
 **The HTML inside a `data-cms` container is generated.** Hand-editing it works until someone runs
