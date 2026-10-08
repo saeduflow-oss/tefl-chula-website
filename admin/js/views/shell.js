@@ -8,26 +8,31 @@
 'use strict';
 
 /* ---------- เมนูซ้าย ----------
-   แบบ WordPress: กลุ่มคั่นด้วยเส้น ไม่มีหัวกลุ่ม · เมนูที่เปิดอยู่กางเมนูย่อย "ทั้งหมด / เพิ่มใหม่" ไว้ใต้ตัวเอง
-   เมนูอื่นโชว์เมนูย่อยเป็นกล่องลอยด้านขวาตอนชี้ (CSS ล้วน) */
+   ตามภาพอ้างอิงที่ผู้ใช้ส่งมา: หัวกลุ่มตัวเล็ก (ชื่อกลุ่มจาก SCHEMA.menu) + รายการบรรทัดเดียว + กลุ่ม "ตั้งค่า" ท้ายสุด
+   .sub ยังสร้างไว้ — ใช้เป็นป้ายชื่อลอยตอนย่อเมนูเหลือแต่ไอคอน (CSS ซ่อนลิงก์ข้างในไว้) */
 function buildMenu(){
   const groups = {};
   Object.keys(SCHEMA).forEach(k => { (groups[SCHEMA[k].menu] = groups[SCHEMA[k].menu] || []).push(k); });
   const item = (k, icon, label, subs) =>
     '<div class="mi" data-k="' + k + '"><a class="top" href="' + H(k) + '">' + icon + '<span class="lb">' + esc(label) + '</span>' +
     '<span class="bub" data-b="' + k + '"></span></a>' +
-    (subs ? '<div class="sub"><span class="sub-h">' + esc(label) + '</span>' + subs + '</div>' : '') + '</div>';
+    '<div class="sub"><span class="sub-h">' + esc(label) + '</span>' + (subs || '') + '</div></div>';
   let h = item('dash', ICON.dash, 'แดชบอร์ด', '');
   Object.keys(groups).forEach(function(g){
-    h += '<div class="sep"></div>';
+    h += '<div class="grp">' + esc(g) + '</div>';
     groups[g].forEach(k => {
       const def = SCHEMA[k];
+      /* blocks ไม่มีเมนูเอง — ตำแหน่งเดียวกันในเมนูเป็น "หน้าเว็บ" (#pages) ที่รวมบล็อกตามหน้าไว้ */
+      if(def.hideMenu){ if(k === 'blocks') h += item('pages', ICON.pages, 'หน้าเว็บ', ''); return; }
       const subs = def.view ? '' :
         '<a href="' + H(k) + '" data-s="list">' + (def.noAdd ? 'แก้ไขทั้งหมด' : 'ทั้งหมด') + '</a>' +
         (def.noAdd ? '' : '<a href="' + H(k + '/new') + '" data-s="new">เพิ่มใหม่</a>');
       h += item(k, ICON[k] || '', def.label, subs);
     });
   });
+  h += '<div class="grp">ตั้งค่า</div>' + item('users', ICON.shield, 'ผู้ดูแลระบบ', '<span></span>') +
+    item('prefs', ICON.gear, 'หน้าตา', '<span></span>') +
+    item('profile', ICON.user, 'โปรไฟล์ของฉัน', '<span></span>');
   $('#menu').innerHTML = h;
 
   /* ปุ่ม "+ เพิ่มใหม่" ในแถบบน: รายการชุดข้อมูลที่เพิ่มได้ (ตรงกับเมนู + New ของ WordPress) */
@@ -37,7 +42,8 @@ function buildMenu(){
 /* sub = 'list' | 'new' | 'edit' — ใช้ไฮไลต์เมนูย่อย (หน้าแก้ไขไฮไลต์ "ทั้งหมด" แบบ WordPress) */
 function paintMenu(sub){
   $('#menu').querySelectorAll('.mi').forEach(mi => {
-    const on = mi.dataset.k === current;
+    /* แก้ข้อความในหน้า (#blocks/<key>) นับเป็นส่วนหนึ่งของเมนู "หน้าเว็บ" */
+    const on = mi.dataset.k === current || (mi.dataset.k === 'pages' && current === 'blocks');
     mi.classList.toggle('on', on);
     mi.querySelectorAll('.sub a').forEach(a =>
       a.classList.toggle('on', on && a.dataset.s === (sub === 'new' ? 'new' : 'list')));
@@ -93,7 +99,7 @@ async function route(){
   const cut = h.indexOf('/');
   let v = cut < 0 ? h : h.slice(0, cut);
   const sub = cut < 0 ? '' : decodeURIComponent(h.slice(cut + 1));
-  if(!['dash','profile','prefs'].includes(v) && !SCHEMA[v]) v = 'dash';
+  if(!['dash','profile','prefs','pages','users'].includes(v) && !SCHEMA[v]) v = 'dash';
   /* กลับมาหน้ารายการเดิมจากหน้าแก้ไข: คงคำค้นและแท็บกรองไว้ เปลี่ยนชุดข้อมูลเมื่อไหร่ค่อยล้าง */
   if(v !== current){ query = ''; filter = 'all'; }
   current = v;
@@ -104,6 +110,8 @@ async function route(){
   if(v === 'dash') return dashboard();
   if(v === 'profile') return profileView();
   if(v === 'prefs') return prefsView();
+  if(v === 'users') return usersView();
+  if(v === 'pages') return sub ? pageEditor(sub) : pagesView();
   if(SCHEMA[v].view) return SCHEMA[v].view();
   if(!sub) return load();
 

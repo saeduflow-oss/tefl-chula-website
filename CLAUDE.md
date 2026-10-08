@@ -158,7 +158,7 @@ Three pieces have to stay in step:
 
 - `cms.js` — loaded by the 7 content pages; swaps DB content into the containers marked `data-cms`
 - `admin/` — the editing UI at `/admin`: `index.html` (markup + script load order), `admin.css`, and
-  `js/` split by concern (`config`, `icons`, `schema`, `core`, `views/{shell,dashboard,list,facebook,account}`,
+  `js/` split by concern (`config`, `icons`, `schema`, `core`, `views/{shell,dashboard,list,pages,blockeditor,facebook,account}`,
   `editor`, `app`). They are classic scripts sharing top-level globals — **load order in `index.html` is
   the contract**, and `schema.js` must reference later-loaded view functions lazily. `index.html` carries
   `<base href="../">` because it sits one directory down while every image, font, css and js path is
@@ -168,6 +168,11 @@ Three pieces have to stay in step:
   WordPress (admin bar, dark side menu, list tables, full-page classic editor) with hash routes `#table`,
   `#table/new`, `#table/<pk>` handled by `route()` in `views/shell.js` — see `DESIGN.md` §9.1.1
 - `sync-content.py` — writes the DB content back into the HTML files
+
+The admin's page editor (`#pages/<file>`) loads the real page in an iframe with `?cms-edit=1` and edits it in place.
+It relies on two small hooks on the public side: `cms.js` sets `window.TEFLCmsReady` / fires `tefl:cms-ready`
+when its render chain ends (the editor waits for it, or cms.js would overwrite the editor's nodes), and `site.js`
+skips the music player under `?cms-edit` (the first click while editing would otherwise unmute it). Keep both.
 
 **The HTML inside a `data-cms` container is generated.** Hand-editing it works until someone runs
 `sync-content.py`, which overwrites it. Change content in `/admin` instead.
@@ -224,7 +229,8 @@ first `news.home_count` rows; the Announcements section at the end of `activitie
 the rules (existing rows are never overwritten, deleted rows come back — hide instead), the CORS gotcha, and
 the one-time setup commands.
 
-Writes are restricted to emails listed in the `admins` table, not merely to logged-in users —
+Writes are restricted to *active* emails listed in the `admins` table (`private.is_admin()`), and only
+`role = 'admin'` may change that table (`private.is_owner()`) — not merely to logged-in users —
 Supabase allows public self-signup with the publishable key, so `role = authenticated` alone would
 let anyone edit the site. `DESIGN.md` §9 has the schema, the permission table and how to add an admin.
 

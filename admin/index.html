@@ -25,8 +25,11 @@
 <div id="login">
   <div class="login-wrap">
     <img class="login-logo" src="img/logo.png" alt="TEFL Chula — Faculty of Education, Chulalongkorn University">
+    <!-- กล่องเดียวสลับได้ 3 แบบ: เข้าสู่ระบบ · ลืมรหัสผ่าน (ขอลิงก์ทางอีเมล) · ตั้งรหัสผ่านใหม่ (เปิดจากลิงก์ในอีเมล)
+         ปุ่มรูปตา (.pw-eye) ข้างช่องรหัสผ่านสลับให้เห็นสิ่งที่พิมพ์ — ผูกการทำงานใน core.js (wireEyes) -->
     <form id="loginForm">
       <p class="login-title">ระบบจัดการเนื้อหาเว็บไซต์หลักสูตร TEFL</p>
+      <p class="login-note">สำหรับผู้ดูแลระบบเท่านั้น</p>
       <div class="msg err" id="loginMsg"></div>
       <div class="field">
         <label for="email">อีเมล</label>
@@ -34,11 +37,44 @@
       </div>
       <div class="field">
         <label for="password">รหัสผ่าน</label>
-        <input type="password" id="password" autocomplete="current-password" required>
+        <div class="pw"><input type="password" id="password" autocomplete="current-password" required><button type="button" class="pw-eye" aria-label="แสดงรหัสผ่าน" aria-pressed="false" title="แสดง/ซ่อนรหัสผ่าน"><svg class="i on" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="i off" viewBox="0 0 24 24"><path d="M10.6 5.1A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a18 18 0 0 1-2.6 3.5M6.6 6.6C3.7 8.5 2 12 2 12s3.6 7 10 7a10 10 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/><path d="M3 3l18 18"/></svg></button></div>
       </div>
       <div class="login-foot">
-        <span class="hint">สำหรับผู้ดูแลระบบเท่านั้น</span>
+        <a id="toForgot" href="javascript:void(0)">ลืมรหัสผ่าน?</a>
         <button class="btn primary" id="loginBtn">เข้าสู่ระบบ</button>
+      </div>
+    </form>
+
+    <form id="forgotForm" hidden>
+      <p class="login-title">ลืมรหัสผ่าน</p>
+      <p class="login-note">ใส่อีเมลที่ใช้เข้าสู่ระบบ ระบบจะส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปให้ (ลิงก์ใช้ได้ครั้งเดียว)</p>
+      <div class="msg err" id="forgotMsg"></div>
+      <div class="field">
+        <label for="fEmail">อีเมล</label>
+        <input type="email" id="fEmail" autocomplete="username" required>
+      </div>
+      <div class="login-foot">
+        <a class="toLogin" href="javascript:void(0)">← กลับไปเข้าสู่ระบบ</a>
+        <button class="btn primary" id="forgotBtn">ส่งลิงก์ตั้งรหัสใหม่</button>
+      </div>
+    </form>
+
+    <form id="resetForm" hidden>
+      <p class="login-title">ตั้งรหัสผ่านใหม่</p>
+      <p class="login-note" id="resetWho"></p>
+      <div class="msg err" id="resetMsg"></div>
+      <div class="field">
+        <label for="rPw1">รหัสผ่านใหม่</label>
+        <div class="pw"><input type="password" id="rPw1" autocomplete="new-password" minlength="8" required><button type="button" class="pw-eye" aria-label="แสดงรหัสผ่าน" aria-pressed="false" title="แสดง/ซ่อนรหัสผ่าน"><svg class="i on" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="i off" viewBox="0 0 24 24"><path d="M10.6 5.1A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a18 18 0 0 1-2.6 3.5M6.6 6.6C3.7 8.5 2 12 2 12s3.6 7 10 7a10 10 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/><path d="M3 3l18 18"/></svg></button></div>
+        <div class="hint">อย่างน้อย 8 ตัวอักษร</div>
+      </div>
+      <div class="field">
+        <label for="rPw2">พิมพ์อีกครั้ง</label>
+        <div class="pw"><input type="password" id="rPw2" autocomplete="new-password" required><button type="button" class="pw-eye" aria-label="แสดงรหัสผ่าน" aria-pressed="false" title="แสดง/ซ่อนรหัสผ่าน"><svg class="i on" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="i off" viewBox="0 0 24 24"><path d="M10.6 5.1A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a18 18 0 0 1-2.6 3.5M6.6 6.6C3.7 8.5 2 12 2 12s3.6 7 10 7a10 10 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/><path d="M3 3l18 18"/></svg></button></div>
+      </div>
+      <div class="login-foot">
+        <a class="toLogin" href="javascript:void(0)">ยกเลิก</a>
+        <button class="btn primary" id="resetBtn">บันทึกรหัสผ่านใหม่</button>
       </div>
     </form>
     <p class="login-back"><a href="index.html">← กลับไปที่เว็บไซต์ TEFL Chula</a></p>
@@ -73,7 +109,8 @@
       <div class="umenu" id="umenu">
         <div class="umenu-head"><span class="av big" id="avatarBig">A</span><div><b id="whoName"></b><small id="whoSub"></small></div></div>
         <a data-v="profile">แก้ไขโปรไฟล์</a>
-        <a data-v="prefs">ตั้งค่าและผู้ดูแล</a>
+        <a data-v="users">ผู้ดูแลระบบ</a>
+        <a data-v="prefs">หน้าตา</a>
         <a id="logout" class="out">ออกจากระบบ</a>
       </div>
     </div>
@@ -114,6 +151,8 @@
 <script src="admin/js/views/shell.js"></script>
 <script src="admin/js/views/dashboard.js"></script>
 <script src="admin/js/views/list.js"></script>
+<script src="admin/js/views/pages.js"></script>
+<script src="admin/js/views/blockeditor.js"></script>
 <script src="admin/js/views/facebook.js"></script>
 <script src="admin/js/views/account.js"></script>
 <script src="admin/js/editor.js"></script>

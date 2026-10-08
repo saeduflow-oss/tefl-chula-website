@@ -231,7 +231,8 @@ function openEdit(row, notice){
       (def.noHide ? '' : '<div class="misc-row">' + ICON.eye + '<label for="pubStatus">สถานะ:</label>' +
         '<select id="pubStatus"><option value="1"' + (vis ? ' selected' : '') + '>แสดงบนเว็บ</option>' +
         '<option value="0"' + (vis ? '' : ' selected') + '>ซ่อน (ฉบับร่าง)</option></select></div>') +
-      (row && row.updated_at ? '<div class="misc-row">' + ICON.clock + '<span>แก้ไขล่าสุด: <b>' + when(row.updated_at) + '</b></span></div>' : '') +
+      (row && row.updated_at ? '<div class="misc-row">' + ICON.clock + '<span>แก้ไขล่าสุด: <b>' + when(row.updated_at) + '</b>' +
+        (row.updated_by ? ' โดย <b>' + esc(row.updated_by) + '</b>' : '') + '</span></div>' : '') +
       (link ? '<div class="misc-row">' + ICON.site + '<a href="' + esc(link) + '" target="_blank" rel="noopener">ดูหน้านี้บนเว็บ ↗</a></div>' : '') +
     '</div>' +
     '<div class="major">' +
@@ -240,7 +241,10 @@ function openEdit(row, notice){
     '</div>';
 
   $('#view').innerHTML = '<div class="wrap">' +
-    '<a class="back" href="' + H(current) + '">' + ICON.back + esc(def.title) + '</a>' +
+    /* ข้อความในหน้าเข้ามาจากเมนู "หน้าเว็บ" → ย้อนกลับไปรายการส่วนของหน้านั้น ไม่ใช่ตาราง blocks ทั้งก้อน */
+    (current === 'blocks' && row
+      ? '<a class="back" href="' + H('pages/' + encodeURIComponent(row.page)) + '">' + ICON.back + esc(pageOf(row.page).title) + '</a>'
+      : '<a class="back" href="' + H(current) + '">' + ICON.back + esc(def.title) + '</a>') +
     heading((row ? 'แก้ไข' : 'เพิ่ม') + def.label + (row ? '' : 'ใหม่'),
       row && !def.noAdd ? '<a class="btn page-title-action" href="' + H(current + '/new') + '">เพิ่มใหม่</a>' : '') +
     (notice ? '<div class="notice ok"><p>' + esc(notice) + (link ? ' <a href="' + esc(link) + '" target="_blank" rel="noopener">ดูบนเว็บ ↗</a>' : '') +
@@ -329,5 +333,6 @@ document.addEventListener('keydown', e => {
   if((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's'){
     const f = $('#editForm');
     if(f){ e.preventDefault(); f.requestSubmit(); }
+    else if($('#beSave')){ e.preventDefault(); $('#beSave').click(); }   /* ตัวแก้แบบบล็อกของทั้งหน้า */
   }
 });

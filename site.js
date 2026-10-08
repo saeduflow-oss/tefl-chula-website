@@ -618,6 +618,7 @@
      ส่วนบทนำต้นหน้าที่ไม่มีในเมนู ติดไปกับกลุ่มแรก
      (Program Overview → Goals and Objectives, Overview → Curriculum Info.)
      อ่านเมนูสดทุกครั้ง เพราะ cms.js สร้างเมนูใหม่จากตาราง nav ได้ */
+  /* ตัวแก้หน้าใน /admin คำนวณกลุ่มแบบเดียวกันจากฐานข้อมูล (pageSubs ใน admin/js/views/pages.js) — แก้กติกาที่นี่ต้องแก้ที่นั่นด้วย */
   function sectionGroups(sections){
     const file = pageFile();
     const menu = {};
@@ -1210,6 +1211,9 @@
     const GESTURES  = ['pointerdown','keydown','touchend','click'];
 
     if(!document.body) return;
+    /* หน้านี้ถูกเปิดในกรอบของตัวแก้หน้าใน /admin (?cms-edit) — ห้ามมีเพลง: คนแก้คลิกพิมพ์ครั้งแรก = gesture ปลดเสียง
+       เพลงจะดังขึ้นกลางการแก้ และตำแหน่งเพลงที่บันทึกไว้ของแท็บจะถูกเขียนทับ */
+    if(/[?&]cms-edit\b/.test(location.search)) return;
 
     /* โหมดส่วนตัวของบางเบราว์เซอร์อ่าน/เขียน storage ไม่ได้และจะโยน exception
        ห้ามให้ทั้งบล็อกพังเพราะเรื่องนี้ — ถือว่า "ยังไม่เคยปิด" แล้วเล่นต่อไปตามปกติ */

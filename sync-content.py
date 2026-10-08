@@ -429,7 +429,8 @@ def main():
         'activities.html': [
             ('news-activities', [news_card(n) for n in by('news', 'placement', 'activities')], None),
             # Announcements + Event Calendar เคยอยู่หน้า news.html (ยุบรวมมาที่นี่ ก.ย. 2569)
-            ('news-all', [news_card(n) for n in by('news', 'placement', 'home')], None),
+            # Announcements โชว์เฉพาะโพสต์จาก Facebook (มี fb_post_id) — กติกาเดียวกับ cms.js
+            ('news-all', [news_card(n) for n in by('news', 'placement', 'home') if n.get('fb_post_id')], None),
             ('events', render_events(data['events']), None),
         ],
         'forms-and-links.html': [

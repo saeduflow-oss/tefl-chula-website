@@ -319,6 +319,15 @@
     return get('blocks').then(function(rows){
       const map = {};
       rows.forEach(function(r){ map[r.key] = r.html; });
+      /* ปุ่ม Preview ของตัวแก้แบบบล็อกใน /admin: เปิดหน้านี้พร้อม ?cms-preview แล้วใช้ข้อความที่ยังไม่บันทึก
+         (ฝากไว้ใน localStorage ของเบราว์เซอร์คนแก้) แทนของในฐานข้อมูล — ผู้ชมคนอื่นไม่มีค่านี้จึงไม่เห็น
+         ไม่เกี่ยวกับมาร์กอัป sync-content.py จึงไม่ต้องแก้ตาม */
+      if(/[?&]cms-preview\b/.test(location.search)){
+        try{
+          const draft = JSON.parse(localStorage.getItem('tefl-cms-preview') || 'null');
+          if(draft) Object.keys(draft).forEach(function(k){ map[k] = draft[k]; });
+        }catch(e){}
+      }
       nodes.forEach(function(n){
         const html = map[n.getAttribute('data-cms-block')];
         if(html != null) n.innerHTML = html;
@@ -364,7 +373,9 @@
       const st = window.TEFLSettings || {};
       const n = parseInt(st['news.home_count'], 10) || 6;
       fill('news-home', home.slice(0, n), newsCard);
-      fill('news-all', home, newsCard);
+      /* Announcements (activities.html) โชว์เฉพาะโพสต์ที่ดึงจาก Facebook (มี fb_post_id) — เจ้าของเว็บขอ ต.ค. 2026
+         ข่าวที่เพิ่มเองใน /admin ยังขึ้นสไลเดอร์หน้าแรกได้ แต่ไม่ขึ้นที่นี่ · ต้องตรงกับ sync-content.py */
+      fill('news-all', home.filter(function(r){ return r.fb_post_id; }), newsCard);
       fill('news-activities', rows.filter(function(r){ return r.placement === 'activities'; }), newsCard);
     }));
   }
@@ -456,5 +467,12 @@
           console.warn('[cms] โหลดไม่สำเร็จ ใช้เนื้อหาสำรองในไฟล์แทน:', r.reason);
         }
       });
+    })
+    /* บอกว่า render เสร็จแล้ว (สำเร็จหรือไม่ก็ตาม) — ตัวแก้หน้าใน /admin เปิดหน้านี้ในกรอบแล้วรอสัญญาณนี้
+       ก่อนเข้าไปแก้ ถ้าเข้าก่อน cms.js จะเขียนทับสิ่งที่ตัวแก้วางไว้ */
+    .catch(function(e){ console.warn('[cms]', e); })
+    .then(function(){
+      window.TEFLCmsReady = true;
+      document.dispatchEvent(new Event('tefl:cms-ready'));
     });
 })();

@@ -15,6 +15,24 @@
    titleKey = ช่องที่หน้าแก้ไขวาดเป็นช่องชื่อเรื่องตัวใหญ่ด้านบน (แบบ WordPress) ไม่มี = แสดงชื่อแบบอ่านอย่างเดียว
    menu = กลุ่มในแถบข้าง (เมนูซ้ายคั่นกลุ่มด้วยเส้น)
    ชนิด select/bool ไปอยู่กล่องข้างขวาของหน้าแก้ไข · image เป็นกล่องภาพ · rich เป็นตัวแก้ข้อความ · ที่เหลือลงกล่อง "รายละเอียด" */
+/* ---------- หน้าเว็บ (เมนู "หน้าเว็บ") ----------
+   หน้าที่มีข้อความแก้ได้ (ค่า page ในตาราง blocks) — ลำดับนี้คือลำดับในหน้ารายการ
+   type: home = หน้าแรก · main = หน้าหลัก · shared = ส่วนที่ใช้ร่วมทุกหน้า (footer)
+   เพิ่มหน้าใหม่ในเว็บแล้วมีบล็อกของหน้านั้น ต้องเพิ่มแถวที่นี่ด้วย ไม่งั้นจะไปโผล่ท้ายรายการโดยใช้ชื่อไฟล์แทนชื่อหน้า */
+const PAGES = [
+  { page:'index.html',           title:'หน้าแรก',          path:'/',                     type:'home' },
+  { page:'about.html',           title:'About',            path:'/about.html',           type:'main' },
+  { page:'academics.html',       title:'Academics',        path:'/academics.html',       type:'main' },
+  { page:'admission.html',       title:'Admission',        path:'/admission.html',       type:'main' },
+  { page:'research.html',        title:'Research',         path:'/research.html',        type:'main' },
+  { page:'activities.html',      title:'Activities',       path:'/activities.html',      type:'main' },
+  { page:'faqs.html',            title:'FAQs',             path:'/faqs.html',            type:'main' },
+  { page:'forms-and-links.html', title:'Forms and Links',  path:'/forms-and-links.html', type:'main' },
+  { page:'contact.html',         title:'Contact',          path:'/contact.html',         type:'main' },
+  { page:'(ทุกหน้า)',             title:'ส่วนท้ายเว็บ (Footer)', path:'ทุกหน้า',            type:'shared' }
+];
+const pageOf = p => PAGES.find(x => x.page === p) || { page:p, title:p, path:'/' + p, type:'main' };
+
 const SCHEMA = {
   blocks: {
     label:'ข้อความในหน้า', title:'ข้อความและหัวข้อในแต่ละหน้า', menu:'เนื้อหาเว็บ',
@@ -25,10 +43,9 @@ const SCHEMA = {
     order:'page.asc,sort_order.asc',
     listT:r=>r.label,
     listS:r=>r.html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,120),
-    groupBy:r=>({'(ทุกหน้า)':'ส่วนท้ายเว็บ (ใช้ร่วมทุกหน้า)','index.html':'หน้าแรก',
-                 'about.html':'About','academics.html':'Academics','admission.html':'Admission',
-                 'research.html':'Research','activities.html':'Activities','faqs.html':'FAQs',
-                 'forms-and-links.html':'Forms and Links','contact.html':'Contact'})[r.page] || r.page,
+    groupBy:r=>pageOf(r.page).title,
+    /* ไม่มีในเมนูซ้ายเอง: เข้าทางเมนู "หน้าเว็บ" (#pages) แล้วเลือกหน้า — หน้าแก้ไขยังเป็น #blocks/<key> ตามเดิม */
+    hideMenu:true,
     fields:[ {k:'html', t:'rich', label:'เนื้อหา'} ]
   },
   nav: {
@@ -43,6 +60,9 @@ const SCHEMA = {
       const walk = id=>kids(id).flatMap(r=>[r, ...walk(r.id)]);
       return walk(null);
     },
+    /* หน้ารายการเยื้องตามชั้นแทนการแบ่งแท็บ (กลุ่มเยอะเกินจะเป็นแท็บ) + ป้ายบอกชั้น */
+    depth:r=>{ let d = 0, p = r; while(p && p.parent_id && d < 3){ p = rows.find(x=>x.id===p.parent_id); d++; } return d; },
+    badge:r=>{ const d = SCHEMA.nav.depth(r); return d === 0 ? ['แถบบน','main'] : d === 1 ? ['ดรอปดาวน์','shared'] : ['เมนูข้าง','shared']; },
     groupBy:r=>{
       if(!r.parent_id) return 'แถบเมนูบน: ' + r.label;
       const p = rows.find(x=>x.id===r.parent_id) || {};
@@ -76,7 +96,8 @@ const SCHEMA = {
     label:'อาจารย์', titleKey:'name', title:'อาจารย์ประจำ', thumb:'photo', menu:'บุคลากร',
     where:'หน้า About ส่วน Academic Staff', link:'about.html#academic-staff',
     listT:r=>r.name, listS:r=>[r.role, r.ext].filter(Boolean).join(' · '),
-    groupBy:r=>r.is_lead ? 'หัวหน้าสาขา (การ์ดใหญ่)' : 'อาจารย์ประจำ',
+    groupBy:r=>r.is_lead ? 'หัวหน้าสาขา' : 'อาจารย์ประจำ',
+    badge:r=>r.is_lead ? ['หัวหน้าสาขา','home'] : null,
     fields:[
       {k:'name', t:'text', label:'ชื่อ-นามสกุล', req:true},
       {k:'role', t:'text', label:'ตำแหน่ง', hint:'เช่น Instructor, Program Secretary'},
@@ -103,10 +124,11 @@ const SCHEMA = {
     label:'ข่าว/กิจกรรม', titleKey:'title', title:'ข่าวและกิจกรรม', thumb:'image', menu:'ข้อมูล',
     where:'สไลด์ Latest News หน้าแรก + Announcements หน้า Activities (ข่าว) · สไลด์ Recent Activities (กิจกรรม)', link:'activities.html#announcements',
     listT:r=>r.title, listS:r=>(r.fb_post_id ? 'จาก Facebook' : r.tag),
+    badge:r=>r.fb_post_id ? ['Facebook','main'] : null,
     /* โพสต์จากเพจดึงเข้ามาโดย Edge Function fb-sync (มี fb_post_id) แก้หัวข้อ/ซ่อนได้ตามปกติ
        แต่ถ้าลบ รอบ sync ถัดไปจะดึงกลับมาใหม่ — ใช้ "ซ่อนจากเว็บ" แทน */
     tools:[{id:'fbSync', label:'ดึงโพสต์จาก Facebook', icon:'facebook', run:b=>syncFacebook(b).then(load)}],
-    groupBy:r=>r.placement==='home' ? 'ข่าว — สไลด์หน้าแรก + Announcements' : 'กิจกรรม — สไลด์ Recent Activities',
+    groupBy:r=>r.placement==='home' ? 'ข่าว (หน้าแรก + Announcements)' : 'กิจกรรม (Recent Activities)',
     fields:[
       {k:'placement', t:'select', label:'แสดงที่', req:true,
        opts:[['home','ข่าว (สไลด์หน้าแรก + Announcements)'],['activities','กิจกรรม (สไลด์ Recent Activities)']]},

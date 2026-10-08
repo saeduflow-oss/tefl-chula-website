@@ -17,7 +17,7 @@ async function dashboard(){
   const keys = Object.keys(SCHEMA).filter(k => !SCHEMA[k].view);
   const results = await Promise.all(keys.map(k => {
     const def = SCHEMA[k], pk = def.pk || 'id';
-    const cols = [pk, 'is_visible', 'updated_at'].concat(
+    const cols = [pk, 'is_visible', 'updated_at'].concat(hasAuthor ? ['updated_by'] : [], k === 'news' ? ['fb_post_id'] : [],
       k === 'blocks' ? ['label','page'] : k === 'settings' ? ['label','value'] :
       k === 'staff' || k === 'lecturers' ? ['name'] : k === 'news' ? ['title'] :
       k === 'faqs' ? ['question'] : k === 'links' ? ['title'] : k === 'courses' ? ['title'] : k === 'events' ? ['title'] :
@@ -42,7 +42,7 @@ async function dashboard(){
 
   const glance = '<ul class="glance">' + keys.map(k => {
     const off = all[k].filter(r => r.is_visible === false).length;
-    return '<li><a href="' + H(k) + '">' + (ICON[k] || '') + '<span><b>' + all[k].length + '</b> ' + esc(SCHEMA[k].label) +
+    return '<li><a href="' + H(k === 'blocks' ? 'pages' : k) + '">' + (ICON[k] || '') + '<span><b>' + all[k].length + '</b> ' + esc(SCHEMA[k].label) +
       (off ? ' <small>(ซ่อน ' + off + ')</small>' : '') + '</span></a></li>';
   }).join('') + '</ul>' +
   '<p class="glance-foot">' + (hidden ? 'มีรายการที่ซ่อนจากเว็บอยู่ ' + hidden + ' รายการ · ' : '') +
@@ -57,7 +57,8 @@ async function dashboard(){
   const activity = recent.length ? '<ul class="activity">' + recent.map(x =>
     '<li><span class="when">' + when(x.t) + '</span><a href="' + editHref(x.k, x.r) + '">' + esc(x.name) + '</a>' +
     /* บล็อกหลายหน้าชื่อซ้ำกัน (เช่น แถบชวนสมัครท้ายหน้า มีทุกหน้า) ต้องบอกว่าเป็นของหน้าไหน */
-    '<span class="in">ใน ' + esc(SCHEMA[x.k].label) + (x.k === 'blocks' ? ' · ' + esc(SCHEMA.blocks.groupBy(x.r)) : '') + '</span></li>').join('') + '</ul>'
+    '<span class="in">ใน ' + esc(SCHEMA[x.k].label) + (x.k === 'blocks' ? ' · ' + esc(SCHEMA.blocks.groupBy(x.r)) : '') +
+      (x.r.updated_by ? ' · โดย ' + esc(x.r.updated_by) : '') + '</span></li>').join('') + '</ul>'
     : '<div class="empty">ยังไม่มีการแก้ไข</div>';
 
   const todo = unset.length ? '<ul class="activity">' + unset.map(s =>
@@ -74,7 +75,7 @@ async function dashboard(){
       '</div>' +
       '<div class="welcome-cols">' +
         '<div><h3>เริ่มต้นใช้งาน</h3><a class="btn primary hero" href="' + H('news/new') + '">' + ICON.news + 'เขียนข่าว/กิจกรรมใหม่</a>' +
-          '<p>หรือ <a href="' + H('blocks') + '">แก้ข้อความในหน้าเว็บ</a></p></div>' +
+          '<p>หรือ <a href="' + H('pages') + '">แก้ข้อความในหน้าเว็บ</a></p></div>' +
         '<div><h3>ขั้นตอนถัดไป</h3><ul>' +
           '<li><a href="' + H('staff/new') + '">' + ICON.staff + 'เพิ่มอาจารย์</a></li>' +
           '<li><a href="' + H('events/new') + '">' + ICON.events + 'เพิ่มกิจกรรมในปฏิทิน</a></li>' +

@@ -42,7 +42,19 @@ const ICON = {
   redo:     I('<path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/>'),
   media:    I('<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5L5 20"/>'),
   eye:      I('<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
-  back:     I('<path d="m15 6-6 6 6 6"/>')
+  back:     I('<path d="m15 6-6 6 6 6"/>'),
+  pages:    I('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><circle cx="6" cy="6.5" r=".6"/><circle cx="8.5" cy="6.5" r=".6"/><path d="M7 13h6M7 16h10"/>'),
+  shield:   I('<path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/>'),
+  gear:     I('<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"/>'),
+  user:     I('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'),
+  trash:    I('<path d="M4 7h16M10 11v6M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M9 7V4h6v3"/>'),
+  heading:  I('<path d="M6 4v16M18 4v16M6 12h12"/>'),
+  text:     I('<path d="M5 6V4h14v2M12 4v16M9 20h6"/>'),
+  more:     I('<circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/>'),
+  sort:     I('<path d="M8 4v16M4 8l4-4 4 4"/><path d="M16 20V4M12 16l4 4 4-4"/>'),
+  sortDown: I('<path d="M12 4v16M6 14l6 6 6-6"/>'),
+  sortUp:   I('<path d="M12 20V4M6 10l6-6 6 6"/>'),
+  filter:   I('<path d="M3 5h18l-7 8.5V19l-4 2v-7.5z"/>')
 };
 /* สีกล่องไอคอนของแต่ละหมวด: หมุนเวียน 5 สี ให้แต่ละหมวดจำง่าย */
-const TINT = { blocks:'c1', nav:'c2', settings:'c3', staff:'c4', lecturers:'c4', news:'c1', facebook:'c2', events:'c3', faqs:'c2', links:'c3', courses:'c5', tuition:'c5' };
+const TINT = { pages:'c1', blocks:'c1', nav:'c2', settings:'c3', staff:'c4', lecturers:'c4', news:'c1', facebook:'c2', events:'c3', faqs:'c2', links:'c3', courses:'c5', tuition:'c5' };

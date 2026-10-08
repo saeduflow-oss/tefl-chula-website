@@ -1,6 +1,6 @@
 /* =========================================================
-   admin/js/views/list.js — หน้ารายการแบบตาราง WordPress (All Posts)
-   แท็บกรอง ทั้งหมด/แสดงบนเว็บ/ซ่อนอยู่ · ค้นหา · การกระทำหลายรายการ · ปุ่มใต้ชื่อโผล่ตอนชี้ · เลื่อนลำดับ
+   admin/js/views/list.js — หน้ารายการ (หน้าตาเดียวกับเมนู "หน้าเว็บ")
+   แท็บตามกลุ่ม · ค้นหา · กรองสถานะ · เรียงตามคอลัมน์ · ปุ่ม ⋯ (ซ่อน/เลื่อนลำดับ/ดูบนเว็บ/ลบ)
    ใช้กับทุกชุดข้อมูลใน SCHEMA ที่ไม่ได้กำหนด view เอง
    ทุกไฟล์ใน admin/js เป็น classic script ที่ประกาศตัวแปร/ฟังก์ชันไว้ระดับบนสุด
    จึงมองเห็นกันข้ามไฟล์ได้ ลำดับการโหลดกำหนดใน admin/index.html — อย่าสลับ
@@ -29,82 +29,83 @@ async function load(){
   if(await fetchRows(k)) render();
 }
 
-/* ---------- วาดตาราง ---------- */
+/* ---------- วาดตาราง ----------
+   หน้าตาเดียวกับเมนู "หน้าเว็บ" (ภาพอ้างอิงที่ผู้ใช้ส่งมา ต.ค. 2026 — ไม่เอาตารางแบบ WordPress ที่มีแถบกลุ่มสีชมพู/ติ๊กเลือก/ลูกศรทุกแถว):
+   แท็บขีดเส้นใต้ = กลุ่มจาก groupBy (ถ้ามี 2–8 กลุ่ม) · การ์ดมีช่องค้นหา + ตัวกรองสถานะ + ปุ่มเพิ่มใหม่ · หัวคอลัมน์กดเรียงได้
+   แถวบรรทัดเดียว คลิกทั้งแถว = แก้ไข · ซ่อน/เลื่อนขึ้นลง/ดูบนเว็บ/ลบ อยู่ในปุ่ม ⋯ ท้ายแถว
+   ชุดที่มีหลายชั้น (เมนู) ไม่ใช้แท็บ แต่เยื้องตามชั้น + ป้ายบอกชั้น (schema: depth / badge) */
+let lsFor = null, lsTab = 'all', lsSort = null;   /* แท็บ/การเรียงของชุดข้อมูลที่เปิดอยู่ — เปลี่ยนชุดแล้วล้าง */
 function render(){
   const def = SCHEMA[current];
+  if(lsFor !== current){ lsFor = current; lsTab = 'all'; lsSort = null; }
   const canHide = !def.noHide, canDel = !def.noDelete;
-  /* ปุ่มเลื่อนลำดับซ่อนตอนค้นหา/กรอง: แถวข้างเคียงที่ถูกกรองออกยังสลับด้วยได้ ผู้ใช้จะงงว่าทำไมไม่ขยับ */
-  const canOrder = !def.noOrder && !query && filter === 'all';
-  const bulk = canHide || canDel;
-  const nOn = rows.filter(r => r.is_visible !== false).length, nOff = rows.length - nOn;
+  const groups = def.groupBy ? [...new Set(rows.map(def.groupBy))] : [];
+  const useTabs = groups.length > 1 && groups.length <= 8 && !def.depth;
+  if(lsTab !== 'all' && !groups.includes(lsTab)) lsTab = 'all';
+  const inTab = r => !useTabs || lsTab === 'all' || def.groupBy(r) === lsTab;
 
-  const head = heading(def.title,
-      (def.noAdd ? '' : '<a class="btn page-title-action" href="' + H(current + '/new') + '">เพิ่มใหม่</a>') +
-      (def.tools || []).map(t => '<button class="btn page-title-action" id="' + t.id + '">' + ICON[t.icon] + esc(t.label) + '</button>').join('')) +
-    (def.where ? '<p class="where">' + ICON.site + '<span>แสดงที่: ' + esc(def.where) + '</span>' +
-      (def.link ? ' <a href="' + esc(def.link) + '" target="_blank" rel="noopener">ดูบนเว็บ ↗</a>' : '') + '</p>' : '');
-
-  /* แท็บกรองแบบ "All (12) | Published (10) | Draft (2)" — ชุดที่ซ่อนไม่ได้ไม่มีแท็บ */
-  const tab = (f, label, n) => '<a data-f="' + f + '"' + (filter === f ? ' class="on"' : '') + '>' + label + ' <span class="cnt">(' + n + ')</span></a>';
-  const subsub = canHide
-    ? '<div class="subsubsub">' + tab('all','ทั้งหมด',rows.length) + ' | ' + tab('on','แสดงบนเว็บ',nOn) +
-      (nOff ? ' | ' + tab('off','ซ่อนอยู่',nOff) : '') + '</div>'
-    : '<div class="subsubsub"><a class="on">ทั้งหมด <span class="cnt">(' + rows.length + ')</span></a></div>';
-  const search = '<label class="search-box">' +
-    '<svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
-    '<input type="search" id="q" placeholder="ค้นหา' + esc(def.label) + '" value="' + esc(query) + '"></label>';
-
-  const show = rows.map((r, i) => ({ r, i })).filter(x =>
+  let show = rows.map((r, i) => ({ r, i })).filter(x => inTab(x.r) &&
     (filter === 'all' || (filter === 'on') === (x.r.is_visible !== false)) &&
     (!query || (def.listT(x.r) + ' ' + (def.listS(x.r) || '')).toLowerCase().includes(query)));
+  if(lsSort){
+    const val = { title:r => String(def.listT(r) || '').toLowerCase(), detail:r => String(def.listS(r) || '').toLowerCase(),
+      status:r => r.is_visible === false ? 1 : 0, updated:r => r.updated_at || '', by:r => byWho(r) }[lsSort.k];
+    show = show.slice().sort((a, b) => { const x = val(a.r), y = val(b.r); return (x < y ? -1 : x > y ? 1 : 0) * lsSort.dir; });
+  }
+  /* เลื่อนลำดับได้เฉพาะตอนเห็นลำดับจริงครบ (ไม่ค้น/กรอง/เรียง/อยู่แท็บย่อย) — ไม่งั้นสลับกับแถวที่มองไม่เห็นแล้วงง */
+  const canOrder = !def.noOrder && !query && filter === 'all' && !lsSort && lsTab === 'all';
 
-  const nav = '<div class="tablenav">' +
-    (bulk ? '<select id="bulk"><option value="">การกระทำหลายรายการ</option>' +
-      (canHide ? '<option value="off">ซ่อนจากเว็บ</option><option value="on">แสดงบนเว็บ</option>' : '') +
-      (canDel ? '<option value="del">ลบถาวร</option>' : '') + '</select>' +
-      '<button class="btn" id="bulkGo">นำไปใช้</button>' : '') +
-    '<span class="num">' + show.length + ' รายการ</span></div>';
+  const tabs = useTabs ? '<div class="pg-tabs" role="tablist">' +
+    [['all','ทั้งหมด', rows.length]].concat(groups.map(g => [g, g, rows.filter(r => def.groupBy(r) === g).length]))
+      .map(([t, label, n]) => '<button role="tab" data-ltab="' + esc(t) + '" aria-selected="' + (lsTab === t) + '">' + esc(label) + ' <span>(' + n + ')</span></button>').join('') +
+    '</div>' : '<div class="pg-tabs"><button aria-selected="true">ทั้งหมด <span>(' + rows.length + ')</span></button></div>';
 
-  const cols = (bulk ? '<td class="cb"><input type="checkbox" class="cbAll" aria-label="เลือกทั้งหมด"></td>' : '') +
-    '<th class="c1">ชื่อ</th><th class="c2">รายละเอียด</th>' + (canHide ? '<th class="c3">สถานะ</th>' : '') +
-    '<th class="c4">แก้ไขล่าสุด</th>' + (canOrder ? '<th class="c5">ลำดับ</th>' : '');
-  const span = cols.split('<t').length - 1;
+  const th = (k, label) => '<th data-lsort="' + k + '"' + (lsSort && lsSort.k === k ? ' class="on"' : '') + '>' + label +
+    (lsSort && lsSort.k === k ? (lsSort.dir < 0 ? ICON.sortDown : ICON.sortUp) : ICON.sort) + '</th>';
+  const ncol = 4 + (canHide ? 1 : 0) + 1;
 
-  let h = '<table class="wp-list"><thead><tr>' + cols + '</tr></thead><tbody>';
-  let lastGroup = null;
-  show.forEach(function(x){
-    const r = x.r, i = x.i, off = r.is_visible === false, href = editHref(current, r);
-    if(def.groupBy && !query){
-      const g = def.groupBy(r);
-      if(g !== lastGroup){ h += '<tr class="g"><td colspan="' + span + '">' + esc(g) + '</td></tr>'; lastGroup = g; }
-    }
-    const thumb = def.thumb ? (r[def.thumb] ? '<img src="' + esc(r[def.thumb]) + '" alt="">' : '<span class="noimg">' + ICON.media + '</span>') : '';
-    /* ปุ่มใต้ชื่อ (row actions) โผล่ตอนชี้แถว — ตามแบบ WordPress */
-    const acts = ['<a href="' + href + '">แก้ไข</a>'];
-    if(canHide) acts.push('<a class="vis" data-i="' + i + '">' + (off ? 'แสดงบนเว็บ' : 'ซ่อนจากเว็บ') + '</a>');
-    if(canDel) acts.push('<a class="del" data-i="' + i + '">ลบถาวร</a>');
-    if(def.link) acts.push('<a href="' + esc(def.link) + '" target="_blank" rel="noopener">ดูบนเว็บ</a>');
-    h += '<tr class="' + (off ? 'off' : '') + '">' +
-      (bulk ? '<th class="cb"><input type="checkbox" class="cbRow" data-i="' + i + '" aria-label="เลือก"></th>' : '') +
-      '<td class="c1"><div class="w">' + thumb + '<div class="tx">' +
-        '<a class="row-title" href="' + href + '">' + esc(def.listT(r) || '(ไม่มีชื่อ)') + '</a>' +
-        (off ? ' <span class="post-state">— ซ่อนอยู่</span>' : '') +
-        '<div class="row-actions">' + acts.join('<span class="pipe"> | </span>') + '</div>' +
-        '<div class="mob">' + esc(def.listS(r) || '') + '</div>' +
-      '</div></div></td>' +
-      '<td class="c2" title="' + esc(def.listS(r) || '') + '">' + esc(def.listS(r) || '') + '</td>' +
-      (canHide ? '<td class="c3"><span class="tag ' + (off ? 'off">ซ่อนอยู่' : 'on">แสดงบนเว็บ') + '</span></td>' : '') +
-      '<td class="c4">' + (r.updated_at ? 'แก้ไขล่าสุด<br><span>' + when(r.updated_at) + '</span>' : '') + '</td>' +
-      (canOrder ? '<td class="c5"><div class="ord">' +
-        '<button class="mv" data-i="' + i + '" data-d="-1" title="เลื่อนขึ้น (บนเว็บจะแสดงก่อน)">&#9650;</button>' +
-        '<button class="mv" data-i="' + i + '" data-d="1" title="เลื่อนลง">&#9660;</button></div></td>' : '') +
-      '</tr>';
-  });
-  if(!show.length) h += '<tr class="none"><td colspan="' + span + '">' +
-    (rows.length ? 'ไม่พบรายการที่ตรงกับเงื่อนไข' : 'ยังไม่มีรายการ' + (def.noAdd ? '' : ' — กด "เพิ่มใหม่" ด้านบน')) + '</td></tr>';
-  h += '</tbody><tfoot><tr>' + cols + '</tr></tfoot></table>';
+  const body = show.length ? show.map(({ r, i }) => {
+    const off = r.is_visible === false, href = editHref(current, r);
+    const depth = def.depth ? def.depth(r) : 0;
+    const badge = def.badge ? def.badge(r) : null;
+    const thumb = def.thumb ? (r[def.thumb] ? '<img class="ls-thumb" src="' + esc(r[def.thumb]) + '" alt="">' : '<span class="ls-thumb none">' + ICON.media + '</span>') : '';
+    const items = [['แก้ไข', href]];
+    if(canHide) items.push([off ? 'แสดงบนเว็บ' : 'ซ่อนจากเว็บ', '', false, 'vis:' + i]);
+    if(canOrder) items.push(['เลื่อนขึ้น', '', false, 'up:' + i], ['เลื่อนลง', '', false, 'down:' + i]);
+    if(def.link) items.push(['ดูบนเว็บ ↗', def.link, true]);
+    if(canDel) items.push(['ลบถาวร', '', false, 'del:' + i, 'danger']);
+    return '<tr data-go="' + esc(href) + '"' + (off ? ' class="off"' : '') + '>' +
+      '<td class="t"><div class="ls-t"' + (depth ? ' style="padding-left:' + depth * 22 + 'px"' : '') + '>' + (depth ? '<span class="ls-arrow">↳</span>' : '') + thumb +
+        '<a href="' + esc(href) + '">' + esc(def.listT(r) || '(ไม่มีชื่อ)') + '</a>' +
+        (badge ? '<span class="pg-badge ' + badge[1] + '">' + esc(badge[0]) + '</span>' : '') + '</div></td>' +
+      '<td class="ex" title="' + esc(def.listS(r) || '') + '">' + esc(def.listS(r) || '') + '</td>' +
+      (canHide ? '<td>' + (off ? '<span class="pg-st warn">ซ่อนอยู่</span>' : '<span class="pg-st ok">แสดงบนเว็บ</span>') + '</td>' : '') +
+      '<td class="d">' + (r.updated_at ? fullDate(r.updated_at) : '—') + '</td>' +
+      '<td class="by">' + esc(byWho(r)) + '</td>' +
+      '<td class="m">' + pgMore(items) + '</td></tr>';
+  }).join('') : '<tr><td colspan="' + ncol + '" class="none">' +
+    (rows.length ? 'ไม่พบรายการที่ตรงกับเงื่อนไข' : 'ยังไม่มีรายการ' + (def.noAdd ? '' : ' — กด "เพิ่มใหม่"')) + '</td></tr>';
 
-  $('#view').innerHTML = '<div class="wrap">' + head + '<div class="list-top">' + subsub + search + '</div>' + nav + h + '</div>';
+  $('#view').innerHTML = '<div class="pg">' +
+    '<div class="pg-head"><h1>' + esc(def.title) + '</h1>' +
+      (def.where ? '<p>แสดงที่: ' + esc(def.where) + (def.link ? ' · <a href="' + esc(def.link) + '" target="_blank" rel="noopener">ดูบนเว็บ ↗</a>' : '') + '</p>' : '') + '</div>' +
+    tabs +
+    '<div class="pg-card">' +
+      '<div class="pg-tools">' +
+        '<label class="pg-search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
+          '<input type="search" id="q" placeholder="ค้นหา' + esc(def.label) + '…" value="' + esc(query) + '"></label>' +
+        (canHide ? '<label class="pg-filter">' + ICON.filter + '<b>สถานะ</b><select id="lsSt">' +
+          [['all','ทั้งหมด'],['on','แสดงบนเว็บ'],['off','ซ่อนอยู่']].map(o =>
+            '<option value="' + o[0] + '"' + (filter === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select></label>' : '') +
+        (def.tools || []).map(t => '<button class="btn" id="' + t.id + '">' + ICON[t.icon] + esc(t.label) + '</button>').join('') +
+        (def.noAdd ? '' : '<a class="btn primary pg-new" href="' + H(current + '/new') + '">' + ICON.add + 'เพิ่มใหม่</a>') +
+      '</div>' +
+      '<div class="pg-scroll"><table class="pg-table"><thead><tr>' +
+        th('title','ชื่อ') + th('detail','รายละเอียด') + (canHide ? th('status','สถานะ') : '') + th('updated','แก้ไขล่าสุด') + th('by','ผู้แก้ไข') + '<th class="m"></th>' +
+      '</tr></thead><tbody>' + body + '</tbody></table></div>' +
+      '<div class="pg-foot">' + show.length + ' จาก ' + rows.length + ' รายการ' +
+        (def.noOrder ? '' : canOrder ? ' · เลื่อนลำดับได้จากปุ่ม ⋯ ท้ายแถว' : ' · ล้างการค้นหา/กรอง/เรียง แล้วอยู่แท็บ "ทั้งหมด" เพื่อเลื่อนลำดับ') + '</div>' +
+    '</div></div>';
   wire();
 }
 
@@ -113,7 +114,13 @@ function wire(){
   (SCHEMA[current].tools || []).forEach(t => {
     const b = v.querySelector('#' + t.id); if(b) b.addEventListener('click', ()=>t.run(b));
   });
-  v.querySelectorAll('.subsubsub [data-f]').forEach(a => a.addEventListener('click', ()=>{ filter = a.dataset.f; render(); }));
+  v.querySelectorAll('[data-ltab]').forEach(b => b.addEventListener('click', ()=>{ lsTab = b.dataset.ltab; render(); }));
+  const st = v.querySelector('#lsSt'); if(st) st.addEventListener('change', ()=>{ filter = st.value; render(); });
+  v.querySelectorAll('[data-lsort]').forEach(h => h.addEventListener('click', ()=>{
+    const k = h.dataset.lsort, first = k === 'updated' ? -1 : 1;
+    lsSort = !lsSort || lsSort.k !== k ? { k, dir: first } : lsSort.dir === first ? { k, dir: -first } : null;
+    render();
+  }));
   const q = v.querySelector('#q');
   q.addEventListener('input', function(){
     query = this.value.trim().toLowerCase();
@@ -122,23 +129,15 @@ function wire(){
     /* render สร้างช่องใหม่ ต้องคืนโฟกัสและตำแหน่งเคอร์เซอร์ให้ ไม่งั้นพิมพ์ได้ทีละตัว */
     const nq = $('#view #q'); if(nq){ nq.focus(); try{ nq.setSelectionRange(pos, pos); }catch(e){} }
   });
-  v.querySelectorAll('.cbAll').forEach(c => c.addEventListener('change', ()=>
-    v.querySelectorAll('.cbRow, .cbAll').forEach(x => { x.checked = c.checked; })));
-  v.querySelectorAll('.vis').forEach(b => b.addEventListener('click', ()=>toggleVis(rows[+b.dataset.i])));
-  v.querySelectorAll('.del').forEach(b => b.addEventListener('click', ()=>removeRows([rows[+b.dataset.i]])));
-  v.querySelectorAll('.mv').forEach(b => b.addEventListener('click', ()=>move(+b.dataset.i, +b.dataset.d)));
-  const go_ = v.querySelector('#bulkGo');
-  if(go_) go_.addEventListener('click', async ()=>{
-    const act = $('#bulk').value;
-    const picked = [...v.querySelectorAll('.cbRow:checked')].map(c => rows[+c.dataset.i]);
-    if(!act) return toast('เลือกการกระทำก่อน');
-    if(!picked.length) return toast('ติ๊กเลือกรายการก่อน');
-    if(act === 'del') return removeRows(picked);
-    const res = await Promise.all(picked.map(r => patchRow(r, { is_visible: act === 'on' })));
-    res.forEach((ok, n) => { if(ok) picked[n].is_visible = act === 'on'; });
-    toast(res.every(Boolean) ? 'บันทึกแล้ว ' + picked.length + ' รายการ' : 'บันทึกไม่สำเร็จบางรายการ');
-    render();
-  });
+  wireRows(v);   /* คลิกทั้งแถว + เปิด/ปิดปุ่ม ⋯ (pages.js) */
+  v.querySelectorAll('[data-act]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    const [act, n] = a.dataset.act.split(':'), r = rows[+n];
+    if(act === 'vis') toggleVis(r);
+    else if(act === 'up') move(+n, -1);
+    else if(act === 'down') move(+n, 1);
+    else if(act === 'del') removeRows([r]);
+  }));
 }
 
 /* ---------- การกระทำกับแถว ---------- */

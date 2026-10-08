@@ -66,6 +66,24 @@ function toast(text){
 const TH_M = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
 function dmy(iso){ if(!iso) return ''; const d = iso.split('-'); return (+d[2]) + ' ' + TH_M[+d[1] - 1] + ' ' + (+d[0] + 543); }
 function today(){ const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+/* วันที่เต็มแบบ 26 ก.ย. 2569 — ใช้ในหน้า "หน้าเว็บ" ที่เรียงตามวันที่ (เวลาสัมพัทธ์ "2 ชม. ที่แล้ว" เรียงด้วยตาไม่ได้) */
+function fullDate(iso){ return iso ? new Date(iso).toLocaleDateString('th-TH', { day:'numeric', month:'short', year:'numeric' }) : '—'; }
+/* ผู้แก้ไขล่าสุด: คอลัมน์ updated_by ใส่โดย trigger ในฐานข้อมูล (migration 20261005000001_updated_by.sql)
+   ยังไม่รัน migration หรือแถวที่แก้ก่อนหน้านั้น = ไม่มีค่า · โพสต์ที่ดึงจาก Facebook ไม่มีคนแก้ */
+function byWho(r){ return (r && r.updated_by) || (r && r.fb_post_id ? 'Facebook' : '') || '—'; }
+/* มีคอลัมน์ updated_by แล้วหรือยัง (start() เช็กครั้งเดียว) — select ที่ระบุคอลัมน์เองต้องรู้ ไม่งั้นทั้งคำขอ error 400 */
+let hasAuthor = false;
+/* บทบาทของคนที่ล็อกอิน: 'admin' (จัดการรายชื่อผู้ดูแลได้) | 'editor' (แก้เนื้อหาอย่างเดียว)
+   ยังไม่รัน migration 20261006000001_admin_roles.sql = ไม่มีคอลัมน์ role → ถือเป็น admin ทุกคน (สิทธิ์เท่าเดิม)
+   hasRoles = มีคอลัมน์แล้วหรือยัง — หน้าผู้ดูแลใช้ตัดสินว่าจะโชว์บทบาท/สถานะไหม */
+let myRole = 'admin', hasRoles = false;
+async function loadMyRole(){
+  const r = await api('/rest/v1/admins?select=email,role,is_active');
+  hasRoles = r.ok;
+  if(!r.ok) return;
+  const mine = (await r.json()).find(a => a.email.toLowerCase() === me.email.toLowerCase());
+  myRole = mine ? mine.role : 'editor';
+}
 /* วันที่แบบสั้น ๆ พอบอกได้ว่าแก้เมื่อไหร่ ไม่ต้องละเอียดถึงวินาที */
 function when(iso){
   if(!iso) return '';
@@ -89,10 +107,44 @@ const H = h => SELF + '#' + h;
 /* hash ของหน้าแก้ไขของแถว: key ของ blocks มี / อยู่ (เช่น site/footer-...) จึงต้อง encode */
 function editHash(k, row){ return k + '/' + encodeURIComponent(row[SCHEMA[k].pk || 'id']); }
 function editHref(k, row){ return H(editHash(k, row)); }
-function showLogin(err){
+/* หน้าล็อกอินมี 3 กล่องสลับกัน: loginForm · forgotForm · resetForm */
+function showPanel(id){
   $('#app').style.display = 'none';
   $('#login').style.display = 'grid';
+  ['loginForm','forgotForm','resetForm'].forEach(f => { $('#' + f).hidden = f !== id; });
+}
+function showLogin(err){
+  showPanel('loginForm');
   if(err) msg($('#loginMsg'), err);
+}
+
+/* ปุ่มรูปตาข้างช่องรหัสผ่าน: สลับ type password ↔ text ให้เห็นสิ่งที่พิมพ์
+   mousedown ไม่ให้ปุ่มแย่งโฟกัส เคอร์เซอร์จึงยังอยู่ในช่องพิมพ์ต่อได้เลย */
+function wireEyes(root){
+  root.querySelectorAll('.pw-eye').forEach(b => {
+    if(b.dataset.wired) return; b.dataset.wired = '1';
+    const inp = b.parentNode.querySelector('input');
+    b.addEventListener('mousedown', e => e.preventDefault());
+    b.addEventListener('click', () => {
+      const show = inp.type === 'password';
+      inp.type = show ? 'text' : 'password';
+      b.setAttribute('aria-pressed', show);
+      b.setAttribute('aria-label', show ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน');
+    });
+  });
+}
+/* เก็บมาร์กอัปปุ่มตาจากหน้าล็อกอินไว้ใช้ซ้ำในหน้าโปรไฟล์ (ต้องเก็บก่อน wire เพราะ wire ใส่ data-wired) */
+const EYE = $('.pw-eye').outerHTML;
+wireEyes(document);
+/* ข้อความ error ของ Supabase เป็นภาษาอังกฤษ — แปลอันที่เจอบ่อย ที่เหลือแสดงตามจริง */
+function authErr(e, fallback){
+  const t = (e && (e.error_description || e.msg || e.message)) || '';
+  if(/invalid login credentials/i.test(t)) return 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+  if(/email not confirmed/i.test(t)) return 'อีเมลนี้ยังไม่ได้ยืนยัน — ให้ผู้ดูแลกด Confirm ใน Supabase → Authentication → Users';
+  if(/should be different/i.test(t)) return 'รหัสผ่านใหม่ต้องไม่ซ้ำกับรหัสเดิม';
+  if(/at least|weak|short/i.test(t)) return 'รหัสผ่านสั้นหรือเดาง่ายเกินไป ลองใช้อย่างน้อย 8 ตัวอักษรผสมตัวเลข';
+  if(/rate limit|too many|security purposes/i.test(t)) return 'ขอบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่';
+  return t || fallback;
 }
 
 /* ---------- ธีม ----------
@@ -123,9 +175,62 @@ $('#loginForm').addEventListener('submit', async function(e){
   $('#loginBtn').disabled = false;
   if(!r.ok){
     const e2 = await r.json().catch(()=>({}));
-    return msg($('#loginMsg'), e2.error_description || e2.msg || 'อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+    return msg($('#loginMsg'), authErr(e2, 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'));
   }
   saveSession(await r.json());
+  start();
+});
+
+/* ---------- ลืมรหัสผ่าน ----------
+   ขอให้ Supabase ส่งลิงก์ทางอีเมล ลิงก์จะพากลับมาหน้านี้พร้อม #access_token=…&type=recovery (app.js จับแล้วเปิด resetForm)
+   redirect_to ต้องอยู่ในรายการ Authentication → URL Configuration → Redirect URLs ของ Supabase
+   ไม่งั้น Supabase จะพาไป Site URL แทน (ไม่ใช่หน้า admin) แล้วตั้งรหัสใหม่ไม่ได้
+   ตอบข้อความเดียวกันไม่ว่าจะมีบัญชีหรือไม่ — ไม่บอกคนนอกว่าอีเมลไหนเป็นผู้ดูแล */
+$('#toForgot').addEventListener('click', ()=>{
+  showPanel('forgotForm'); msg($('#forgotMsg'), '');
+  $('#fEmail').value = $('#email').value; $('#fEmail').focus();
+});
+document.querySelectorAll('#login .toLogin').forEach(a => a.addEventListener('click', ()=>{
+  history.replaceState(null, '', SELF);
+  clearSession(); showLogin(); msg($('#loginMsg'), '');
+}));
+$('#forgotForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const btn = $('#forgotBtn'); btn.disabled = true;
+  const r = await fetch(URL_ + '/auth/v1/recover?redirect_to=' + encodeURIComponent(SELF), {
+    method:'POST', headers:{ apikey: KEY, 'Content-Type':'application/json' },
+    body: JSON.stringify({ email: $('#fEmail').value.trim() })
+  }).catch(()=>null);
+  btn.disabled = false;
+  if(!r || !r.ok){
+    const e2 = r ? await r.json().catch(()=>({})) : {};
+    return msg($('#forgotMsg'), authErr(e2, 'ส่งไม่สำเร็จ ลองใหม่อีกครั้ง'));
+  }
+  msg($('#forgotMsg'), 'ถ้าอีเมลนี้เป็นบัญชีผู้ดูแล จะได้รับลิงก์ภายในไม่กี่นาที — เปิดลิงก์จากอีเมลแล้วตั้งรหัสใหม่ได้เลย (ถ้าไม่เห็น ลองดูในโฟลเดอร์สแปม)', 'ok');
+});
+
+/* ---------- ตั้งรหัสผ่านใหม่ (เปิดจากลิงก์ในอีเมล) ----------
+   ตอนนี้ session คือ token ชั่วคราวจากลิงก์ ใช้เปลี่ยนรหัสได้ทันทีโดยไม่ต้องรู้รหัสเดิม */
+function showReset(email){
+  showPanel('resetForm');
+  $('#resetWho').textContent = email ? 'สำหรับบัญชี ' + email : '';
+  $('#rPw1').focus();
+}
+$('#resetForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const a = $('#rPw1').value, b = $('#rPw2').value;
+  if(a.length < 8) return msg($('#resetMsg'), 'รหัสผ่านต้องยาวอย่างน้อย 8 ตัวอักษร');
+  if(a !== b) return msg($('#resetMsg'), 'รหัสผ่านสองช่องไม่ตรงกัน');
+  const btn = $('#resetBtn'); btn.disabled = true;
+  const r = await api('/auth/v1/user', { method:'PUT', headers:{ 'Content-Type':'application/json' },
+    body: JSON.stringify({ password: a }) });
+  btn.disabled = false;
+  if(!r.ok){
+    const e2 = await r.json().catch(()=>({}));
+    return msg($('#resetMsg'), authErr(e2, 'ตั้งรหัสไม่สำเร็จ — ลิงก์อาจหมดอายุ กด "ยกเลิก" แล้วขอลิงก์ใหม่'));
+  }
+  $('#rPw1').value = $('#rPw2').value = '';
+  toast('ตั้งรหัสผ่านใหม่แล้ว ✓ ครั้งหน้าใช้รหัสนี้เข้าสู่ระบบ');
   start();
 });
 $('#logout').addEventListener('click', function(){ clearSession(); location.reload(); });
