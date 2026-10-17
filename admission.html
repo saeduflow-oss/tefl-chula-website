@@ -9,6 +9,34 @@
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="stylesheet" href="fonts/chula.css">
 <link rel="stylesheet" href="site.css">
+<style>
+  /* ============ เลือกระดับปริญญา (.degree-paths) ============
+     เปิดทั้งหน้า: เห็นแค่การ์ด ป.ตรี / ป.โท ซ่อนทุก section · เลือกหัวข้อแล้ว (#hash): ซ่อนการ์ด เห็น section ตามกลุ่มเมนู
+     ผูกกับคลาสที่ตัวกรอง section ใน site.js ใส่ให้ body — ไม่มี JS ไม่มีทั้งสองคลาส จึงเห็นการ์ดและเนื้อหาครบ
+     (การ์ดยังใช้เป็นลิงก์กระโดดได้) ส่วนตัวแก้หน้าใน /admin ถอดทั้งสองคลาสออก จึงเห็นทุกบล็อกให้แก้ได้ */
+  .is-page-view .content > section{display:none;}
+  .is-section-view .degree-paths{display:none;}
+
+  /* การ์ดหน้าตา .ov-tile เดียวกับการ์ดย่อ List of Courses / Study Plan (site.css) + บรรทัดคำอธิบายใต้ชื่อ */
+  .degree-paths .dp-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,280px));
+    justify-content:center;
+    gap:16px;
+    margin-top:28px;
+    text-align:left;   /* กัน .is-centered ดันข้อความในการ์ดไปกลาง */
+  }
+  .degree-paths .ov-tile{min-height:var(--mini-tile-h);}
+  .degree-paths .dp-text{display:flex;flex-direction:column;gap:8px;}
+  .degree-paths .dp-desc{font-size:15px;line-height:1.55;color:var(--text-muted);transition:color .2s ease;}
+  .degree-paths .ov-tile:hover .dp-desc,
+  .degree-paths .ov-tile:focus-visible .dp-desc,
+  .degree-paths .ov-tile:active .dp-desc{color:rgba(255,255,255,.88);}
+  @media (max-width:520px){
+    .degree-paths .dp-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+    .degree-paths .dp-desc{font-size:14px;}
+  }
+</style>
 </head>
 <body>
 
@@ -24,7 +52,7 @@
         <ul data-cms="nav">
           <li><a href="about.html" data-dropdown="dd-about">About<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-about"><div class="dd-menu"><a class="dd-title" href="about.html">About the Program</a><ul><li><a href="about.html#goals">Goals and Objectives</a></li><li><a href="about.html#academic-staff">Academic Staff</a></li><li><a href="about.html#guest-lecturers">Guest Lecturers</a></li></ul></div></div></li>
           <li><a href="academics.html" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#study-plan">Study Plan</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></div></div></li>
-          <li><a href="admission.html" class="active" data-dropdown="dd-admission">Admission<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-admission"><div class="dd-menu"><a class="dd-title" href="admission.html">Admission</a><ul><li><a href="admission.html#admission-requirements">Admission Requirements</a></li><li><a href="admission.html#admission-procedures">Admission Procedures</a></li><li><a href="admission.html#admission-deadline">Admission Deadline</a></li><li><a href="admission.html#undergraduate-admission">Undergraduate Admission</a></li></ul></div></div></li>
+          <li><a href="admission.html" class="active" data-dropdown="dd-admission">Admission<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-admission"><div class="dd-menu"><a class="dd-title" href="admission.html">Admission</a><ul><li><a href="admission.html#undergraduate-admission">Bachelor’s Degree</a></li><li class="has-sub"><a href="admission.html#admission-procedures">Master’s Degree</a><ul class="dd-sub"><li><a href="admission.html#admission-procedures">Admission Procedures</a></li><li><a href="admission.html#admission-requirements">Admission Requirements</a></li><li><a href="admission.html#admission-deadline">Admission Deadline</a></li></ul></li></ul></div></div></li>
           <li><a href="research.html" data-dropdown="dd-research">Research<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-research"><div class="dd-menu"><a class="dd-title" href="research.html">Research</a><ul><li><a href="research.html#research-guidelines">Guidelines for Research Procedures</a></li><li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li><li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li></ul></div></div></li>
           <li><a href="activities.html" data-dropdown="dd-activities">Activities<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-activities"><div class="dd-menu"><a class="dd-title" href="activities.html">Activities</a><ul><li><a href="activities.html#activities-list">Activities List</a></li><li><a href="activities.html#intensive-course">Intensive Course</a></li><li><a href="activities.html#announcements">Announcements</a></li><li><a href="activities.html#calendar">Event Calendar</a></li></ul></div></div></li>
           <li><a href="forms-and-links.html" data-dropdown="dd-forms-links">Forms &amp; Links<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-forms-links"><div class="dd-menu"><a class="dd-title" href="forms-and-links.html">Forms and Links</a><ul><li><a href="forms-and-links.html#request-forms">Request Forms</a></li><li><a href="forms-and-links.html#thesis-forms">Thesis and Master Project Forms</a></li><li><a href="forms-and-links.html#research-collaboration-letters">Research Collaboration Letters</a></li><li><a href="forms-and-links.html#graduation-request">Graduation Request</a></li><li><a href="forms-and-links.html#useful-links">Useful Links</a></li></ul></div></div></li>
@@ -91,8 +119,35 @@
   <div class="page-wrap">
     <div class="content">
 
+      <!-- เลือกระดับปริญญา — เปิดทั้งหน้า (body.is-page-view) เห็นแค่การ์ดสองใบนี้ section ทั้งหมดถูกซ่อน (style ด้านบน)
+           กดการ์ด = ไป #id ของ section → ตัวกรอง section ใน site.js เปิดหน้าย่อยพร้อมแถบหัวข้อย่อยใต้ banner
+           เป็น <div> ไม่ใช่ <section> โดยตั้งใจ: ตัวกรองนับเฉพาะ section[id] ถ้าเป็น section จะถูกนับเป็นบทนำแล้วติดไปกับกลุ่มแรก
+           และไม่ใช่บล็อก DB (ไม่มี data-cms-block) — แก้ข้อความการ์ดที่ไฟล์นี้ (เจ้าของเว็บขอ ต.ค. 2026) -->
+      <div class="degree-paths is-centered">
+        <div class="eyebrow">Choose Your Degree</div>
+        <span class="rule"></span>
+        <h2>Degree Programs</h2>
+        <p>Select a degree level to see its admission information.</p>
+        <div class="dp-grid">
+          <a class="ov-tile" href="#undergraduate-admission">
+            <span class="dp-text">
+              <span class="ov-title">Bachelor&rsquo;s Degree</span>
+              <span class="dp-desc">Undergraduate admission information</span>
+            </span>
+            <span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+          </a>
+          <a class="ov-tile" href="#admission-procedures">
+            <span class="dp-text">
+              <span class="ov-title">Master&rsquo;s Degree</span>
+              <span class="dp-desc">A two-year TEFL program for pre-service and in-service teachers</span>
+            </span>
+            <span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+          </a>
+        </div>
+      </div>
+
       <!-- 3.1 ADMISSION PROCEDURES -->
-      <section id="admission-procedures" class="is-centered" data-cms-block="admission/admission-procedures">
+      <section id="admission-procedures" data-track="Master&rsquo;s Degree" class="is-centered" data-cms-block="admission/admission-procedures">
         <div class="eyebrow">How to Apply</div>
         <span class="rule"></span>
         <h2>Admission Procedures</h2>
@@ -103,7 +158,7 @@
         </p>
       </section>
 
-      <section id="application-steps" data-cms-block="admission/application-steps">
+      <section id="application-steps" data-track="Master&rsquo;s Degree" data-cms-block="admission/application-steps">
         <div class="sec-head">
           <div class="eyebrow">Step by Step</div>
           <span class="rule"></span>
@@ -187,7 +242,7 @@
       </section>
 
       <!-- 3.2 ADMISSION REQUIREMENTS -->
-      <section id="admission-requirements" data-cms-block="admission/admission-requirements">
+      <section id="admission-requirements" data-track="Master&rsquo;s Degree" data-cms-block="admission/admission-requirements">
         <div class="sec-head">
           <div class="eyebrow">Who Can Apply</div>
           <span class="rule"></span>
@@ -226,7 +281,7 @@
       </section>
 
       <!-- 3.3 ADMISSION DEADLINE -->
-      <section id="admission-deadline" data-cms-block="admission/admission-deadline">
+      <section id="admission-deadline" data-track="Master&rsquo;s Degree" data-cms-block="admission/admission-deadline">
         <div class="sec-head">
           <div class="eyebrow">Key Dates</div>
           <span class="rule"></span>
@@ -259,7 +314,7 @@
       </section>
 
       <!-- 3.4 UNDERGRADUATE ADMISSION — หน้าย่อยของ ป.ตรี (เมนู Admission → Undergraduate Admission) ยังไม่มีข้อมูล ใส่ได้ที่ /admin -->
-      <section id="undergraduate-admission" class="is-centered" data-cms-block="admission/undergraduate-admission">
+      <section id="undergraduate-admission" data-track="Bachelor&rsquo;s Degree" class="is-centered" data-cms-block="admission/undergraduate-admission">
         <div class="eyebrow">Bachelor&rsquo;s Degree</div>
         <span class="rule"></span>
         <h2>Undergraduate Admission</h2>

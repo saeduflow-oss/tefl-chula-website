@@ -26,7 +26,8 @@ index.html            หน้าแรก (hero + welcome + missions + courses
 about.html            About the Program   → #goals, #academic-staff, #guest-lecturers
 academics.html        Academics           → #curriculum-info, #list-of-courses, #study-plan,
                                             #class-schedule, #tentative-schedule, #tuition-and-fees
-admission.html        Admission           → #admission-requirements, #admission-procedures, #admission-deadline
+admission.html        Admission           → Bachelor’s Degree #undergraduate-admission
+                                            Master’s Degree › #admission-procedures, #admission-requirements, #admission-deadline (ชั้นที่ 3)
 research.html         Research            → #research-guidelines, #tefl-research-thesis, #tefl-research-ojed
 activities.html       Activities          → #activities-list, #intensive-course, #announcements, #calendar
                                             (สองส่วนหลังย้ายมาจากหน้า News & Events ที่ยุบไป ก.ย. 2569)
@@ -553,6 +554,14 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
   พื้นเทา ป้ายเทา ยอดสีเข้ม 30px แถบเทา — % ของแถบคำนวณใน feeCard/fee_card ด้วย floor(x+.5) ทั้งสองฝั่ง; `feeCard` (cms.js) กับ `fee_card` (sync) ต้องตรงกันทุกตัวอักษร
 
 - **Admission (ต.ค. 2026)** — CSS ล้วนท้าย `site.css` ไม่แก้บล็อกใน DB
+  · **เลือกระดับปริญญา** (`.degree-paths` ใน `admission.html` + `<style>` ของหน้า, เจ้าของเว็บขอ 17 ต.ค. 2026) — เปิดทั้งหน้าเห็นแค่การ์ด `.ov-tile` สองใบ
+    Bachelor's Degree → `#undergraduate-admission`, Master's Degree → `#admission-procedures`
+    แยกระดับด้วย `data-track="…"` บนแท็กเปิด `<section>` (อยู่รอดเพราะ cms.js / sync เขียนทับแค่ข้างใน) — site.js ให้แถบหัวข้อแสดงเฉพาะกลุ่มระดับเดียวกัน
+    (ป.โท: Procedures / Requirements / Deadline · ป.ตรี มีหัวข้อเดียวจึงไม่มีแถบ) และ breadcrumb เป็น Admission › ชื่อระดับ › ชื่อหัวข้อ
+    banner เปลี่ยนตามระดับ (`updateBanner` ใน site.js): h1 = ชื่อระดับ, `.subtitle` = `.dp-desc` ของการ์ดระดับนั้น — กลับหน้ารวมคืนข้อความเดิม; ไม่เปลี่ยนใน `?cms-edit`
+    เพิ่ม section ใหม่ในหน้านี้ต้องใส่ `data-track` ด้วย ไม่งั้นจะเป็นระดับว่างที่ไม่ขึ้นแถบร่วมกับใคร
+    `.is-page-view .content > section` ถูกซ่อนทั้งหมด จึง**ไม่มีใครเห็นการ์ดย่อตอนเปิดทั้งหน้า**ของ Steps / Requirements / Deadline ด้านล่างอีก (CSS ยังอยู่ ไม่มีผล)
+    เป็น `<div>` ไม่ใช่ `<section>` และไม่ใช่บล็อก DB — แก้ข้อความการ์ดที่ไฟล์; ไม่มี JS เห็นการ์ด + ทุก section
   · **Application Steps** (`#application-steps`) ตอนเปิดทั้งหน้า = การ์ดย่อแบบเดียวกับ Admission Requirements (เจ้าของเว็บขอ ต.ค. 2026 แทนการ์ดรูปเดิม) กว้าง 190–210px เท่า Requirements — กริด 1114px ยื่นออกนอก .page-wrap แบบ .plan-grid ให้ 5 ใบอยู่แถวเดียว
     — "Step N" (CSS counter) + ชื่อขั้นตอน + ไอคอนของการ์ดเอง `.t-ic` สีส้ม + ปุ่มลูกศร; ซ่อนป้าย/คำอธิบาย/เลขลำดับ; กดแล้ว site.js พาไป `#application-steps`
     หน้าย่อย (`.is-section-view`) = ขั้นตอนละ 1 กล่องแบบ "ทำไมต้องเรียนที่จุฬาฯ" เรียงลงมา (gap 24px, กว้างสุด 980px, มุม 20px, สูงอย่างน้อย 300px)
@@ -672,11 +681,12 @@ img/    logo.png, logo.jpg, icon.png
         favicon.png, apple-touch-icon.png   (ตัดเปลวไฟจาก logo.png — ดูหัวข้อ 7.1)
         icon-collab.png, icon-global.png, icon-practical.png, icon-research.png
         mission-collab.jpg, mission-global.jpg, mission-practical.jpg, mission-research.jpg
-        hero-cohort/-lab/-classroom/-library/-campus.jpg (สไลด์ hero 5 ใบ, 2400px)
+        hero-ceremony/-lab/-classroom/-library/-campus.jpg (สไลด์ hero 5 ใบ ตามลำดับนี้ · hero-ceremony 2048px โฟกัส `center 35%` · ที่เหลือ 2400px · hero-cohort.jpg เลิกใช้ ต.ค. 2026)
         missions-bg.jpg  banner-campus.jpg                  (พื้นหลังใต้ม่านสี)
         program-overview.jpg  program-beyond.jpg            (บล็อกภาพคู่ข้อความหน้าแรก, 1800px)
         about-program.jpg                                   (ภาพใหญ่หน้า About, 2000px)
-        course-required/-elective/-practicum/-guest/-edtech.jpg  (การ์ด Courses, 1200×992)
+        course-bachelor/-master/-supervision/-guest-lecturers.jpg (การ์ด Courses 4 ใบ ต.ค. 2026, 3:4 ~900×1200)
+        course-required/-elective/-practicum/-guest/-edtech.jpg  (การ์ด Courses ชุดเดิม เลิกใช้แล้ว)
         activity-*.jpg                                      (การ์ดข่าวหน้า Activities 6 ใบ, 1200px)
         pic1–pic5.jpeg   (ชุดเดิม — เหลือไว้เพราะ index.backup.html และแถวข่าวใน CMS ยังอ้างถึง)
         song.m4a         (เสียงประกอบ เล่นทุกหน้า — AAC โมโน 16kHz ~79 วิ 164KB)
@@ -707,6 +717,13 @@ img/    logo.png, logo.jpg, icon.png
 รูปที่หน้าคนอยู่สูง (เช่น 162, 059, 078) หน้าจะไปอยู่ใต้ตัวอักษรพอดี
 พาธรูปอยู่ในบล็อก `index/academics` ใน Supabase ด้วย — **เปลี่ยนรูปโดยเขียนทับไฟล์ชื่อเดิม** จะได้ผลทันทีไม่ต้องแก้ฐานข้อมูล
 ถ้าเปลี่ยนชื่อไฟล์ ต้องแก้บล็อกใน `/admin` ด้วย ไม่งั้น `cms.js` จะเขียนพาธเก่ากลับ และ `sync-content.py` จะเขียนพาธเก่าลงไฟล์
+
+**ชุด 4 ใบ (ต.ค. 2026)** — Bachelor's / Master's / Teaching Practicum ครอป 3:4 จาก `img/goals/` (g13-lg · card-research · g02-lg)
+ส่วน Guest Lectures (`course-guest-lecturers.jpg`) เป็นผนังรูปวิทยากรรับเชิญ 7 คนจาก `img/lecturer-*.jpg` เต็มใบแบบการ์ดอื่น
+แถวบน 4 แถวล่าง 3 ร่องมืด 6px เต็มสองในสามล่าง; หนึ่งในสามบน (ใต้หัวข้อ) เป็นผนังเดียวกันขยายเบลอ ไล่จางเข้าหาแถวรูป
+(ทำแบบวงกลมบนพื้นส้มก่อนแล้ว ม่านมืดของการ์ดทำให้แถวบนหม่น และดูไม่เข้ากับอีกสามใบที่เป็นรูปเต็ม)
+ช่องขวาล่างอยู่ใต้ปุ่ม + จึงเป็น McKinley ที่ยกหน้าขึ้นครึ่งบนของช่องได้ — สร้างด้วย PIL (ไม่มีสคริปต์ในรีโป)
+ถ้าเพิ่ม/เปลี่ยนวิทยากร ต้องทำภาพนี้ใหม่ด้วย ไม่งั้นการ์ดจะเห็นแต่คนชุดเดิม
 
 ### 7.1 ไอคอนแท็บ (favicon)
 

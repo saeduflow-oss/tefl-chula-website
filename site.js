@@ -589,7 +589,29 @@
   /* อ่านชื่อจาก h2 ทุกครั้ง (ไม่ cache) เพราะ cms.js อาจเปลี่ยนหัวข้อหลังโหลด */
   const sectionTitle = function(s){ const h = s.querySelector('h2'); return (h ? h.textContent : s.id).trim(); };
 
-  function updateCrumb(label){
+  /* หลายระดับในหน้าเดียว (admission.html: ป.ตรี / ป.โท) — <section data-track="ชื่อระดับ">
+     แถบหัวข้อแสดงเฉพาะกลุ่มที่อยู่ระดับเดียวกับที่เปิดอยู่ และ breadcrumb มีชื่อระดับคั่นระหว่างชื่อหน้ากับชื่อหัวข้อ
+     ติดที่ <section> ได้เพราะ cms.js / sync-content.py เขียนทับแค่ข้างใน แท็กเปิด section อยู่รอด
+     section ที่ไม่มี data-track (หน้าอื่นทั้งหมด) = ระดับว่างเดียวกันทั้งหน้า ทำงานเหมือนเดิม */
+  const trackOf = function(g){ return (g && g.lead.dataset.track) || ''; };
+
+  /* banner เปลี่ยนตามระดับที่เปิดอยู่ (admission.html) — หัวเรื่อง = ชื่อระดับ, คำอธิบาย = .dp-desc ของการ์ดเลือกระดับ
+     ที่ลิงก์ไปหัวข้อแรกของระดับนั้น (แก้ข้อความที่การ์ดที่เดียว) · กลับเป็นทั้งหน้า = คืนข้อความเดิมของ banner
+     ข้อความเดิมเก็บไว้ที่ h1/.subtitle เอง: cms.js เขียน banner ทับแล้วได้ element ใหม่ที่ยังไม่มีค่าเก็บ จึงจำข้อความจาก DB ใหม่ทุกครั้ง
+     ข้ามใน ?cms-edit — ตัวแก้หน้าใน /admin เปิดพร้อม #hash ได้ ถ้าเปลี่ยนข้อความ banner ตอนนั้น กดบันทึกแล้วข้อความชั่วคราวจะลง DB */
+  function updateBanner(track){
+    if(/[?&]cms-edit\b/.test(location.search)) return;
+    const h1 = document.querySelector('.page-banner h1');
+    const sub = document.querySelector('.page-banner .subtitle');
+    if(!h1) return;
+    if(h1.dataset.orig == null) h1.dataset.orig = h1.textContent;
+    if(sub && sub.dataset.orig == null) sub.dataset.orig = sub.textContent;
+    const desc = track && document.querySelector('.degree-paths a[href="#' + track.id + '"] .dp-desc');
+    h1.textContent = track ? track.label : h1.dataset.orig;
+    if(sub) sub.textContent = desc ? desc.textContent.trim() : sub.dataset.orig;
+  }
+
+  function updateCrumb(label, track){
     const crumb = document.querySelector('.page-banner .breadcrumb');
     if(!crumb) return;
     crumb.querySelectorAll('.crumb-sub').forEach(function(el){ el.remove(); });
@@ -607,8 +629,11 @@
       page = swap;
     }
     if(label){
-      page.insertAdjacentHTML('afterend',
-        CRUMB_SEP.replace('class="sep"', 'class="sep crumb-sub"') +
+      const sep = CRUMB_SEP.replace('class="sep"', 'class="sep crumb-sub"');
+      /* ชื่อระดับเป็นลิงก์ไปหัวข้อแรกของระดับนั้น */
+      const trackCrumb = track && track.label !== label
+        ? sep + '<a class="crumb-sub" href="#' + esc(track.id) + '">' + esc(track.label) + '</a>' : '';
+      page.insertAdjacentHTML('afterend', trackCrumb + sep +
         '<span class="current crumb-sub" aria-current="page">' + esc(label) + '</span>');
     }
   }
@@ -726,7 +751,9 @@
     document.body.classList.toggle('is-page-view', !group);
     /* หลังใส่คลาสมุมมอง — tagStepCards ดูว่าเป็นหน้าย่อยหรือไม่ */
     tagStepCards();
-    updateCrumb(group && group.label);
+    const first = group && trackOf(group) && groups.find(function(g){ return trackOf(g) === trackOf(group); });
+    updateCrumb(group && group.label, first && { label:trackOf(group), id:first.lead.id });
+    updateBanner(first && { label:trackOf(group), id:first.lead.id });
     renderSectionTabs(content, groups, group);
 
     if(!group) return;
@@ -759,6 +786,10 @@
      สร้างใหม่ทุกครั้งเพราะชื่อเมนูเปลี่ยนได้หลัง cms.js โหลด */
   function renderSectionTabs(content, groups, current){
     const wrap = content.closest('.page-wrap');
+    /* แสดงเฉพาะหัวข้อในระดับเดียวกัน (data-track) — ระดับที่มีหัวข้อเดียว (ป.ตรี) จึงไม่มีแถบ */
+    const all = groups;
+    groups = groups.filter(function(g){ return trackOf(g) === trackOf(current); });
+    groups.hasMenu = all.hasMenu;
     let bar = document.querySelector('.section-tabs');
     /* เปิดทั้งหน้า (ไม่ได้เลือกหัวข้อ) ไม่ต้องมีแถบ — เจ้าของเว็บขอ ต.ค. 2026 ให้โผล่เฉพาะตอนเลือกหัวข้อแล้ว */
     if(!wrap || !current || !groups.hasMenu || groups.length < 2 || content.dataset.sectionTabs === 'off'){

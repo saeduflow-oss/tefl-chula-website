@@ -38,7 +38,11 @@
     background-size:cover;
     background-repeat:no-repeat;
   }
-  .slide-1{background-image:url('img/hero-cohort.jpg');}
+  /* รูปหมู่ในห้องคอมฯ (slide-1, hero-cohort.jpg) ถูกเอาออกตามคำขอผู้ดูแล (ต.ค. 2026)
+     สไลด์จึงเริ่มที่ slide-2 — จำนวนปุ่มจุดใน #sliderDots ต้องเท่ากับจำนวน .hero-slide เสมอ */
+  /* รูปพิธีมอบรางวัล (hero-ceremony.jpg) เพิ่มเป็นใบแรก ต.ค. 2026 — ใบหน้าอยู่ครึ่งบนของภาพ
+     จึงดันจุดโฟกัสขึ้นเป็น 35% ถ้าใช้ center จอกว้างจะตัดหัวแถวหลังทิ้ง */
+  .slide-6{background-image:url('img/hero-ceremony.jpg');background-position:center 35%;}
   .slide-2{background-image:url('img/hero-lab.jpg');}
   .slide-3{background-image:url('img/hero-classroom.jpg');}
   .slide-4{background-image:url('img/hero-library.jpg');}
@@ -254,7 +258,7 @@
   .discover .section-head{margin-bottom:clamp(20px,2.4vw,30px);}
 
   /* แถบเลื่อนแนวนอน การ์ดขนาดเท่าการ์ด Latest News (.photo-cards ใน site.css) ทุกจุดตัด
-     การ์ดมี 5 ใบ แต่ขนาดนี้วางได้แถวละ 4 — ผู้ดูแลเลือกให้เลื่อนดูใบที่ 5 แทนการตัดขึ้นแถวใหม่ (ต.ค. 2026)
+     การ์ดเหลือ 4 ใบ (ป.ตรี ป.โท Practicum Guest) พอดีแถวละ 4 บนจอกว้าง — ถ้าเพิ่มใบที่ 5 จะเลื่อนดูแทนการตัดขึ้นแถวใหม่ (ต.ค. 2026)
      แก้ขนาดการ์ดข่าวเมื่อไร ต้องแก้ --c-cols/ช่องไฟ/aspect-ratio ตรงนี้ให้ตรงกันด้วย */
   .course-index{
     --c-cols:4;
@@ -697,7 +701,7 @@
         <ul data-cms="nav">
           <li><a href="about.html" data-dropdown="dd-about">About<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-about"><div class="dd-menu"><a class="dd-title" href="about.html">About the Program</a><ul><li><a href="about.html#goals">Goals and Objectives</a></li><li><a href="about.html#academic-staff">Academic Staff</a></li><li><a href="about.html#guest-lecturers">Guest Lecturers</a></li></ul></div></div></li>
           <li><a href="academics.html" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#study-plan">Study Plan</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></div></div></li>
-          <li><a href="admission.html" data-dropdown="dd-admission">Admission<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-admission"><div class="dd-menu"><a class="dd-title" href="admission.html">Admission</a><ul><li><a href="admission.html#admission-requirements">Admission Requirements</a></li><li><a href="admission.html#admission-procedures">Admission Procedures</a></li><li><a href="admission.html#admission-deadline">Admission Deadline</a></li><li><a href="admission.html#undergraduate-admission">Undergraduate Admission</a></li></ul></div></div></li>
+          <li><a href="admission.html" data-dropdown="dd-admission">Admission<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-admission"><div class="dd-menu"><a class="dd-title" href="admission.html">Admission</a><ul><li><a href="admission.html#undergraduate-admission">Bachelor’s Degree</a></li><li class="has-sub"><a href="admission.html#admission-procedures">Master’s Degree</a><ul class="dd-sub"><li><a href="admission.html#admission-procedures">Admission Procedures</a></li><li><a href="admission.html#admission-requirements">Admission Requirements</a></li><li><a href="admission.html#admission-deadline">Admission Deadline</a></li></ul></li></ul></div></div></li>
           <li><a href="research.html" data-dropdown="dd-research">Research<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-research"><div class="dd-menu"><a class="dd-title" href="research.html">Research</a><ul><li><a href="research.html#research-guidelines">Guidelines for Research Procedures</a></li><li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li><li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li></ul></div></div></li>
           <li><a href="activities.html" data-dropdown="dd-activities">Activities<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-activities"><div class="dd-menu"><a class="dd-title" href="activities.html">Activities</a><ul><li><a href="activities.html#activities-list">Activities List</a></li><li><a href="activities.html#intensive-course">Intensive Course</a></li><li><a href="activities.html#announcements">Announcements</a></li><li><a href="activities.html#calendar">Event Calendar</a></li></ul></div></div></li>
           <li><a href="forms-and-links.html" data-dropdown="dd-forms-links">Forms &amp; Links<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-forms-links"><div class="dd-menu"><a class="dd-title" href="forms-and-links.html">Forms and Links</a><ul><li><a href="forms-and-links.html#request-forms">Request Forms</a></li><li><a href="forms-and-links.html#thesis-forms">Thesis and Master Project Forms</a></li><li><a href="forms-and-links.html#research-collaboration-letters">Research Collaboration Letters</a></li><li><a href="forms-and-links.html#graduation-request">Graduation Request</a></li><li><a href="forms-and-links.html#useful-links">Useful Links</a></li></ul></div></div></li>
@@ -750,7 +754,7 @@
     <!-- ============ HERO ============ -->
     <section class="hero" id="home" data-cms-block="index/home">
       <div class="hero-track" id="heroTrack">
-        <div class="hero-slide slide-1" role="img" aria-label="TEFL students and instructors in the computer lab"></div>
+        <div class="hero-slide slide-6" role="img" aria-label="TEFL students and faculty members at an award ceremony"></div>
         <div class="hero-slide slide-2" role="img" aria-label="TEFL students in the faculty computer lab"></div>
         <div class="hero-slide slide-3" role="img" aria-label="Students working together in a TEFL class"></div>
         <div class="hero-slide slide-4" role="img" aria-label="Group work in the faculty library"></div>
@@ -848,26 +852,26 @@
         </div>
 
         <div class="course-index" id="courses">
-          <a class="course-card" href="academics.html#list-of-courses">
-            <div class="c-photo" style="--img:url('img/course-required.jpg')"></div>
+          <a class="course-card" href="admission.html#undergraduate-admission">
+            <div class="c-photo" style="--img:url('img/course-bachelor.jpg')"></div>
             <div class="c-bg"></div>
             <div class="c-body">
-              <h5>Required Courses</h5>
-              <p>Core courses essential for all TEFL students</p>
+              <h5>Bachelor&rsquo;s Degree</h5>
+              <p>Undergraduate study in English language teaching</p>
             </div>
             <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </a>
-          <a class="course-card" href="academics.html#list-of-courses">
-            <div class="c-photo" style="--img:url('img/course-elective.jpg')"></div>
+          <a class="course-card" href="academics.html">
+            <div class="c-photo" style="--img:url('img/course-master.jpg')"></div>
             <div class="c-bg"></div>
             <div class="c-body">
-              <h5>Elective Courses</h5>
-              <p>Specialized courses based on your interests</p>
+              <h5>Master&rsquo;s Degree</h5>
+              <p>A two-year TEFL program for pre-service and in-service teachers</p>
             </div>
             <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </a>
-          <a class="course-card" href="academics.html#curriculum-info">
-            <div class="c-photo" style="--img:url('img/course-practicum.jpg')"></div>
+          <a class="course-card" href="activities.html#activities-list">
+            <div class="c-photo" style="--img:url('img/course-supervision.jpg')"></div>
             <div class="c-bg"></div>
             <div class="c-body">
               <h5>Teaching Practicum</h5>
@@ -876,20 +880,11 @@
             <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </a>
           <a class="course-card" href="about.html#guest-lecturers">
-            <div class="c-photo" style="--img:url('img/course-guest.jpg')"></div>
+            <div class="c-photo" style="--img:url('img/course-guest-lecturers.jpg')"></div>
             <div class="c-bg"></div>
             <div class="c-body">
               <h5>Guest Lectures</h5>
               <p>Talks by visiting scholars and professionals</p>
-            </div>
-            <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
-          </a>
-          <a class="course-card" href="academics.html#list-of-courses">
-            <div class="c-photo" style="--img:url('img/course-edtech.jpg')"></div>
-            <div class="c-bg"></div>
-            <div class="c-body">
-              <h5>Educational Technology</h5>
-              <p>Digital tools and technology for modern language education</p>
             </div>
             <span class="plus" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </a>
