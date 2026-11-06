@@ -1182,18 +1182,15 @@
       const track = document.getElementById('heroTrack');
       const count = document.querySelectorAll('.hero-slide').length;
       if(!track || !count) return;
+      syncDots(count);
+      const dots  = document.querySelectorAll('#sliderDots button');
       if(index < 0) index = count - 1;
       if(index >= count) index = 0;
       currentSlide = index;
-      syncDots(count);
-      const dots  = document.querySelectorAll('#sliderDots button');
       track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
       dots.forEach((dot,i) => dot.classList.toggle('active', i === currentSlide));
     }
 
-    function restartSlider(){
-      clearInterval(sliderTimer);
-      sliderTimer = setInterval(() => showSlide(currentSlide + 1), 6500);
     /* จุดเลื่อนต้องเท่ากับจำนวนสไลด์ — ผู้ดูแลเพิ่ม/ลบสไลด์ใน /admin (โหมดโค้ด) โดยไม่ต้องนับจุดเอง
        สร้างมาร์กอัปเดียวกับในไฟล์ทุกตัวอักษร ไม่งั้นตัวแก้หน้าใน /admin จะเห็นว่าบล็อก "เปลี่ยน" ทั้งที่ไม่ได้แตะ */
     function syncDots(count){
@@ -1206,6 +1203,9 @@
       box.innerHTML = h + '\n      ';
     }
 
+    function restartSlider(){
+      clearInterval(sliderTimer);
+      sliderTimer = setInterval(() => showSlide(currentSlide + 1), 6500);
     }
 
     /* ผูกที่ document ครั้งเดียว ปุ่มจะถูกสร้างใหม่กี่รอบก็ยังกดได้ */
