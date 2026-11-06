@@ -141,9 +141,14 @@ Two kinds of content now live in Supabase and are edited through `admin/index.ht
 - **nav** (`nav`, up to three levels via `parent_id` — the third renders as a side flyout, `li.has-sub > ul.dd-sub`) — the main menu, rendered into `.main-nav ul[data-cms="nav"]`
   with `class="active"` computed from the current filename
 - **settings** (`settings`, key/value) — the site's external connections: form endpoint, contact
-  email/phone, map place, social URLs, background music. Applied to elements marked
+  email/phone, map place, social URLs, background music — plus the contact form's wording
+  (`form.*`) and every page's `<title>` (`title.<page>`). Applied to elements marked
   `data-setting-href` / `data-setting-text` / `data-setting-map` (with an optional
   `data-setting-prefix` such as `tel:` or `mailto:`); an empty `href` value hides the element.
+  `data-setting-text` only replaces plain text, so it sits on a span wrapping the words, never on an
+  element with children (the send button's text is `.bs-txt` for that reason).
+  `select[data-setting-options]` takes a comma-separated list and keeps the first `value=""` option.
+  The contact form is deliberately not a block: rewriting it would orphan the form script's bindings.
   Exposed as `window.TEFLSettings` and announced with a `tefl:settings` event, which the contact
   form (`contact.html`) and the music player (`site.js`) consume.
 
@@ -170,6 +175,9 @@ Three pieces have to stay in step:
 - `sync-content.py` — writes the DB content back into the HTML files
 
 The admin's page editor (`#pages/<file>`) loads the real page in an iframe with `?cms-edit=1` and edits it in place.
+Background images (`style="--img:url(…)"` on cards, `style="background-image:url(…)"` on the hero
+slides) get their own "รูปพื้นหลัง" buttons in both editor views (`beBgList` in `blockeditor.js`) — an
+image set by a page's CSS instead of in the markup cannot be changed from `/admin`, so keep images in markup.
 It relies on two small hooks on the public side: `cms.js` sets `window.TEFLCmsReady` / fires `tefl:cms-ready`
 when its render chain ends (the editor waits for it, or cms.js would overwrite the editor's nodes), and `site.js`
 skips the music player under `?cms-edit` (the first click while editing would otherwise unmute it). Keep both.

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Explore | TEFL Program</title>
+<title data-setting-text="title.explore">Explore | TEFL Program</title>
 <!-- ไอคอนแท็บ: ตัดเปลวไฟจาก img/logo.png เพราะโลโก้เต็มเป็นแนวนอน ย่อเหลือ 16px แล้วอ่านไม่ออก -->
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -73,8 +73,8 @@
   </div>
 
   <!-- ============ PAGE BANNER ============
-       ไม่มี data-cms-block — หน้านี้ไม่มีข้อความใน DB ทั้งหน้าสร้างจากเมนู -->
-  <section class="page-banner">
+       ข้อความมาจากบล็อก explore/page-banner ใน DB (แก้ที่ /admin) — การ์ดด้านล่างไม่มีใน DB สร้างจากเมนูทั้งหมด -->
+  <section class="page-banner" data-cms-block="explore/page-banner">
     <div class="inner">
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="index.html" aria-label="Home">

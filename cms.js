@@ -293,6 +293,17 @@
       const k = el.getAttribute('data-setting-text');
       if(k in st && st[k].trim()) el.textContent = st[k];
     });
+    /* ตัวเลือกใน <select> (หัวข้อในฟอร์มติดต่อ) — ค่าคั่นด้วยจุลภาค ตัวเลือกแรกที่ value="" (Please select) คงไว้
+       ต้องตรงกับ apply_settings() ใน sync-content.py — ไม่สร้าง <select> ใหม่ สคริปต์ฟอร์มที่ผูกไว้ตอนโหลดจึงยังทำงาน */
+    document.querySelectorAll('select[data-setting-options]').forEach(function(sel){
+      const items = (st[sel.getAttribute('data-setting-options')] || '').split(',')
+        .map(function(x){ return x.trim(); }).filter(Boolean);
+      if(!items.length) return;
+      const keep = sel.value;
+      Array.from(sel.options).forEach(function(o){ if(o.value !== '') o.remove(); });
+      items.forEach(function(t){ const o = document.createElement('option'); o.textContent = t; sel.appendChild(o); });
+      if(items.indexOf(keep) >= 0) sel.value = keep;
+    });
     const place = (st['map.place'] || '').trim();
     if(place){
       const q = encodeURIComponent(place);

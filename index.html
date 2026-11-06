@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>(TEFL) Teaching English as a Foreign Language</title>
+<title data-setting-text="title.index">(TEFL) Teaching English as a Foreign Language</title>
 <!-- ไอคอนแท็บ: ตัดเปลวไฟจาก img/logo.png เพราะโลโก้เต็มเป็นแนวนอน ย่อเหลือ 16px แล้วอ่านไม่ออก -->
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -42,6 +42,9 @@
      สไลด์จึงเริ่มที่ slide-2 — จำนวนปุ่มจุดใน #sliderDots ต้องเท่ากับจำนวน .hero-slide เสมอ */
   /* รูปพิธีมอบรางวัล (hero-ceremony.jpg) เพิ่มเป็นใบแรก ต.ค. 2026 — ใบหน้าอยู่ครึ่งบนของภาพ
      จึงดันจุดโฟกัสขึ้นเป็น 35% ถ้าใช้ center จอกว้างจะตัดหัวแถวหลังทิ้ง */
+  /* รูปจริงของแต่ละสไลด์อยู่ใน style="" ของสไลด์ในบล็อก index/home (เปลี่ยนรูปได้ที่ /admin → หน้าแรก, พ.ย. 2026)
+     กฎ .slide-N ข้างล่างเป็นค่าสำรองเท่านั้น — style ในมาร์กอัปชนะเสมอ แก้รูปตรงนี้จะไม่เห็นผล
+     เก็บไว้ให้หน้ายังมีรูปถ้าไฟล์ขึ้นก่อนรัน SQL (บล็อกเก่าใน DB ไม่มี style) ลบได้เมื่อ DB อัปเดตแล้ว */
   .slide-6{background-image:url('img/hero-ceremony.jpg');background-position:center 35%;}
   .slide-2{background-image:url('img/hero-lab.jpg');}
   .slide-3{background-image:url('img/hero-classroom.jpg');}
@@ -754,11 +757,11 @@
     <!-- ============ HERO ============ -->
     <section class="hero" id="home" data-cms-block="index/home">
       <div class="hero-track" id="heroTrack">
-        <div class="hero-slide slide-6" role="img" aria-label="TEFL students and faculty members at an award ceremony"></div>
-        <div class="hero-slide slide-2" role="img" aria-label="TEFL students in the faculty computer lab"></div>
-        <div class="hero-slide slide-3" role="img" aria-label="Students working together in a TEFL class"></div>
-        <div class="hero-slide slide-4" role="img" aria-label="Group work in the faculty library"></div>
-        <div class="hero-slide slide-5" role="img" aria-label="Faculty of Education campus"></div>
+        <div class="hero-slide slide-6" style="background-image:url('img/hero-ceremony.jpg');background-position:center 35%" role="img" aria-label="TEFL students and faculty members at an award ceremony"></div>
+        <div class="hero-slide slide-2" style="background-image:url('img/hero-lab.jpg')" role="img" aria-label="TEFL students in the faculty computer lab"></div>
+        <div class="hero-slide slide-3" style="background-image:url('img/hero-classroom.jpg')" role="img" aria-label="Students working together in a TEFL class"></div>
+        <div class="hero-slide slide-4" style="background-image:url('img/hero-library.jpg')" role="img" aria-label="Group work in the faculty library"></div>
+        <div class="hero-slide slide-5" style="background-image:url('img/hero-campus.jpg')" role="img" aria-label="Faculty of Education campus"></div>
       </div>
 
       <div class="hero-inner">
@@ -1177,12 +1180,13 @@
 
     function showSlide(index){
       const track = document.getElementById('heroTrack');
-      const dots  = document.querySelectorAll('#sliderDots button');
       const count = document.querySelectorAll('.hero-slide').length;
       if(!track || !count) return;
       if(index < 0) index = count - 1;
       if(index >= count) index = 0;
       currentSlide = index;
+      syncDots(count);
+      const dots  = document.querySelectorAll('#sliderDots button');
       track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
       dots.forEach((dot,i) => dot.classList.toggle('active', i === currentSlide));
     }
@@ -1190,6 +1194,18 @@
     function restartSlider(){
       clearInterval(sliderTimer);
       sliderTimer = setInterval(() => showSlide(currentSlide + 1), 6500);
+    /* จุดเลื่อนต้องเท่ากับจำนวนสไลด์ — ผู้ดูแลเพิ่ม/ลบสไลด์ใน /admin (โหมดโค้ด) โดยไม่ต้องนับจุดเอง
+       สร้างมาร์กอัปเดียวกับในไฟล์ทุกตัวอักษร ไม่งั้นตัวแก้หน้าใน /admin จะเห็นว่าบล็อก "เปลี่ยน" ทั้งที่ไม่ได้แตะ */
+    function syncDots(count){
+      const box = document.getElementById('sliderDots');
+      if(!box || box.querySelectorAll('button').length === count) return;
+      let h = '';
+      for(let i = 0; i < count; i++){
+        h += '\n        <button' + (i === currentSlide ? ' class="active"' : '') + ' data-slide="' + i + '" aria-label="Slide ' + (i + 1) + '"></button>';
+      }
+      box.innerHTML = h + '\n      ';
+    }
+
     }
 
     /* ผูกที่ document ครั้งเดียว ปุ่มจะถูกสร้างใหม่กี่รอบก็ยังกดได้ */

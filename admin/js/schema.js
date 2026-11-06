@@ -29,6 +29,7 @@ const PAGES = [
   { page:'faqs.html',            title:'FAQs',             path:'/faqs.html',            type:'main' },
   { page:'forms-and-links.html', title:'Forms and Links',  path:'/forms-and-links.html', type:'main' },
   { page:'contact.html',         title:'Contact',          path:'/contact.html',         type:'main' },
+  { page:'explore.html',         title:'Explore',          path:'/explore.html',         type:'main' },
   { page:'(ทุกหน้า)',             title:'ส่วนท้ายเว็บ (Footer)', path:'ทุกหน้า',            type:'shared' }
 ];
 const pageOf = p => PAGES.find(x => x.page === p) || { page:p, title:p, path:'/' + p, type:'main' };
@@ -83,12 +84,12 @@ const SCHEMA = {
   },
   settings: {
     label:'ข้อมูลติดต่อและลิงก์', title:'ข้อมูลติดต่อ โซเชียล และการตั้งค่า', menu:'เนื้อหาเว็บ',
-    where:'อีเมล เบอร์โทร แผนที่ ปุ่มโซเชียลท้ายเว็บ และเพลงประกอบ', link:'contact.html',
+    where:'อีเมล เบอร์โทร แผนที่ ปุ่มโซเชียลท้ายเว็บ ข้อความในฟอร์มติดต่อ ชื่อแท็บของแต่ละหน้า และเพลงประกอบ', link:'contact.html',
     /* ค่าตั้งไม่มีแนวคิด "ซ่อน": ซ่อนแล้ว cms.js จะไม่ได้รับค่านั้นเลย หน้าเว็บกลับไปใช้ค่าในไฟล์
        ซึ่งดูเหมือน "แก้แล้วไม่ขึ้น" จึงตัดปุ่มออก อยากปิดให้ล้างค่าเป็นว่างแทน */
     pk:'key', noAdd:true, noDelete:true, noOrder:true, noHide:true,
     listT:r=>r.label, listS:r=>r.value || 'ยังไม่ได้ใส่',
-    groupBy:r=>({form:'ฟอร์มติดต่อ', contact:'ช่องทางติดต่อ', map:'แผนที่', social:'โซเชียลมีเดีย', facebook:'โพสต์จาก Facebook', music:'เพลงประกอบ'})[r.key.split('.')[0]] || 'อื่น ๆ',
+    groupBy:r=>({form:'ฟอร์มติดต่อ', contact:'ช่องทางติดต่อ', map:'แผนที่', social:'โซเชียลมีเดีย', facebook:'โพสต์จาก Facebook', music:'เพลงประกอบ', title:'ชื่อแท็บของแต่ละหน้า'})[r.key.split('.')[0]] || 'อื่น ๆ',
     /* แต่ละแถวคือค่าคนละชนิด ช่องกรอกจึงต้องสร้างจากตัวแถวเอง ไม่ใช่รายการตายตัว */
     fields:r=>[{k:'value', t:r.kind==='bool' ? 'boolstr' : 'text', label:r.label, hint:r.hint}]
   },

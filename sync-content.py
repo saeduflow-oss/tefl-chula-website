@@ -260,10 +260,25 @@ def apply_settings(html, st):
         return set_attr(tag, 'href', esc((pre.group(1) if pre else '') + v) if v else '#')
     html = re.sub(r'<a\b[^>]*data-setting-href="([^"]+)"[^>]*>', href_sub, html)
 
+    # ทุกแท็ก (ไม่ใช่แค่ <a>) — <title> ชื่อแท็บ, ป้ายในฟอร์มติดต่อ · เฉพาะที่ข้างในเป็นข้อความล้วน ไม่งั้นข้าม
     def text_sub(m):
-        key = m.group(2)
-        return m.group(1) + esc(st[key]) + m.group(3) if st.get(key, '').strip() else m.group(0)
-    html = re.sub(r'(<a\b[^>]*data-setting-text="([^"]+)"[^>]*>)[^<]*(</a>)', text_sub, html)
+        key = m.group(3)
+        return m.group(1) + esc(st[key]) + m.group(4) if st.get(key, '').strip() else m.group(0)
+    html = re.sub(r'(<(\w+)\b[^>]*data-setting-text="([^"]+)"[^>]*>)[^<]*(</\2>)', text_sub, html)
+
+    # ตัวเลือกใน <select data-setting-options> — กติกาเดียวกับ cms.js: คั่นด้วยจุลภาค คงตัวเลือกแรก value=""
+    def opts_sub(m):
+        items = [x.strip() for x in st.get(m.group(2), '').split(',') if x.strip()]
+        if not items:
+            return m.group(0)
+        body = m.group(3)
+        head = re.match(r'\s*<option value="">.*?</option>', body, re.S)
+        ind = re.search(r'\n([ \t]*)<option', body)
+        ind = ind.group(1) if ind else ''
+        tail = re.search(r'\s*$', body).group(0)
+        return (m.group(1) + (head.group(0) if head else '')
+                + ''.join(f'\n{ind}<option>{esc(x)}</option>' for x in items) + tail + m.group(4))
+    html = re.sub(r'(<select\b[^>]*data-setting-options="([^"]+)"[^>]*>)(.*?)(</select>)', opts_sub, html, flags=re.S)
 
     place = st.get('map.place', '').strip()
     if place:

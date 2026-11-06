@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact | TEFL Program</title>
+<title data-setting-text="title.contact">Contact | TEFL Program</title>
 <!-- ไอคอนแท็บ: ตัดเปลวไฟจาก img/logo.png เพราะโลโก้เต็มเป็นแนวนอน ย่อเหลือ 16px แล้วอ่านไม่ออก -->
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -108,8 +108,8 @@
            แก้ข้อความในการ์ดขวาได้ใน /admin (บล็อก contact/contact-card) · ลิงก์อีเมล/โซเชียล/แผนที่มาจาก settings -->
       <div class="contact-split">
         <div class="contact-form-wrap" id="send-a-message">
-          <h3>Send Us a Message</h3>
-          <p class="panel-lead">Fill out the form and we will get back to you as soon as possible.</p>
+          <h3 data-setting-text="form.heading">Send Us a Message</h3>
+          <p class="panel-lead" data-setting-text="form.lead">Fill out the form and we will get back to you as soon as possible.</p>
           <noscript>
             <div class="form-status is-warn is-shown">
               This form needs JavaScript to work. Please email us directly at
@@ -121,35 +121,35 @@
             <div class="form-grid">
 
               <div class="field">
-                <label for="cf-first">First Name <span class="req" aria-hidden="true">*</span></label>
+                <label for="cf-first"><span data-setting-text="form.label_first">First Name</span> <span class="req" aria-hidden="true">*</span></label>
                 <input type="text" id="cf-first" placeholder="Ex. Somchai" name="firstName" autocomplete="given-name"
                        required data-msg-required="Please enter your first name.">
                 <span class="f-error" id="err-first" role="alert"></span>
               </div>
 
               <div class="field">
-                <label for="cf-last">Last Name <span class="req" aria-hidden="true">*</span></label>
+                <label for="cf-last"><span data-setting-text="form.label_last">Last Name</span> <span class="req" aria-hidden="true">*</span></label>
                 <input type="text" id="cf-last" placeholder="Ex. Jaidee" name="lastName" autocomplete="family-name"
                        required data-msg-required="Please enter your last name.">
                 <span class="f-error" id="err-last" role="alert"></span>
               </div>
 
               <div class="field">
-                <label for="cf-email">Email <span class="req" aria-hidden="true">*</span></label>
+                <label for="cf-email"><span data-setting-text="form.label_email">Email</span> <span class="req" aria-hidden="true">*</span></label>
                 <input type="email" id="cf-email" placeholder="example@gmail.com" name="email" autocomplete="email"
                        required data-msg-required="Please enter the email address we should reply to.">
                 <span class="f-error" id="err-email" role="alert"></span>
               </div>
 
               <div class="field">
-                <label for="cf-phone">Phone <span class="opt">(optional)</span></label>
+                <label for="cf-phone"><span data-setting-text="form.label_phone">Phone</span> <span class="opt">(optional)</span></label>
                 <input type="tel" id="cf-phone" placeholder="Ex. 081 234 5678" name="phone" autocomplete="tel">
                 <span class="f-error" id="err-phone" role="alert"></span>
               </div>
 
               <div class="field is-full">
-                <label for="cf-subject">Subject <span class="req" aria-hidden="true">*</span></label>
-                <select id="cf-subject" name="subject" required
+                <label for="cf-subject"><span data-setting-text="form.label_subject">Subject</span> <span class="req" aria-hidden="true">*</span></label>
+                <select id="cf-subject" name="subject" required data-setting-options="form.subjects"
                         data-msg-required="Please choose a subject.">
                   <option value="">&mdash; Please select &mdash;</option>
                   <option>Admissions</option>
@@ -162,7 +162,7 @@
               </div>
 
               <div class="field is-full">
-                <label for="cf-message">Message <span class="req" aria-hidden="true">*</span></label>
+                <label for="cf-message"><span data-setting-text="form.label_message">Message</span> <span class="req" aria-hidden="true">*</span></label>
                 <textarea id="cf-message" name="message" placeholder="Enter here&hellip;" maxlength="1500"
                           required data-msg-required="Please write your message."></textarea>
                 <span class="f-error" id="err-message" role="alert"></span>
@@ -177,15 +177,16 @@
             </div>
 
             <div class="form-actions">
-              <!-- ข้อความต้องเป็นลูกตัวแรกของปุ่ม — สคริปต์ท้ายไฟล์สลับเป็น "Sending…" ผ่าน firstChild.nodeValue
+              <!-- ข้อความปุ่มอยู่ใน .bs-txt (ตั้งค่าได้ที่ /admin: form.button) — สคริปต์ท้ายไฟล์สลับเป็น "Sending…" ที่ span นี้
+                   เคยเป็นข้อความเปล่าลูกตัวแรกของปุ่ม แต่ applySettings ใส่ textContent ทั้งปุ่มจะลบไอคอนทิ้ง จึงต้องห่อ
                    วงกลมลูกศรอยู่ทีหลังในมาร์กอัป แต่ CSS ย้ายไปซ้าย (order) -->
               <button type="submit" class="btn-send" id="cf-submit">
-                Send Message
+                <span class="bs-txt" data-setting-text="form.button">Send Message</span>
                 <span class="bs-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
               </button>
               <p class="form-hint">
                 Fields marked <span aria-hidden="true">*</span> are required.
-                Your message goes to TEFL.Chula@gmail.com.
+                <span data-setting-text="form.hint">Your message goes to TEFL.Chula@gmail.com.</span>
               </p>
             </div>
 
@@ -443,7 +444,9 @@
 
     const statusBox = document.getElementById('cf-status');
     const submitBtn = document.getElementById('cf-submit');
-    const submitLbl = submitBtn.firstChild.nodeValue;
+    /* อ่าน span ข้อความปุ่มสด ๆ และจำข้อความตอนกดส่ง ไม่ใช่ตอนโหลด — applySettings อาจเปลี่ยนข้อความหลังสคริปต์นี้ทำงาน */
+    const submitTxt = submitBtn.querySelector('.bs-txt');
+    let submitLbl = submitTxt.textContent;
     const EMAIL_RE  = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     let composed = '';   /* ข้อความล่าสุดที่ประกอบไว้ เผื่อผู้ใช้กดคัดลอก */
 
@@ -544,7 +547,8 @@
 
     function setBusy(busy){
       submitBtn.disabled = busy;
-      submitBtn.firstChild.nodeValue = busy ? 'Sending… ' : submitLbl;
+      if(busy) submitLbl = submitTxt.textContent;
+      submitTxt.textContent = busy ? 'Sending…' : submitLbl;
     }
 
     /* ---------- ส่งฟอร์ม ---------- */

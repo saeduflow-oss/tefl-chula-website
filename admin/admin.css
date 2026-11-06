@@ -657,6 +657,13 @@ svg.i{width:18px;height:18px;flex-shrink:0;fill:none;stroke:currentColor;stroke-
 .be-img{border:1px solid var(--line);border-radius:8px;padding:0;background:var(--faint);cursor:pointer;overflow:hidden;width:min(420px,100%);min-height:120px;display:grid;place-items:center;}
 .be-img img{display:block;width:100%;max-height:300px;object-fit:contain;}
 .be-img img[src=""]{display:none;}
+/* รูปพื้นหลังในบล็อก HTML พิเศษ (การ์ด Courses, สไลด์หน้าแรก) — blockeditor.js beBgRow */
+.be-bgrow{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);}
+.be-bgh{flex-basis:100%;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);}
+.be-bg{display:flex;flex-direction:column;gap:5px;width:118px;padding:6px;border:1px solid var(--line);border-radius:8px;background:var(--panel);cursor:pointer;font:inherit;font-size:12px;text-align:left;color:inherit;}
+.be-bg:hover{border-color:var(--brand);}
+.be-bg img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:5px;background:var(--faint);}
+.be-bg span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .be-imgf{flex:1;min-width:220px;display:grid;gap:10px;align-content:start;}
 .be-imgf .btn{justify-self:start;}
 .be-imgf label,.be-btnrow label{display:grid;gap:4px;font-size:13px;color:var(--muted);}

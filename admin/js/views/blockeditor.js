@@ -363,7 +363,7 @@ function beBlockHtml(s, b, i, under){
       '<div class="be-h2" contenteditable="true" spellcheck="false"></div>';
   } else if(b.type === 'text' || b.type === 'html' || b.type === 'cb'){
     body = beTools(b.type !== 'text') + '<div class="be-ce ' + (b.type === 'text' ? 'be-p' : 'be-html') + '" contenteditable="true"></div>' +
-      '<textarea class="be-code" hidden spellcheck="false"></textarea>';
+      '<textarea class="be-code" hidden spellcheck="false"></textarea>' + (b.type === 'text' ? '' : beBgRow(b));
   } else if(b.type === 'image'){
     body = '<div class="be-imgrow"><button type="button" class="be-img" data-pick title="เปลี่ยนรูป"><img alt=""></button>' +
       '<div class="be-imgf"><button type="button" class="btn" data-pick>' + ICON.media + 'อัปโหลดรูปใหม่</button>' +
@@ -451,6 +451,11 @@ function beFormWire(root){
     }
     if(t.matches('[data-code]')) return beToggleCode(blkEl, b, t);
     if(t.matches('[data-pick]')) return blkEl.querySelector('[data-file]').click();
+    if(t.matches('[data-bg]')){
+      const el = beBgList(b)[+t.dataset.bg];
+      if(el) bePickImage(url => { beSetBg(el, url); beTouch(true); const im = t.querySelector('img'); if(im) im.src = url; });
+      return;
+    }
   });
   document.addEventListener('click', beCloseMenus);
 
@@ -720,6 +725,9 @@ function beChipHtml(b){
     const m = beCmsMenu(b.cms);
     h += ICON.settings.replace('class="i"', 'class="i lock"') + (SCHEMA[m] ? '<button class="txt" data-c="menu" data-m="' + m + '">แก้ที่เมนู ' + esc(SCHEMA[m].label) + ' ↗</button>' : '');
   }
+  const [s] = beFind(b.id), bgs = beBgList(b, s);
+  if(bgs.length) h += sep + bgs.map((el, i) => '<button class="txt" data-c="bg" data-i="' + i + '" title="เปลี่ยนรูปพื้นหลัง">' +
+    ICON.media + esc(beBgLabel(el, i)) + '</button>').join('');
   if(b.type !== 'locked') h += sep + btn('code','แก้เป็นโค้ด HTML','&lt;/&gt;') + btn('del','ลบบล็อก',ICON.trash,'del');
   return h;
 }
@@ -885,6 +893,11 @@ async function beOvClick(t){
     return;
   }
   if(c === 'img') return bePickImage(url => { beSetSrc(b, url); beTouch(true); bePlace(); });
+  if(c === 'bg'){
+    const el = beBgList(b, s)[+t.dataset.i];
+    if(el) bePickImage(url => { beSetBg(el, url); beTouch(true); bePlace(); });
+    return;
+  }
   if(b.type === 'cb' && beCbAction(b, c)){ beTouch(true); beCanvasApply(); return; }
   if(c === 'alt'){
     const v = prompt('คำอธิบายรูป (alt) สำหรับผู้ใช้โปรแกรมอ่านหน้าจอ', b.img.getAttribute('alt') || '');
@@ -1076,6 +1089,39 @@ function beSetEyebrow(b, text){
   b.eb.textContent = text;
 }
 /* เปลี่ยนรูป: ลบ width/height/srcset ของรูปเดิมทิ้ง ไม่งั้นรูปใหม่ถูกบังคับสัดส่วนของรูปเก่า */
+/* ---------- รูปพื้นหลังในบล็อก HTML พิเศษ (พ.ย. 2026) ----------
+   ปุ่ม "เปลี่ยนรูป" ปกติจับแค่ <img> — แต่การ์ด Courses ใช้ style="--img:url(...)" และสไลด์หน้าแรกใช้ style="background-image:url(...)"
+   จึงหา element ที่มีรูปใน style เอง แล้วแก้เฉพาะค่าใน url() ส่วนอื่นของ style (เช่น background-position) ไม่แตะ
+   รูปที่มาจาก CSS ของหน้า (ไม่อยู่ใน style ของมาร์กอัป) เปลี่ยนจากที่นี่ไม่ได้ — ต้องย้ายเข้ามาร์กอัปก่อน */
+const BE_BG = '[style*="--img"], [style*="background-image"]';
+const BE_BG_RE = /((?:--img|background-image)\s*:\s*url\()\s*(['"]?)([^'")]*)\2\s*(\))/;
+/* s ไม่บังคับ — ใส่มาเมื่อเป็นชิปบน canvas: บล็อก hero มีชั้นข้อความทับรูปทั้งแผ่น คลิกโดนสไลด์ไม่ได้
+   จึงให้บล็อกไหนในส่วน hero ก็ได้เปลี่ยนรูปสไลด์ทั้งหมดของส่วนนั้น */
+function beBgList(b, s){
+  const own = (b.type === 'html' || b.type === 'cb') ? b.els.filter(n => n.nodeType === 1)
+    .flatMap(n => (n.matches(BE_BG) ? [n] : []).concat([...n.querySelectorAll(BE_BG)]))
+    .filter(el => BE_BG_RE.test(el.getAttribute('style') || '')) : [];
+  if(own.length || !s || !beIsHero(s.key)) return own;
+  return s.blocks.filter(x => x !== b).flatMap(x => beBgList(x));
+}
+const beBgUrl = el => ((el.getAttribute('style') || '').match(BE_BG_RE) || [])[3] || '';
+function beBgLabel(el, i){
+  if(el.matches('.hero-slide')) return 'สไลด์ ' + (i + 1);
+  const host = el.closest('a, article, li, figure') || el.parentElement;
+  const h = host && host.querySelector('h3, h4, h5, .ov-title, .t-name');
+  return ((h && h.textContent.trim()) || 'รูปที่ ' + (i + 1)).slice(0, 22);
+}
+function beSetBg(el, url){
+  el.setAttribute('style', (el.getAttribute('style') || '').replace(BE_BG_RE, (m, a, q, u, z) => a + "'" + url.replace(/'/g, '%27') + "'" + z));
+}
+function beBgRow(b){
+  const list = beBgList(b);
+  if(!list.length) return '';
+  return '<div class="be-bgrow"><span class="be-bgh">' + ICON.media + 'รูปพื้นหลัง — กดที่รูปเพื่อเปลี่ยน</span>' +
+    list.map((el, i) => '<button type="button" class="be-bg" data-bg="' + i + '" title="เปลี่ยนรูป: ' + esc(beBgLabel(el, i)) + '">' +
+      '<img src="' + esc(beBgUrl(el)) + '" alt=""><span>' + esc(beBgLabel(el, i)) + '</span></button>').join('') + '</div>';
+}
+
 function beSetSrc(b, url){
   ['width','height','srcset','sizes'].forEach(a => b.img.removeAttribute(a));
   b.img.setAttribute('src', url);

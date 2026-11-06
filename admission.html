@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admission | TEFL Program</title>
+<title data-setting-text="title.admission">Admission | TEFL Program</title>
 <!-- ไอคอนแท็บ: ตัดเปลวไฟจาก img/logo.png เพราะโลโก้เต็มเป็นแนวนอน ย่อเหลือ 16px แล้วอ่านไม่ออก -->
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -122,8 +122,9 @@
       <!-- เลือกระดับปริญญา — เปิดทั้งหน้า (body.is-page-view) เห็นแค่การ์ดสองใบนี้ section ทั้งหมดถูกซ่อน (style ด้านบน)
            กดการ์ด = ไป #id ของ section → ตัวกรอง section ใน site.js เปิดหน้าย่อยพร้อมแถบหัวข้อย่อยใต้ banner
            เป็น <div> ไม่ใช่ <section> โดยตั้งใจ: ตัวกรองนับเฉพาะ section[id] ถ้าเป็น section จะถูกนับเป็นบทนำแล้วติดไปกับกลุ่มแรก
-           และไม่ใช่บล็อก DB (ไม่มี data-cms-block) — แก้ข้อความการ์ดที่ไฟล์นี้ (เจ้าของเว็บขอ ต.ค. 2026) -->
-      <div class="degree-paths is-centered">
+           ข้อความมาจากบล็อก admission/degree-paths ใน DB (แก้ที่ /admin, พ.ย. 2026) — .dp-desc ของแต่ละใบเป็นคำอธิบายใต้ banner
+           ของระดับนั้นด้วย (updateBanner ใน site.js) และ href ต้องชี้ id ของหัวข้อแรกของระดับ ไม่งั้น banner ไม่เปลี่ยน -->
+      <div class="degree-paths is-centered" data-cms-block="admission/degree-paths">
         <div class="eyebrow">Choose Your Degree</div>
         <span class="rule"></span>
         <h2>Degree Programs</h2>
