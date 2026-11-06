@@ -681,6 +681,20 @@
     });
   }
 
+  /* การ์ด Intensive Course ใน Recent Activities (activities.html) ได้ id="intensive-course"
+     เป็นปลายทางของเมนู Activities → Intensive Course — หน้านี้ไม่มี section ชื่อนี้ เนื้อหาเป็นการ์ดในคอลเลกชัน news
+     (placement=activities) ที่ cms.js สร้าง จึงใส่ id ให้การ์ดใบแรก (ใหม่สุด) ที่ชื่อขึ้นต้นด้วย "Intensive Course"
+     ตัวกรอง section เปิดกลุ่มที่การ์ดอยู่ เลื่อนไปที่การ์ดแล้วกระพริบกรอบ แบบ #plan-a — ใส่ซ้ำทุกครั้งเพราะ cms.js สร้างการ์ดใหม่
+     ถ้าวันหนึ่งมี section id="intensive-course" จริง ฟังก์ชันนี้จะไม่ทำอะไร */
+  function tagIntensiveCard(){
+    if(document.getElementById('intensive-course')) return;
+    const card = Array.from(document.querySelectorAll('#recent-activities .nc-card')).find(function(c){
+      const h = c.querySelector('h3');
+      return h && /^intensive course/i.test(h.textContent.trim());
+    });
+    if(card) card.id = 'intensive-course';
+  }
+
   /* การ์ด Application Steps (admission.html) — หน้าย่อยเป็นกล่องละขั้นตอน (APPLICATION STEPS ใน site.css)
      ใส่ด้วยสคริปต์ทุกครั้งที่ filterSections ทำงาน เพราะการ์ดมาจากบล็อก admission/application-steps ใน DB
      และ cms.js เขียนทับทั้งก้อน (ของที่ใส่ไว้หาย) — ทำซ้ำได้ ไม่ซ้อนกัน:
@@ -733,6 +747,7 @@
     const content = document.querySelector('.page-wrap .content');
     if(!content) return;
     tagPlanCards();
+    tagIntensiveCard();
     addReadMore();
     const sections = Array.from(content.querySelectorAll(':scope > section[id]'));
     let id = '';
