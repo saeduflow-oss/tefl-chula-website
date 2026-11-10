@@ -24,8 +24,9 @@
 ```
 index.html            หน้าแรก (hero + welcome + missions + courses + programs + intro + news + FAQ)
 about.html            About the Program   → #goals, #academic-staff, #guest-lecturers
-academics.html        Academics           → #curriculum-info, #list-of-courses, #study-plan,
-                                            #class-schedule, #tentative-schedule, #tuition-and-fees
+academics.html        Academics           → Bachelor’s Degree #bachelor-program
+                                            Master’s Degree › #curriculum-info, #list-of-courses, #study-plan,
+                                            #class-schedule, #tentative-schedule, #tuition-and-fees (ชั้นที่ 3)
 admission.html        Admission           → Bachelor’s Degree › #undergraduate-admission (What Do We Study), #bachelor-activities, #bachelor-prides (ชั้นที่ 3)
                                             Master’s Degree › #admission-procedures, #admission-requirements, #admission-deadline (ชั้นที่ 3)
 research.html         Research            → #research-guidelines, #tefl-research-thesis, #tefl-research-ojed
@@ -557,7 +558,11 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
   พื้นเทา ป้ายเทา ยอดสีเข้ม 30px แถบเทา — % ของแถบคำนวณใน feeCard/fee_card ด้วย floor(x+.5) ทั้งสองฝั่ง; `feeCard` (cms.js) กับ `fee_card` (sync) ต้องตรงกันทุกตัวอักษร
 
 - **Admission (ต.ค. 2026)** — CSS ล้วนท้าย `site.css` ไม่แก้บล็อกใน DB
-  · **เลือกระดับปริญญา** (`.degree-paths` ใน `admission.html` + `<style>` ของหน้า, เจ้าของเว็บขอ 17 ต.ค. 2026) — เปิดทั้งหน้าเห็นแค่การ์ด `.ov-tile` สองใบ
+  · **เลือกระดับปริญญา** (`.degree-paths` ใน `admission.html` + บล็อก DEGREE PATHS ท้าย `site.css`, เจ้าของเว็บขอ 17 ต.ค. 2026
+    — **Academics ใช้แบบเดียวกัน** ตั้งแต่ 10 พ.ย. 2026: บล็อก `academics/degree-paths`, 7 section เดิมเป็น `data-track` ป.โท
+    (การ์ด ป.โท ชี้ `#curriculum-info` — Overview ไม่อยู่ในเมนูจึงติดไปกับกลุ่มนี้), ป.ตรี = `#bachelor-program` ยังเป็น "announced soon";
+    ซ่อน section ตอนเปิดทั้งหน้าเฉพาะหน้าที่มี `.degree-paths` (`:has`) การ์ดย่อตอนเปิดทั้งหน้าของ Academics (Study Plan, List of Courses,
+    Tuition) จึงไม่มีใครเห็นแล้วเหมือนของ Admission) — เปิดทั้งหน้าเห็นแค่การ์ด `.ov-tile` สองใบ
     Bachelor's Degree → `#undergraduate-admission`, Master's Degree → `#admission-procedures`
     แยกระดับด้วย `data-track="…"` บนแท็กเปิด `<section>` (อยู่รอดเพราะ cms.js / sync เขียนทับแค่ข้างใน) — site.js ให้แถบหัวข้อแสดงเฉพาะกลุ่มระดับเดียวกัน
     (ป.โท: Procedures / Requirements / Deadline · ป.ตรี: What Do We Study / Our Activities / Our Prides — พ.ย. 2026 ยังเป็นข้อความ "announced soon"

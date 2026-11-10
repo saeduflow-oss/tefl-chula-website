@@ -23,7 +23,7 @@
       <nav class="main-nav" id="mainNav" aria-label="Main menu">
         <ul data-cms="nav">
           <li><a href="about.html" data-dropdown="dd-about">About<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-about"><div class="dd-menu"><a class="dd-title" href="about.html">About the Program</a><ul><li><a href="about.html#goals">Goals and Objectives</a></li><li><a href="about.html#academic-staff">Academic Staff</a></li><li><a href="about.html#guest-lecturers">Guest Lecturers</a></li></ul></div></div></li>
-          <li><a href="academics.html" class="active" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#study-plan">Study Plan</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></div></div></li>
+          <li><a href="academics.html" class="active" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#bachelor-program">Bachelor’s Degree</a></li><li class="has-sub"><a href="academics.html#curriculum-info">Master’s Degree</a><ul class="dd-sub"><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#study-plan">Study Plan</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></li></ul></div></div></li>
           <li><a href="admission.html" data-dropdown="dd-admission">Admission<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-admission"><div class="dd-menu"><a class="dd-title" href="admission.html">Admission</a><ul><li class="has-sub"><a href="admission.html#undergraduate-admission">Bachelor’s Degree</a><ul class="dd-sub"><li><a href="admission.html#undergraduate-admission">What Do We Study</a></li><li><a href="admission.html#bachelor-activities">Our Activities</a></li><li><a href="admission.html#bachelor-prides">Our Prides</a></li></ul></li><li class="has-sub"><a href="admission.html#admission-procedures">Master’s Degree</a><ul class="dd-sub"><li><a href="admission.html#admission-procedures">Admission Procedures</a></li><li><a href="admission.html#admission-requirements">Admission Requirements</a></li><li><a href="admission.html#admission-deadline">Admission Deadline</a></li></ul></li></ul></div></div></li>
           <li><a href="research.html" data-dropdown="dd-research">Research<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-research"><div class="dd-menu"><a class="dd-title" href="research.html">Research</a><ul><li><a href="research.html#research-guidelines">Guidelines for Thesis Procedures</a></li><li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li><li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li></ul></div></div></li>
           <li><a href="activities.html" data-dropdown="dd-activities">Activities<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-activities"><div class="dd-menu"><a class="dd-title" href="activities.html">Activities</a><ul><li><a href="activities.html#activities-list">Activities List</a></li><li><a href="activities.html#intensive-course">Intensive Course</a></li><li><a href="activities.html#announcements">Announcements</a></li><li><a href="activities.html#calendar">Event Calendar</a></li></ul></div></div></li>
@@ -91,8 +91,34 @@
   <div class="page-wrap">
     <div class="content">
 
+      <!-- เลือกระดับปริญญา — แบบเดียวกับ admission.html (DEGREE PATHS ใน site.css, พ.ย. 2026)
+           ข้อความมาจากบล็อก academics/degree-paths ใน DB (แก้ที่ /admin) — .dp-desc ของแต่ละใบเป็นคำอธิบายใต้ banner ของระดับนั้นด้วย
+           href ต้องชี้ id หัวข้อแรกของระดับ: ป.โท = #curriculum-info (Overview ไม่อยู่ในเมนู จึงติดไปกับกลุ่มนี้) -->
+      <div class="degree-paths is-centered" data-cms-block="academics/degree-paths">
+        <div class="eyebrow">Choose Your Degree</div>
+        <span class="rule"></span>
+        <h2>Degree Programs</h2>
+        <p>Select a degree level to see its curriculum.</p>
+        <div class="dp-grid">
+          <a class="ov-tile" href="#bachelor-program">
+            <span class="dp-text">
+              <span class="ov-title">Bachelor&rsquo;s Degree</span>
+              <span class="dp-desc">Curriculum and courses of the undergraduate program</span>
+            </span>
+            <span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+          </a>
+          <a class="ov-tile" href="#curriculum-info">
+            <span class="dp-text">
+              <span class="ov-title">Master&rsquo;s Degree</span>
+              <span class="dp-desc">A two-year TEFL program for pre-service and in-service teachers</span>
+            </span>
+            <span class="ov-foot"><svg class="ov-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span class="ov-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+          </a>
+        </div>
+      </div>
+
       <!-- 2.1 OVERVIEW -->
-      <section id="overview" class="is-centered" data-cms-block="academics/overview">
+      <section id="overview" data-track="Master&rsquo;s Degree" class="is-centered" data-cms-block="academics/overview">
         <div class="eyebrow">At a Glance</div>
         <span class="rule"></span>
         <h2>Overview</h2>
@@ -110,7 +136,7 @@
       </section>
 
       <!-- 2.2 CURRICULUM INFO -->
-      <section id="curriculum-info" class="is-centered" data-cms-block="academics/curriculum-info">
+      <section id="curriculum-info" data-track="Master&rsquo;s Degree" class="is-centered" data-cms-block="academics/curriculum-info">
         <div class="eyebrow">How It Works</div>
         <span class="rule"></span>
         <h2>Curriculum Info.</h2>
@@ -211,7 +237,7 @@
       </section>
 
       <!-- 2.3 STUDY PLAN -->
-      <section id="study-plan" data-cms-block="academics/study-plan">
+      <section id="study-plan" data-track="Master&rsquo;s Degree" data-cms-block="academics/study-plan">
         <div class="sec-head">
           <div class="eyebrow">Choose Your Track</div>
           <span class="rule"></span>
@@ -260,7 +286,7 @@
       </section>
 
       <!-- 2.4 LIST OF COURSES -->
-      <section id="list-of-courses" data-cms-block="academics/list-of-courses">
+      <section id="list-of-courses" data-track="Master&rsquo;s Degree" data-cms-block="academics/list-of-courses">
         <div class="sec-head">
           <div class="eyebrow">What You Study</div>
           <span class="rule"></span>
@@ -461,7 +487,7 @@
       </section>
 
       <!-- 2.5 CLASS SCHEDULE -->
-      <section id="class-schedule" data-cms-block="academics/class-schedule">
+      <section id="class-schedule" data-track="Master&rsquo;s Degree" data-cms-block="academics/class-schedule">
         <div class="sec-head">
           <div class="eyebrow">When You Study</div>
           <span class="rule"></span>
@@ -531,7 +557,7 @@
       </section>
 
       <!-- 2.6 TENTATIVE SCHEDULE -->
-      <section id="tentative-schedule" data-cms-block="academics/tentative-schedule">
+      <section id="tentative-schedule" data-track="Master&rsquo;s Degree" data-cms-block="academics/tentative-schedule">
         <div class="sec-head">
           <div class="eyebrow">Each Semester</div>
           <span class="rule"></span>
@@ -546,7 +572,7 @@
       </section>
 
       <!-- 2.7 TUITION AND FEES -->
-      <section id="tuition-and-fees" data-cms-block="academics/tuition-and-fees">
+      <section id="tuition-and-fees" data-track="Master&rsquo;s Degree" data-cms-block="academics/tuition-and-fees">
         <div class="sec-head">
           <div class="eyebrow">Costs</div>
           <span class="rule"></span>
@@ -564,6 +590,14 @@
           The application fee and comprehensive exam fee are charged separately.
         </p>
       
+      </section>
+
+      <!-- 2.8 BACHELOR'S DEGREE — หลักสูตร ป.ตรี (เมนู Academics → Bachelor’s Degree) ยังไม่มีข้อมูล ใส่ได้ที่ /admin -->
+      <section id="bachelor-program" data-track="Bachelor&rsquo;s Degree" class="is-centered" data-cms-block="academics/bachelor-program">
+        <div class="eyebrow">Bachelor&rsquo;s Degree</div>
+        <span class="rule"></span>
+        <h2>Undergraduate Program</h2>
+        <p>Information will be announced soon.</p>
       </section>
 
     </div>

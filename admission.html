@@ -9,34 +9,6 @@
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="stylesheet" href="fonts/chula.css">
 <link rel="stylesheet" href="site.css">
-<style>
-  /* ============ เลือกระดับปริญญา (.degree-paths) ============
-     เปิดทั้งหน้า: เห็นแค่การ์ด ป.ตรี / ป.โท ซ่อนทุก section · เลือกหัวข้อแล้ว (#hash): ซ่อนการ์ด เห็น section ตามกลุ่มเมนู
-     ผูกกับคลาสที่ตัวกรอง section ใน site.js ใส่ให้ body — ไม่มี JS ไม่มีทั้งสองคลาส จึงเห็นการ์ดและเนื้อหาครบ
-     (การ์ดยังใช้เป็นลิงก์กระโดดได้) ส่วนตัวแก้หน้าใน /admin ถอดทั้งสองคลาสออก จึงเห็นทุกบล็อกให้แก้ได้ */
-  .is-page-view .content > section{display:none;}
-  .is-section-view .degree-paths{display:none;}
-
-  /* การ์ดหน้าตา .ov-tile เดียวกับการ์ดย่อ List of Courses / Study Plan (site.css) + บรรทัดคำอธิบายใต้ชื่อ */
-  .degree-paths .dp-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,280px));
-    justify-content:center;
-    gap:16px;
-    margin-top:28px;
-    text-align:left;   /* กัน .is-centered ดันข้อความในการ์ดไปกลาง */
-  }
-  .degree-paths .ov-tile{min-height:var(--mini-tile-h);}
-  .degree-paths .dp-text{display:flex;flex-direction:column;gap:8px;}
-  .degree-paths .dp-desc{font-size:15px;line-height:1.55;color:var(--text-muted);transition:color .2s ease;}
-  .degree-paths .ov-tile:hover .dp-desc,
-  .degree-paths .ov-tile:focus-visible .dp-desc,
-  .degree-paths .ov-tile:active .dp-desc{color:rgba(255,255,255,.88);}
-  @media (max-width:520px){
-    .degree-paths .dp-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
-    .degree-paths .dp-desc{font-size:14px;}
-  }
-</style>
 </head>
 <body>
 
@@ -51,7 +23,7 @@
       <nav class="main-nav" id="mainNav" aria-label="Main menu">
         <ul data-cms="nav">
           <li><a href="about.html" data-dropdown="dd-about">About<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-about"><div class="dd-menu"><a class="dd-title" href="about.html">About the Program</a><ul><li><a href="about.html#goals">Goals and Objectives</a></li><li><a href="about.html#academic-staff">Academic Staff</a></li><li><a href="about.html#guest-lecturers">Guest Lecturers</a></li></ul></div></div></li>
-          <li><a href="academics.html" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#study-plan">Study Plan</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></div></div></li>
+          <li><a href="academics.html" data-dropdown="dd-academics">Academics<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-academics"><div class="dd-menu"><a class="dd-title" href="academics.html">Academics</a><ul><li><a href="academics.html#bachelor-program">Bachelor’s Degree</a></li><li class="has-sub"><a href="academics.html#curriculum-info">Master’s Degree</a><ul class="dd-sub"><li><a href="academics.html#curriculum-info">Curriculum Info.</a></li><li><a href="academics.html#list-of-courses">List of Courses</a></li><li><a href="academics.html#study-plan">Study Plan</a></li><li><a href="academics.html#class-schedule">Class Schedule</a></li><li><a href="academics.html#tentative-schedule">Tentative Schedule</a></li><li><a href="academics.html#tuition-and-fees">Tuition and Fees</a></li></ul></li></ul></div></div></li>
           <li><a href="admission.html" class="active" data-dropdown="dd-admission">Admission<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-admission"><div class="dd-menu"><a class="dd-title" href="admission.html">Admission</a><ul><li class="has-sub"><a href="admission.html#undergraduate-admission">Bachelor’s Degree</a><ul class="dd-sub"><li><a href="admission.html#undergraduate-admission">What Do We Study</a></li><li><a href="admission.html#bachelor-activities">Our Activities</a></li><li><a href="admission.html#bachelor-prides">Our Prides</a></li></ul></li><li class="has-sub"><a href="admission.html#admission-procedures">Master’s Degree</a><ul class="dd-sub"><li><a href="admission.html#admission-procedures">Admission Procedures</a></li><li><a href="admission.html#admission-requirements">Admission Requirements</a></li><li><a href="admission.html#admission-deadline">Admission Deadline</a></li></ul></li></ul></div></div></li>
           <li><a href="research.html" data-dropdown="dd-research">Research<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-research"><div class="dd-menu"><a class="dd-title" href="research.html">Research</a><ul><li><a href="research.html#research-guidelines">Guidelines for Thesis Procedures</a></li><li><a href="research.html#tefl-research-thesis">TEFL Research [THESIS]</a></li><li><a href="research.html#tefl-research-ojed">TEFL Research from OJED</a></li></ul></div></div></li>
           <li><a href="activities.html" data-dropdown="dd-activities">Activities<svg class="chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></a><div class="dropdown" id="dd-activities"><div class="dd-menu"><a class="dd-title" href="activities.html">Activities</a><ul><li><a href="activities.html#activities-list">Activities List</a></li><li><a href="activities.html#intensive-course">Intensive Course</a></li><li><a href="activities.html#announcements">Announcements</a></li><li><a href="activities.html#calendar">Event Calendar</a></li></ul></div></div></li>

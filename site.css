@@ -4839,3 +4839,34 @@
     .cb.cb-quote p{font-size:23px;}
     .cb.cb-list,.cb.cb-callout p{font-size:19px;}
   }
+
+  /* ============ DEGREE PATHS — การ์ดเลือกระดับปริญญา (admission.html, academics.html) ============
+     ย้ายมาจาก <style> ของ admission.html เมื่อ Academics ใช้ด้วย (พ.ย. 2026)
+     เปิดทั้งหน้า: เห็นแค่การ์ด ป.ตรี / ป.โท ซ่อนทุก section · เลือกหัวข้อแล้ว (#hash): ซ่อนการ์ด เห็น section ตามกลุ่มเมนู
+     ผูกกับคลาสที่ตัวกรอง section ใน site.js ใส่ให้ body — ไม่มี JS ไม่มีทั้งสองคลาส จึงเห็นการ์ดและเนื้อหาครบ
+     (การ์ดยังใช้เป็นลิงก์กระโดดได้) ส่วนตัวแก้หน้าใน /admin ถอดทั้งสองคลาสออก จึงเห็นทุกบล็อกให้แก้ได้
+     ซ่อน section เฉพาะหน้าที่มี .degree-paths (:has) — หน้าอื่นที่มีการ์ดย่อตอนเปิดทั้งหน้า (Research, Forms) ต้องไม่โดน
+     ผลข้างเคียง: การ์ดย่อตอนเปิดทั้งหน้าของสองหน้านี้ (Study Plan, List of Courses, Tuition, Application Steps ฯลฯ) ไม่มีใครเห็นแล้ว
+     ชื่อระดับต้องตรงกับ data-track ของ section และ href ของการ์ดต้องชี้ id หัวข้อแรกของระดับ (banner เปลี่ยนตามการ์ด — updateBanner) */
+  .is-page-view .content:has(> .degree-paths) > section{display:none;}
+  .is-section-view .degree-paths{display:none;}
+
+  /* การ์ดหน้าตา .ov-tile เดียวกับการ์ดย่อ List of Courses / Study Plan + บรรทัดคำอธิบายใต้ชื่อ */
+  .degree-paths .dp-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,280px));
+    justify-content:center;
+    gap:16px;
+    margin-top:28px;
+    text-align:left;   /* กัน .is-centered ดันข้อความในการ์ดไปกลาง */
+  }
+  .degree-paths .ov-tile{min-height:var(--mini-tile-h);}
+  .degree-paths .dp-text{display:flex;flex-direction:column;gap:8px;}
+  .degree-paths .dp-desc{font-size:15px;line-height:1.55;color:var(--text-muted);transition:color .2s ease;}
+  .degree-paths .ov-tile:hover .dp-desc,
+  .degree-paths .ov-tile:focus-visible .dp-desc,
+  .degree-paths .ov-tile:active .dp-desc{color:rgba(255,255,255,.88);}
+  @media (max-width:520px){
+    .degree-paths .dp-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+    .degree-paths .dp-desc{font-size:14px;}
+  }
