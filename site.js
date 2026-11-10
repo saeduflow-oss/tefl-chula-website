@@ -80,7 +80,7 @@
     file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>'
   };
   /* เลือกไอคอนจากคำในชื่อเมนู — ลำดับสำคัญ ตัวแรกที่ตรงชนะ
-     (Intensive Course ต้องเป็นกิจกรรมก่อนเจอ course, Guidelines for Research Procedures ก่อนเจอ procedure,
+     (Intensive Course ต้องเป็นกิจกรรมก่อนเจอ course, Guidelines for Thesis Procedures ก่อนเจอ procedure,
       Thesis ... Forms ต้องเป็นฟอร์มก่อนเจอ thesis)
      เมนูใหม่ที่ไม่ตรงคำไหนได้ไอคอนเอกสาร */
   const OV_RULES = [
@@ -801,7 +801,7 @@
      สร้างใหม่ทุกครั้งเพราะชื่อเมนูเปลี่ยนได้หลัง cms.js โหลด */
   function renderSectionTabs(content, groups, current){
     const wrap = content.closest('.page-wrap');
-    /* แสดงเฉพาะหัวข้อในระดับเดียวกัน (data-track) — ระดับที่มีหัวข้อเดียว (ป.ตรี) จึงไม่มีแถบ */
+    /* แสดงเฉพาะหัวข้อในระดับเดียวกัน (data-track) — ระดับที่มีหัวข้อเดียวจึงไม่มีแถบ */
     const all = groups;
     groups = groups.filter(function(g){ return trackOf(g) === trackOf(current); });
     groups.hasMenu = all.hasMenu;
@@ -900,9 +900,8 @@
        และการ์ด Application Steps ที่ CSS ย่อแบบเดียวกัน (APPLICATION STEPS ใน site.css) */
     const row = event.target.closest('#admission-requirements tbody tr, #admission-deadline tbody tr, #application-steps .tile-card');
     if(row) location.hash = row.closest('section').id;
-    /* research.html — การ์ดย่อ (RESEARCH ใน site.css): แถวตาราง Thesis และการ์ด Guidelines
-       การ์ด Guidelines เป็นลิงก์ไปหน้า Forms & Links — เปิดทั้งหน้ากดแล้วไปหน้าย่อยก่อน (เหมือนการ์ดย่ออื่น) ลิงก์ใช้ได้ในหน้าย่อย */
-    const card = event.target.closest('#tefl-research-thesis tbody tr, #research-guidelines .tile-card');
+    /* research.html — การ์ดย่อ (RESEARCH ใน site.css): แถวตาราง Thesis */
+    const card = event.target.closest('#tefl-research-thesis tbody tr');
     if(card && !event.metaKey && !event.ctrlKey && !event.shiftKey){
       event.preventDefault();
       location.hash = card.closest('section').id;

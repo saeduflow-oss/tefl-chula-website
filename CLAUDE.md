@@ -136,7 +136,7 @@ Two kinds of content now live in Supabase and are edited through `admin/index.ht
 
 - **collections** (`staff`, `lecturers`, `faqs`, `news`, `events`, `links`, `courses`, `tuition`) — repeating
   items with real columns, marked in the HTML by `data-cms`
-- **blocks** (`blocks`, 58 rows) — the prose and headings of every `<section>` plus four footer
+- **blocks** (`blocks`, 58 rows) — the prose and headings of every `<section>` plus three footer
   regions, stored as raw HTML and marked by `data-cms-block`
 - **nav** (`nav`, up to three levels via `parent_id` — the third renders as a side flyout, `li.has-sub > ul.dd-sub`) — the main menu, rendered into `.main-nav ul[data-cms="nav"]`
   with `class="active"` computed from the current filename

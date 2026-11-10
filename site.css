@@ -568,6 +568,24 @@
   .footer-social a.is-fb svg,   .ci-social a.is-fb svg{width:18px;height:18px;}
   .footer-social a.is-line svg, .ci-social a.is-line svg{width:19px;height:19px;}
   .footer-social a.is-ig svg,   .ci-social a.is-ig svg{width:16px;height:16px;}
+  /* IG แยกสองบัญชี ป.ตรี / ป.โท ไอคอนหน้าตาเหมือนกันทุกอย่าง ถ้าไม่มีป้าย คนกดจะเดาไม่ได้ว่าอันไหนของใคร
+     ป้าย "B.Ed." กว้างกว่าวงกลม จึงวางกึ่งกลางคร่อมขอบล่าง — ถ้าไว้มุมขวาจะล้นไปทับไอคอนถัดไป (ช่องห่างแค่ 10–14px) */
+  .footer-social a[data-badge],
+  .ci-social a[data-badge]{position:relative;}
+  .footer-social a[data-badge]::after,
+  .ci-social a[data-badge]::after{
+    content:attr(data-badge);
+    position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);
+    height:14px;padding:0 4px;border-radius:999px;white-space:nowrap;
+    display:flex;align-items:center;justify-content:center;
+    font:700 8.5px/1 var(--font-body);letter-spacing:.02em;
+    color:#fff;background:#1d1d1f;
+    box-shadow:0 0 0 1.5px #fff;
+  }
+  /* ลิงก์ที่ยังไม่ได้ใส่ค่า (sync-content.py เขียนเป็น "#") — ซ่อนในสำเนา static ด้วย
+     cms.js ซ่อนให้อยู่แล้ว แต่หน้าที่ไม่มี JS หรือโหลด Supabase ไม่ได้จะโชว์ไอคอนที่กดแล้วไม่ไปไหน */
+  .footer-social a[href="#"],
+  .ci-social a[href="#"]{display:none;}
   footer .copyright{
     font-size:15px;
     color:#8c8c8c;
@@ -2367,6 +2385,29 @@
     transform:translateY(-2px);
     box-shadow:0 13px 26px rgba(195,52,20,.34);
   }
+  /* ชี้/แตะแล้วพื้นดำเลื่อนออกจากวงกลมจนเต็มปุ่ม (เจ้าของเว็บขอ พ.ย. 2026)
+     ::before เริ่มที่ขนาด/ตำแหน่งเดียวกับวงกลม .bs-ic (5px, 42px) ซึ่งเป็นสีดำเหมือนกัน จึงมองไม่เห็นจนกว่าจะขยาย
+     — แก้ padding ปุ่มหรือขนาดวงกลมต้องแก้ตัวเลขตรงนี้ด้วย ไม่งั้นจะเห็นขอบดำโผล่ข้างวงกลม
+     z-index:-1 + isolation ให้พื้นอยู่ใต้ข้อความ — ข้อความเป็น text node ตรง ๆ (สคริปต์ใช้ firstChild) ใส่ z-index เองไม่ได้ */
+  .btn-send{position:relative;isolation:isolate;}
+  .btn-send::before{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    top:5px;bottom:5px;left:5px;
+    width:42px;
+    border-radius:999px;
+    background:#1d1d1f;
+    transition:width .45s cubic-bezier(.4,0,.2,1),top .45s cubic-bezier(.4,0,.2,1),
+               bottom .45s cubic-bezier(.4,0,.2,1),left .45s cubic-bezier(.4,0,.2,1);
+  }
+  .btn-send:hover::before,
+  .btn-send:active::before{top:0;bottom:0;left:0;width:100%;}
+  .btn-send:hover,
+  .btn-send:active{box-shadow:0 13px 26px rgba(0,0,0,.28);}
+  @media (prefers-reduced-motion:reduce){
+    .btn-send::before{transition:none;}
+  }
   /* ชี้/แตะแล้ววงกลมเปลี่ยนจากดำเป็นขาว (เจ้าของเว็บขอ ต.ค. 2026) — ลูกศรต้องเปลี่ยนเป็นส้มเข้มพร้อมกัน
      ไม่อย่างนั้นลูกศรขาวบนวงกลมขาวจะหายไป · :active ไว้สำหรับจอสัมผัสที่ไม่มี hover จริง */
   .btn-send svg{transition:stroke .25s ease;}
@@ -2428,6 +2469,8 @@
     .form-grid{grid-template-columns:1fr;}
     .form-actions{align-items:stretch;}
     .btn-send{width:100%;justify-content:center;}
+    /* ปุ่มเต็มแถว วงกลมไปอยู่กลางคู่กับข้อความ ไม่ได้อยู่ที่ 5px — พื้นดำจึงเริ่มจากขอบซ้ายแทน (กว้าง 0) */
+    .btn-send::before{top:0;bottom:0;left:0;width:0;}
   }
 
 
@@ -3180,6 +3223,18 @@
   }
   @media (max-width:560px){
     .photo-cards .nc-track .nc-card{flex:0 0 72vw;}
+  }
+
+  /* ============ THESIS FLOW IMAGE (research.html → Guidelines for Thesis Procedures) ============
+     ผัง "Working on Master Project" เป็นรูปตามที่เจ้าของเว็บส่งมา (พ.ย. 2026) ใช้แทนผัง HTML ด้านล่าง
+     กว้างสุด 640px — รูปทรงตั้ง 3:4 ถ้าเต็มคอลัมน์ 980px จะสูงเกินจอ
+     แสดงทั้งตอนเปิดทั้งหน้าและหน้าย่อย — การ์ด 4 ใบเดิมถูกเอาออก (พ.ย. 2026) รูปจึงเป็นเนื้อหาเดียวของเซคชันนี้
+     ซ่อนตอนเปิดทั้งหน้าแล้วจะเหลือแค่หัวข้อลอย ๆ */
+  .content .thesis-flow{margin:32px auto 0;max-width:640px;}
+  .content .thesis-flow + .note{margin-top:32px;}
+  .content .thesis-flow img{
+    display:block;width:100%;height:auto;
+    border-radius:18px;border:1px solid #e3e6e8;
   }
 
   /* ============ FLOWCHART (research.html → Working on Master Project) ============
@@ -4391,63 +4446,6 @@
      CSS ล้วน มาร์กอัปมาจากบล็อก research/* ใน DB · ตัวเลข/สีต้องตามการ์ด ADMISSION REQUIREMENTS — แก้ที่นั่นแล้วแก้ตรงนี้ด้วย */
   .is-page-view :is(#research-guidelines,#tefl-research-thesis) > p{display:none;}
 
-  /* Guidelines — .tile-card (ลิงก์ไปหน้า Forms & Links) ย่อเหลือ "Step N" + ชื่อ + ไอคอนในการ์ด + ลูกศร
-     เปิดทั้งหน้ากดแล้วไป #research-guidelines ก่อน (site.js) — ลิงก์ไปหน้า Forms ใช้ได้ในหน้าย่อยตามเดิม */
-  .is-page-view #research-guidelines .tile-grid{
-    grid-template-columns:repeat(auto-fit,minmax(190px,210px));
-    justify-content:center;
-    gap:16px;
-    margin-top:28px;
-  }
-  .is-page-view #research-guidelines .tile-card{
-    position:relative;
-    min-height:var(--mini-tile-h);
-    padding:22px 20px 76px;
-    border:1px solid #e3e6e8;
-    border-radius:16px;
-    background:var(--bg);
-    box-shadow:none;
-    transition:transform .2s ease,box-shadow .2s ease,background-color .2s ease,border-color .2s ease;
-  }
-  .is-page-view #research-guidelines .tile-card .t-meta{display:none;}
-  .is-page-view #research-guidelines .tile-card .t-label{
-    margin-bottom:4px;
-    font-size:15px;
-    font-weight:500;
-    letter-spacing:0;
-    text-transform:none;
-    color:var(--brand-dark);
-  }
-  .is-page-view #research-guidelines .tile-card .t-name{font-size:24px;line-height:1.4;}
-  .is-page-view #research-guidelines .tile-card .t-foot{
-    position:absolute;
-    left:20px;right:20px;bottom:20px;
-    padding:0;
-    align-items:center;
-  }
-  .is-page-view #research-guidelines .tile-card .t-ic{color:var(--brand);}
-  /* เส้น 1.4 ใน viewBox 36 ย่อเหลือ 30px แล้วบางกว่าไอคอน Lucide — หนาขึ้นให้เท่ากัน (เหมือน Application Steps) */
-  .is-page-view #research-guidelines .tile-card .t-ic svg{width:30px;height:30px;stroke-width:2.2;}
-  .is-page-view #research-guidelines .tile-card .t-arrow{width:38px;height:38px;background:#f2f3f4;color:#2b2b2b;}
-  .is-page-view #research-guidelines .tile-card .t-arrow svg{width:16px;height:16px;}
-  .is-page-view #research-guidelines .tile-card:hover,
-  .is-page-view #research-guidelines .tile-card:active,
-  .is-page-view #research-guidelines .tile-card:focus-visible{
-    background:var(--brand);
-    border-color:var(--brand);
-    box-shadow:0 12px 28px rgba(232,64,26,.22);
-    transform:translateY(-3px);
-  }
-  .is-page-view #research-guidelines .tile-card:hover .t-label,
-  .is-page-view #research-guidelines .tile-card:active .t-label,
-  .is-page-view #research-guidelines .tile-card:focus-visible .t-label{color:rgba(255,255,255,.85);}
-  .is-page-view #research-guidelines .tile-card:hover .t-ic,
-  .is-page-view #research-guidelines .tile-card:active .t-ic,
-  .is-page-view #research-guidelines .tile-card:focus-visible .t-ic{color:#fff;}
-  .is-page-view #research-guidelines .tile-card:hover .t-arrow,
-  .is-page-view #research-guidelines .tile-card:active .t-arrow,
-  .is-page-view #research-guidelines .tile-card:focus-visible .t-arrow{background:#fff;color:#2b2b2b;}
-
   /* Thesis — แถวตาราง (ปี / ผู้เขียน / หัวข้อ) กลายเป็นการ์ด: ปีเป็นป้ายเล็ก + ชื่อผู้เขียน + ไอคอนหนังสือ + ลูกศร; หัวข้อซ่อน (ดูในหน้าย่อย) */
   .is-page-view #tefl-research-thesis .table-wrap{
     margin-top:28px;
@@ -4532,17 +4530,13 @@
   .is-page-view #tefl-research-thesis .data-table tbody tr:hover::after,
   .is-page-view #tefl-research-thesis .data-table tbody tr:active::after{background-color:#fff;}
   @media (max-width:520px){
-    .is-page-view :is(#research-guidelines .tile-grid,#tefl-research-thesis .data-table tbody){grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
-    .is-page-view #research-guidelines .tile-card,
+    .is-page-view #tefl-research-thesis .data-table tbody{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
     .is-page-view #tefl-research-thesis .data-table tbody tr{padding:18px 16px 68px;}
-    .is-page-view #research-guidelines .tile-card .t-name,
     .is-page-view #tefl-research-thesis .data-table td{font-size:17.5px;}
-    .is-page-view #research-guidelines .tile-card .t-foot{left:16px;right:16px;bottom:16px;}
     .is-page-view #tefl-research-thesis .data-table tbody tr::before{left:16px;bottom:16px;}
     .is-page-view #tefl-research-thesis .data-table tbody tr::after{right:16px;bottom:16px;}
   }
   @media (prefers-reduced-motion:reduce){
-    .is-page-view #research-guidelines .tile-card,
     .is-page-view #tefl-research-thesis .data-table tbody tr{transition:none;}
   }
 
@@ -4563,112 +4557,6 @@
   }
   /* Overview มี 2 ย่อหน้า — เปิดทั้งหน้าเห็นแค่ย่อหน้าแรก 2 บรรทัด */
   .is-page-view :is(#research-overview,#tefl-research-ojed,#request-forms,#research-collaboration-letters,#graduation-request) > p ~ p{display:none;}
-
-  /* ============ RESEARCH GUIDELINES — หน้าย่อย: การ์ดรูป (research.html#research-guidelines) ============
-     เจ้าของเว็บขอ ต.ค. 2026 ให้เหมือนการ์ดรูปตัวอย่าง: รูปเต็มใบ, ชื่อ + คำอธิบายสีขาวด้านบนบนแถบเบลอไล่จาง,
-     ปุ่มวงกลมขาว "+" มุมขวาล่าง · ป้าย Step N และไอคอนซ่อน (ลำดับการ์ดบอกขั้นตอนอยู่แล้ว)
-     มาร์กอัปยังเป็น .tile-card (ลิงก์ไป Forms & Links) จากบล็อก research/research-guidelines — CSS ล้วน
-     body:not(.is-page-view) เพราะตอนเปิดทั้งหน้าการ์ดชุดเดียวกันย่อเป็นการ์ดเล็ก (บล็อก RESEARCH ด้านบน)
-     รูปผูกกับลำดับการ์ด (nth-child) — สลับลำดับในบล็อกแล้วรูปจะสลับตาม
-     โครงชั้นรูป (::before คม + ::after เบลอมี mask) แบบเดียวกับ PHOTO CARD BAND แต่กลับด้าน: เบลอ/เฉดมืดอยู่บน เพราะข้อความอยู่บน */
-  body:not(.is-page-view) #research-guidelines .tile-grid{
-    /* แถวละ 4 (เจ้าของเว็บขอ ต.ค. 2026) — การ์ดแคบ จึงเป็นทรงตั้ง 3/4 แบบรูปตัวอย่าง ตัวอักษร/ระยะเล็กลง */
-    grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:clamp(14px,1.6vw,22px);
-    /* กว้างกว่าคอลัมน์เนื้อหา 980px (เจ้าของเว็บขอให้การ์ดใหญ่ขึ้น) — ยื่นออกเท่ากันสองข้างแบบ .plan-grid / Application Steps
-       --rg-w ไม่เกินจอลบขอบ 16–24px จึงไม่เกิดสกรอลล์แนวนอน */
-    --rg-w:min(1240px,100vw - 2 * clamp(16px,2.4vw,24px));
-    width:var(--rg-w);
-    margin:clamp(24px,2.6vw,36px) 0 0 calc(50% - var(--rg-w) / 2);
-    /* เงาอยู่ที่กริด เพราะ clip-path บนการ์ดตัด box-shadow ทิ้ง */
-    filter:drop-shadow(0 14px 28px rgba(0,0,0,.14));
-  }
-  body:not(.is-page-view) #research-guidelines .tile-card{
-    position:relative;
-    isolation:isolate;
-    overflow:hidden;
-    aspect-ratio:3/4;
-    min-height:0;
-    padding:clamp(20px,2.2vw,30px);
-    border:0;
-    border-radius:clamp(18px,2vw,26px);
-    clip-path:inset(0 round clamp(18px,2vw,26px));
-    background:#1d1d1f;
-    box-shadow:none;
-    color:#fff;
-  }
-  body:not(.is-page-view) #research-guidelines .tile-card::before,
-  body:not(.is-page-view) #research-guidelines .tile-card::after{
-    content:"";
-    position:absolute;inset:0;z-index:-1;
-    pointer-events:none;
-    background-image:linear-gradient(180deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.55) 38%,rgba(0,0,0,.18) 62%,rgba(0,0,0,0) 78%),var(--card-img);
-    background-size:cover;
-    background-position:center;
-    transition:transform .8s cubic-bezier(.2,.7,.2,1);
-  }
-  body:not(.is-page-view) #research-guidelines .tile-card::after{
-    filter:blur(12px);
-    /* เบลอลงมาถึงใต้คำอธิบาย (3 บรรทัด) — รูปพื้นสว่าง (โต๊ะขาว) ตัวขาวจะจมถ้าเบลอสั้นกว่านี้ */
-    -webkit-mask-image:linear-gradient(180deg,#000 40%,transparent 66%);
-    mask-image:linear-gradient(180deg,#000 40%,transparent 66%);
-  }
-  body:not(.is-page-view) #research-guidelines > .note{margin-top:36px;}
-  body:not(.is-page-view) #research-guidelines .tile-card:nth-child(1){--card-img:url(img/forms-proposal.jpg);}
-  body:not(.is-page-view) #research-guidelines .tile-card:nth-child(2){--card-img:url(img/forms-committee.jpg);}
-  body:not(.is-page-view) #research-guidelines .tile-card:nth-child(3){--card-img:url(img/forms-plan.jpg);}
-  body:not(.is-page-view) #research-guidelines .tile-card:nth-child(4){--card-img:url(img/goals/g22-lg.jpg);}
-  body:not(.is-page-view) #research-guidelines .tile-card .t-label,
-  body:not(.is-page-view) #research-guidelines .tile-card .t-ic{display:none;}
-  body:not(.is-page-view) #research-guidelines .tile-card .t-name{
-    font-size:clamp(22px,2.2vw,28.5px);
-    line-height:1.25;
-    color:#fff;
-    text-shadow:0 2px 18px rgba(0,0,0,.3);
-  }
-  body:not(.is-page-view) .content #research-guidelines .tile-card .t-meta{
-    margin-top:12px;
-    font-size:clamp(15.5px,1.32vw,17px);
-    line-height:1.65;
-    color:rgba(255,255,255,.9);
-    text-shadow:0 1px 10px rgba(0,0,0,.3);
-  }
-  /* ปุ่มวงกลมขาว "+" — ใช้ .t-arrow เดิม ซ่อนลูกศรแล้ววาดเครื่องหมายบวกเป็นพื้นหลัง */
-  body:not(.is-page-view) #research-guidelines .tile-card .t-foot{
-    position:absolute;
-    right:clamp(16px,1.8vw,22px);bottom:clamp(16px,1.8vw,22px);
-    padding:0;
-  }
-  body:not(.is-page-view) #research-guidelines .tile-card .t-arrow{
-    width:50px;height:50px;
-    background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d1d1f' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 6v12M6 12h12'/%3E%3C/svg%3E") center / 22px no-repeat;
-    box-shadow:0 4px 14px rgba(0,0,0,.18);
-    transition:transform .25s ease;
-  }
-  body:not(.is-page-view) #research-guidelines .tile-card .t-arrow svg{display:none;}
-  /* hover: ซูมรูป + หมุนปุ่ม แทนพื้นส้มของ .tile-card */
-  body:not(.is-page-view) #research-guidelines .tile-card:hover,
-  body:not(.is-page-view) #research-guidelines .tile-card:active,
-  body:not(.is-page-view) #research-guidelines .tile-card:focus-visible{background:#1d1d1f;box-shadow:none;transform:none;}
-  body:not(.is-page-view) #research-guidelines .tile-card:hover::before,
-  body:not(.is-page-view) #research-guidelines .tile-card:hover::after{transform:scale(1.05);}
-  body:not(.is-page-view) #research-guidelines .tile-card:hover .t-arrow,
-  body:not(.is-page-view) #research-guidelines .tile-card:focus-visible .t-arrow{background-color:#fff;transform:rotate(90deg);}
-  body:not(.is-page-view) #research-guidelines .tile-card:focus-visible{outline:3px solid var(--brand);outline-offset:4px;}
-  @media (max-width:880px){
-    body:not(.is-page-view) #research-guidelines .tile-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-    body:not(.is-page-view) #research-guidelines .tile-card .t-name{font-size:23px;}
-    body:not(.is-page-view) .content #research-guidelines .tile-card .t-meta{font-size:16px;}
-  }
-  @media (max-width:460px){
-    body:not(.is-page-view) #research-guidelines .tile-grid{grid-template-columns:1fr;}
-    body:not(.is-page-view) #research-guidelines .tile-card{aspect-ratio:4/3;}
-  }
-  @media (prefers-reduced-motion:reduce){
-    body:not(.is-page-view) #research-guidelines .tile-card::before,
-    body:not(.is-page-view) #research-guidelines .tile-card::after,
-    body:not(.is-page-view) #research-guidelines .tile-card .t-arrow{transition:none;}
-  }
 
   /* ============ TEFL RESEARCH [THESIS] — หน้าย่อย: การ์ดแบบ Guest Lecturers (research.html#tefl-research-thesis) ============
      เจ้าของเว็บขอ ต.ค. 2026: โครงแบบการ์ด Guest Lecturers (.lecturer-card ใน about.html) — ป้ายปีมุมซ้ายบน, ชื่อผู้เขียน + หัวข้อชิดล่าง, hover ยกขึ้น

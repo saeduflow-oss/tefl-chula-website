@@ -26,7 +26,7 @@ index.html            หน้าแรก (hero + welcome + missions + courses
 about.html            About the Program   → #goals, #academic-staff, #guest-lecturers
 academics.html        Academics           → #curriculum-info, #list-of-courses, #study-plan,
                                             #class-schedule, #tentative-schedule, #tuition-and-fees
-admission.html        Admission           → Bachelor’s Degree #undergraduate-admission
+admission.html        Admission           → Bachelor’s Degree › #undergraduate-admission (What Do We Study), #bachelor-activities, #bachelor-prides (ชั้นที่ 3)
                                             Master’s Degree › #admission-procedures, #admission-requirements, #admission-deadline (ชั้นที่ 3)
 research.html         Research            → #research-guidelines, #tefl-research-thesis, #tefl-research-ojed
 activities.html       Activities          → #activities-list, #intensive-course, #announcements, #calendar
@@ -98,6 +98,7 @@ breadcrumb บน banner กลายเป็น `Home > About > Academic Staff
     ช่วงกลางเข้มขึ้นตั้งแต่เปลี่ยนมาใช้รูปห้องเรียน/ห้องสมุดที่สว่างกว่าชุดเดิม — ถ้าลดค่าลง หัวเรื่องขาวจะจมกับพื้นหลัง
 - social: FB `#1877f2`, LINE `#06c755`, IG gradient `#f9ce34 → #ee2a7b → #6228d7`
   - ใช้ชุดเดียวกันทั้ง `.footer-social` (พื้นดำ) และ `.ci-social` (หน้า Contact — ในการ์ดส้มเข้มทับเป็นวงกลมขาวไอคอนส้ม)
+  - IG มีสองบัญชี (ป.ตรี `social.instagram_bachelor` / ป.โท `social.instagram`) ไอคอนเหมือนกัน จึงมีป้าย B.Ed. / M.Ed. จาก `data-badge` (แคปซูลดำขอบขาว คร่อมขอบล่างกึ่งกลางไอคอน) — ช่องที่ยังไม่มีลิงก์ (`href="#"`) ถูกซ่อน
   - โลโก้สามตัวมีความทึบไม่เท่ากัน จึง**ตั้งขนาดไอคอนไม่เท่ากันโดยตั้งใจ**
     คือ FB `18px` · LINE `19px` · IG `16px` (ค่ากลาง `17px`) ถ้าปรับให้เท่ากันหมด ตัว `f` จะดูลีบและ IG จะดูเป็นก้อนหนัก
   - ไอคอน LINE ใช้เฉพาะรูปลูกโป่งข้อความ **ไม่มีตัวอักษร "LINE" ข้างใน** เพราะที่ขนาดจริง (17–19px) ตัวอักษรจะเละอ่านไม่ออก
@@ -305,7 +306,8 @@ sticky top, `z-index:200`, พื้นขาว, มีแถบ gradient 6px �
 1. `.footer-cols` — ลิงก์ 4 คอลัมน์ (`1fr 1fr 1fr 1.35fr`) คอลัมน์สุดท้ายใส่ `.is-split` เพื่อแตกเป็น 2 คอลัมน์ย่อยด้วย CSS `columns`
 2. `.footer-mid` — โลโก้ + ที่อยู่/ติดต่อ (`auto 1.4fr 1fr`)
 3. `.footer-bottom` — copyright + ไอคอนโซเชียล (มีสีแบรนด์จริงของแต่ละแพลตฟอร์ม)
-4. `.photo-credits` — เครดิตรูป 10.5px
+4. `.photo-credits` — เครดิตรูป 11.5px (สัญญาอนุญาต CC — ห้ามลบ)
+
 
 `.back-top` เป็นปุ่มกลมลอยมุมขวาล่าง โผล่เมื่อเลื่อนเกิน **500px** hover เป็นสีแบรนด์ส้ม
 
@@ -482,6 +484,7 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
 - **`.form-grid` / `.field`** — 2 คอลัมน์ (ชื่อ | นามสกุล, อีเมล | โทร) Subject กับ Message `.is-full` · ช่องพื้นเทา `#f3f3f5` ไม่มีเส้น
   โฟกัสเป็นพื้นขาวเส้นส้ม · มี placeholder ตัวอย่าง · `.f-error` / `.has-error` สำหรับข้อความเตือน · `.hp-field` คือกับดักบอท ห้ามลบ
 - **`.btn-send`** — พิลล์ส้มเข้มตัวขาว + วงกลมดำลูกศร `.bs-ic` ซ้อนหัวซ้าย (hover/แตะ: ลูกศรหมุนขึ้น 45° วงกลมเปลี่ยนจากดำเป็นขาว และลูกศรเปลี่ยนเป็น `--brand-dark` ด้วย ไม่อย่างนั้นลูกศรขาวจะหายไปบนวงกลมขาว)
+  พร้อมกันพื้นดำ `#1d1d1f` (`::before`) เลื่อนออกจากวงกลมจนเต็มปุ่ม .45s (พ.ย. 2026) — เริ่มซ่อนอยู่ใต้วงกลมพอดี (5px / 42px) ≤560px ปุ่มเต็มแถวจึงเลื่อนจากขอบซ้าย
   วงกลมอยู่หลังข้อความในมาร์กอัปเพราะสคริปต์สลับข้อความ "Sending…" ผ่าน `firstChild` — CSS ย้ายมาซ้ายด้วย `order:-1`
 - **`.form-status`** — กล่องแจ้งผลใต้ฟอร์ม 3 แบบ `.is-ok` / `.is-warn` / `.is-bad` (เพิ่ม `.is-shown` เพื่อแสดง)
 
@@ -557,7 +560,8 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
   · **เลือกระดับปริญญา** (`.degree-paths` ใน `admission.html` + `<style>` ของหน้า, เจ้าของเว็บขอ 17 ต.ค. 2026) — เปิดทั้งหน้าเห็นแค่การ์ด `.ov-tile` สองใบ
     Bachelor's Degree → `#undergraduate-admission`, Master's Degree → `#admission-procedures`
     แยกระดับด้วย `data-track="…"` บนแท็กเปิด `<section>` (อยู่รอดเพราะ cms.js / sync เขียนทับแค่ข้างใน) — site.js ให้แถบหัวข้อแสดงเฉพาะกลุ่มระดับเดียวกัน
-    (ป.โท: Procedures / Requirements / Deadline · ป.ตรี มีหัวข้อเดียวจึงไม่มีแถบ) และ breadcrumb เป็น Admission › ชื่อระดับ › ชื่อหัวข้อ
+    (ป.โท: Procedures / Requirements / Deadline · ป.ตรี: What Do We Study / Our Activities / Our Prides — พ.ย. 2026 ยังเป็นข้อความ "announced soon"
+    หัวข้อแรกใช้ id เดิม `#undergraduate-admission` เพราะการ์ดหน้าแรกกับการ์ดเลือกระดับชี้อยู่) และ breadcrumb เป็น Admission › ชื่อระดับ › ชื่อหัวข้อ
     banner เปลี่ยนตามระดับ (`updateBanner` ใน site.js): h1 = ชื่อระดับ, `.subtitle` = `.dp-desc` ของการ์ดระดับนั้น — กลับหน้ารวมคืนข้อความเดิม; ไม่เปลี่ยนใน `?cms-edit`
     เพิ่ม section ใหม่ในหน้านี้ต้องใส่ `data-track` ด้วย ไม่งั้นจะเป็นระดับว่างที่ไม่ขึ้นแถบร่วมกับใคร
     `.is-page-view .content > section` ถูกซ่อนทั้งหมด จึง**ไม่มีใครเห็นการ์ดย่อตอนเปิดทั้งหน้า**ของ Steps / Requirements / Deadline ด้านล่างอีก (CSS ยังอยู่ ไม่มีผล)
@@ -583,12 +587,8 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
   · ซ่อนย่อหน้า/หมายเหตุ (`section > p`) ของ Guidelines และ Thesis; Overview กับ OJED ตัดย่อหน้าเหลือ 2 บรรทัด (`line-clamp`, Overview ซ่อนย่อหน้าที่สอง)
     + ปุ่ม Read More แบบเดียวกับหน้า Home (`.btn-base.is-outline` + ลูกศร ขนาดปกติ) เป็นลิงก์ `#id` ไปหน้าย่อยที่เห็นข้อความเต็ม
     (site.js `addReadMore`, รายชื่อ section ที่ `READ_MORE`) — Overview ไม่มีในเมนู จึงเปิดกลุ่ม Guidelines ที่มันติดอยู่; หน้าย่อยไม่มีปุ่ม
-  · Guidelines: `.tile-card` ย่อเป็นการ์ดเล็ก ("Step N" ตัวเทา + ชื่อ + ไอคอนในการ์ดเส้นหนาขึ้น + ลูกศร) — ปกติเป็นลิงก์ไป Forms & Links
-    แต่ตอนเปิดทั้งหน้า site.js พาไป `#research-guidelines` ก่อน (ลิงก์ใช้ได้ในหน้าย่อย)
-  · **หน้าย่อย Guidelines** (`body:not(.is-page-view)`) = การ์ดรูปแถวละ 4 ทรงตั้ง 3/4 มุม 18–26px กริดกว้าง `min(1240px, จอ − ขอบ)` ยื่นออกนอกคอลัมน์ 980px เท่ากันสองข้าง
-    (≤880px 2 คอลัมน์, ≤460px 1 คอลัมน์ ทรง 4/3) ชื่อ 20–26px คำอธิบาย 14–15.5px: ชื่อ + คำอธิบายขาวด้านบน
-    บนเฉดมืด + ชั้นเบลอ (mask) ไล่จากบนลงถึง ~66% ให้อ่านได้บนรูปพื้นสว่าง, ปุ่มวงกลมขาว "+" 50px มุมขวาล่าง (`.t-arrow` เดิม วาดบวกเป็นพื้นหลัง),
-    hover ซูมรูป + หมุนปุ่ม 90°; ซ่อนป้าย Step / ไอคอน; รูปผูก nth-child (forms-proposal, forms-committee, forms-plan, goals/g22-lg)
+  · Guidelines: ไม่มีการ์ดแล้ว — เจ้าของเว็บให้เอาการ์ด 4 ขั้น (Proposal Defense / Collaboration Letters / Thesis Defense / Publication) ออก (พ.ย. 2026)
+    เหลือหัวข้อ + รูปผัง + หมายเหตุ (§5.3) · รูปแสดงทั้งตอนเปิดทั้งหน้าและหน้าย่อย ไม่งั้นเปิดทั้งหน้าจะเหลือหัวข้อลอย ๆ
   · Thesis: แถวตารางเป็นการ์ด (ปีตัวเทา + ชื่อผู้เขียน + ไอคอน Lucide `book-open-text` + ลูกศร, ซ่อนหัวข้อ) กดแล้วไป `#tefl-research-thesis`
   · **หน้าย่อย Thesis** (`body:not(.is-page-view)`, บล็อก TEFL RESEARCH [THESIS] ใน `site.css`) = โครงแบบการ์ด Guest Lecturers (ป้ายปีส้มมุมซ้ายบน แบบ "Most Recent", เนื้อหาชิดล่าง)
     แต่พื้นขาวขอบเทา `#e3e6e8` มุม 16px, สัมผัส/hover เป็นส้มทึบ ตัวอักษร/ไอคอนขาว ป้ายปีกลับเป็นขาวตัวส้ม + ยก 5px
@@ -620,8 +620,14 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
 
 ## 5.3 คอมโพเนนต์เฉพาะ `research.html`
 
-สไตล์อยู่ท้าย `site.css` (บล็อก **FLOWCHART**) — ผัง "Working on Master Project: From Start to Finish"
-ท้ายเซคชัน Guidelines for Research Procedures ทำเป็น HTML/CSS ไม่ใช่รูป เพื่อให้แก้ข้อความใน `/admin` ได้
+**ผังท้ายเซคชัน Guidelines for Thesis Procedures เป็นรูปแล้ว (พ.ย. 2026)** — เจ้าของเว็บส่งรูปมาให้ใช้ตรง ๆ
+และเปลี่ยนชื่อเซคชัน/เมนูจาก "Guidelines for Research Procedures": `<figure class="thesis-flow">` + `img/thesis-procedures.jpg`
+(1200×1607 ย่อจาก PNG 4.8 MB) อยู่ในบล็อก `research/research-guidelines` ต่อจากหมายเหตุ · กว้างสุด 640px กลางคอลัมน์ มุม 18px ขอบ `#e3e6e8`
+· เป็นเนื้อหาหลักของเซคชัน (การ์ด 4 ใบเดิมถูกเอาออก) ตามด้วยหมายเหตุ Forms & Links — หมายเหตุต้องอยู่ "หลัง" รูป
+เพราะถ้าเป็นย่อหน้าแรกต่อจาก `.sec-head` จะโดนกฎ `.sec-head + p` จัดกลาง 720px · ข้อความในรูปแก้ใน `/admin` ไม่ได้ ต้องเปลี่ยนรูป
+— alt ของรูปบรรยายขั้นตอนครบ ถ้าเปลี่ยนรูปให้แก้ alt ตามด้วย (บล็อก **THESIS FLOW IMAGE** ใน `site.css`)
+
+ด้านล่างคือผังแบบ HTML/CSS เดิม (บล็อก **FLOWCHART**) — ไม่มีหน้าไหนใช้แล้ว เก็บ CSS ไว้เผื่อกลับไปใช้แบบแก้ข้อความได้
 
 - **`.flow-chart`** — กริด 5 คอลัมน์ (หลัก | ลูกศร | กิ่ง | ลูกศร | กิ่ง) ไม่มี div ครอบแถว:
   กล่องสายหลักตั้ง `grid-column:1` ซึ่งบังคับขึ้นแถวใหม่เอง ส่วนลูกศร/กล่องข้างที่วางต่อท้ายไหลเข้าคอลัมน์ถัดไปของแถวเดียวกัน
@@ -667,7 +673,7 @@ curl -s http://localhost:9225/json    # อ่าน title ที่หน้า
 
 - คอนทราสต์ของ `--brand` (#e8401a) บนพื้นขาว ≈ **4.0:1** → ผ่านเกณฑ์ AA เฉพาะตัวใหญ่/ตัวหนา (≥18.5px หรือ ≥14px ตัวหนา) **ไม่ผ่านสำหรับข้อความขนาดปกติ** — ถ้าใช้กับข้อความเล็กควรเปลี่ยนเป็น `--brand-dark`
 - `.nc-tag` / `.nc-date` สี `#9b9b9b` บนพื้นขาว ≈ **2.8:1** → ต่ำกว่าเกณฑ์ ควรเข้มขึ้นเป็นราว `#767676`
-- `.photo-credits` (10.5px) และ `.stat .label` (12.5px) ผ่านคอนทราสต์แต่ตัวเล็กมาก อ่านยากบนมือถือ
+- `.photo-credits` (11.5px) และ `.stat .label` (12.5px) ผ่านคอนทราสต์แต่ตัวเล็กมาก อ่านยากบนมือถือ
 - `prefers-reduced-motion` ยังไม่ครอบคลุมสไลด์ hero (ยังเลื่อนอัตโนมัติ)
 
 ---
@@ -719,7 +725,7 @@ img/    logo.png, logo.jpg, icon.png
 พาธรูปอยู่ในบล็อก `index/academics` ใน Supabase ด้วย — **เปลี่ยนรูปโดยเขียนทับไฟล์ชื่อเดิม** จะได้ผลทันทีไม่ต้องแก้ฐานข้อมูล
 ถ้าเปลี่ยนชื่อไฟล์ ต้องแก้บล็อกใน `/admin` ด้วย ไม่งั้น `cms.js` จะเขียนพาธเก่ากลับ และ `sync-content.py` จะเขียนพาธเก่าลงไฟล์
 
-**ชุด 4 ใบ (ต.ค. 2026)** — Bachelor's / Master's / Teaching Practicum ครอป 3:4 จาก `img/goals/` (g13-lg · card-research · g02-lg)
+**ชุด 4 ใบ (ต.ค. 2026)** — Bachelor's / Master's / Our Activities (เดิม Teaching Practicum) ครอป 3:4 จาก `img/goals/` (g13-lg · card-research · g02-lg)
 ส่วน Guest Lectures (`course-guest-lecturers.jpg`) เป็นผนังรูปวิทยากรรับเชิญ 7 คนจาก `img/lecturer-*.jpg` เต็มใบแบบการ์ดอื่น
 แถวบน 4 แถวล่าง 3 ร่องมืด 6px เต็มสองในสามล่าง; หนึ่งในสามบน (ใต้หัวข้อ) เป็นผนังเดียวกันขยายเบลอ ไล่จางเข้าหาแถวรูป
 (ทำแบบวงกลมบนพื้นส้มก่อนแล้ว ม่านมืดของการ์ดทำให้แถวบนหม่น และดูไม่เข้ากับอีกสามใบที่เป็นรูปเต็ม)
